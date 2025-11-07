@@ -19,8 +19,8 @@ window.map = map;
 L.imageOverlay('images/aegir-sector.png', bounds).addTo(map);
 map.setMaxBounds(bounds);
 const fitZoom = map.getBoundsZoom(bounds, true);
-const minZoom = fitZoom - 0.75;
-const initialZoom = Math.max(minZoom, fitZoom - 0.5);
+const minZoom = Math.max(fitZoom - 2, -5);
+const initialZoom = minZoom;
 map.setMinZoom(minZoom);
 map.setView([mapHeight / 2, mapWidth / 2], initialZoom, { animate: false });
 
