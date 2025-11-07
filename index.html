@@ -15,26 +15,93 @@
 
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="gin.css" />
 </head>
 <body>
-  <!-- Controls -->
-  <div id="ui">
-    <div class="row">
-      <input id="q" placeholder="Search system…" />
-      <button id="go">Go</button>
-    </div>
-    <label class="toggle">
-      <input type="checkbox" id="toggle-names" />
-      <span>Show Names</span>
-    </label>
-    <label class="toggle">
-      <input type="checkbox" id="toggle-lanes" checked />
-      <span>Show Hyperlanes</span>
-    </label>
-  </div>
+  <div id="gin-ui">
+    <header id="gin-top-bar" class="gin-top-bar">
+      <div class="gin-top-left">
+        <img data-logo-src="icons/AEGIR.png" alt="Outpost Aegir logo" class="gin-logo" />
+        <span class="gin-wordmark" aria-label="Outpost Aegir wordmark">OUTPOST AEGIR</span>
+      </div>
+      <div class="gin-top-center" aria-live="polite">
+        <div class="gin-headline-ticker">
+          <span id="gin-top-headline" class="gin-headline-text" aria-label="Latest headline"></span>
+        </div>
+      </div>
+      <div class="gin-top-right">
+        <div class="gin-status" role="status" aria-live="polite">
+          <div class="gin-status-glyph gin-status-signal" aria-hidden="true"></div>
+          <div class="gin-status-glyph gin-status-node" aria-hidden="true"></div>
+          <div class="gin-status-glyph gin-status-time" aria-hidden="true"></div>
+          <span class="visually-hidden">Broadcast nominal.</span>
+        </div>
+        <button id="gin-refresh" type="button" class="gin-refresh-button">Refresh feed</button>
+      </div>
+    </header>
 
-  <!-- Map -->
-  <div id="map"></div>
+    <div class="gin-main">
+      <aside class="gin-panel gin-left-panel" data-panel="news">
+        <div class="gin-panel-header">
+          <h2 id="gin-news-title">Sector Reports</h2>
+          <button type="button" class="gin-panel-toggle" aria-expanded="true" aria-controls="gin-news-body">
+            <span class="visually-hidden">Toggle Sector Reports</span>
+            <span aria-hidden="true" class="gin-toggle-icon"></span>
+          </button>
+        </div>
+        <div id="gin-news-body" class="gin-panel-content">
+          <div id="gin-rotator" class="gin-rotator" aria-live="polite"></div>
+          <p id="gin-news-fallback" class="gin-panel-fallback" hidden>Unable to load sector reports at this time.</p>
+        </div>
+      </aside>
+
+      <div class="gin-map-column">
+        <!-- Controls -->
+        <div id="ui">
+          <div class="row">
+            <input id="q" placeholder="Search system…" />
+            <button id="go">Go</button>
+          </div>
+          <label class="toggle">
+            <input type="checkbox" id="toggle-names" />
+            <span>Show Names</span>
+          </label>
+          <label class="toggle">
+            <input type="checkbox" id="toggle-lanes" checked />
+            <span>Show Hyperlanes</span>
+          </label>
+        </div>
+
+        <!-- Map -->
+        <div class="gin-map-wrapper">
+          <div id="map"></div>
+        </div>
+      </div>
+
+      <aside class="gin-panel gin-right-panel" data-panel="ad">
+        <div class="gin-panel-header">
+          <h2 id="gin-sponsored-title">Sponsored Transmission</h2>
+          <button type="button" class="gin-panel-toggle" aria-expanded="true" aria-controls="gin-ad-body">
+            <span class="visually-hidden">Toggle Sponsored Transmission</span>
+            <span aria-hidden="true" class="gin-toggle-icon"></span>
+          </button>
+        </div>
+        <div id="gin-ad-body" class="gin-panel-content">
+          <div class="gin-sponsored-badge" aria-hidden="true">Sponsored</div>
+          <article class="gin-ad-card" aria-live="polite">
+            <div class="gin-ad-media">
+              <img id="gin-ad-image" alt="" loading="lazy" />
+              <div id="gin-ad-image-fallback" class="gin-ad-image-fallback" hidden>Transmission image unavailable.</div>
+            </div>
+            <h3 id="gin-ad-title" class="gin-ad-title"></h3>
+            <p id="gin-ad-text" class="gin-ad-text"></p>
+            <p id="gin-ad-sponsor" class="gin-ad-sponsor"></p>
+          </article>
+          <p id="gin-ad-fallback" class="gin-panel-fallback" hidden>Sponsored transmission unavailable.</p>
+        </div>
+      </aside>
+    </div>
+  </div>
 
   <!-- System Detail Modal -->
   <div id="system-modal" class="system-modal" aria-hidden="true">
@@ -53,5 +120,6 @@
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="script.js"></script>
+  <script src="gin.js"></script>
 </body>
 </html>
