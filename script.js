@@ -1002,7 +1002,7 @@ addLaneByIds(threnos, korneth);
 addLaneByIds(threnos, vayth);
 
 addLaneByIds(vayth, threnos);
-addLaneByIds(vayth, ormun);
+addLaneByIds(vayth, ormun_crimson);
 addLaneByIds(vayth, zhaen);
 addLaneByIds(vayth, irri);
 
@@ -1018,14 +1018,14 @@ addLaneByIds(vexar, nyren);
 addLaneByIds(coda, irri);
 addLaneByIds(coda, laertis);
 
-addLaneByIds(ormun, vayth);
-addLaneByIds(ormun, drelith_crimson);
-addLaneByIds(ormun, oryx);
+addLaneByIds(ormun_crimson, vayth);
+addLaneByIds(ormun_crimson, drelith);
+addLaneByIds(ormun_crimson, oryx);
 
-addLaneByIds(drelith_crimson, ormun);
-addLaneByIds(drelith_crimson, zhaen);
+addLaneByIds(drelith, ormun_crimson);
+addLaneByIds(drelith, zhaen);
 
-addLaneByIds(zhaen, drelith_crimson);
+addLaneByIds(zhaen, drelith);
 addLaneByIds(zhaen, vayth);
 addLaneByIds(zhaen, olk);
 
@@ -1038,7 +1038,7 @@ addLaneByIds(col, xsa);
 addLaneByIds(xsa, col);
 
 addLaneByIds(oryx, aliti);
-addLaneByIds(oryx, ormun);
+addLaneByIds(oryx, ormun_crimson);
 addLaneByIds(oryx, joris);
 
 addLaneByIds(aliti, oryx);
