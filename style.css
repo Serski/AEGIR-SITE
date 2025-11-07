@@ -28,6 +28,10 @@ html, body {
   width: 100%;
 }
 
+.leaflet-container {
+  background: #000; /* ensure map gutters stay space-black on wide viewports */
+}
+
 /* UI panel — floats inside map */
 #ui {
   position: absolute;
