@@ -8,7 +8,6 @@
   const topHeadlineEl = document.getElementById('gin-top-headline');
   const rotatorEl = document.getElementById('gin-rotator');
   const newsFallbackEl = document.getElementById('gin-news-fallback');
-  const refreshButton = document.getElementById('gin-refresh');
   const adFallbackEl = document.getElementById('gin-ad-fallback');
   const adImageEl = document.getElementById('gin-ad-image');
   const adImageFallbackEl = document.getElementById('gin-ad-image-fallback');
@@ -29,7 +28,7 @@
 
   function initialise() {
     setupPanelToggles();
-    setupRefreshControls();
+    setupRefreshHotkey();
     loadLogoAsset();
     loadFeeds();
   }
@@ -72,11 +71,7 @@
       });
   }
 
-  function setupRefreshControls() {
-    if (refreshButton) {
-      refreshButton.addEventListener('click', handleRefreshRequest);
-    }
-
+  function setupRefreshHotkey() {
     document.addEventListener('keydown', (event) => {
       if (event.key !== 'r' && event.key !== 'R') {
         return;

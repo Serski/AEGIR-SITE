@@ -36,7 +36,6 @@
           <div class="gin-status-glyph gin-status-time" aria-hidden="true"></div>
           <span class="visually-hidden">Broadcast nominal.</span>
         </div>
-        <button id="gin-refresh" type="button" class="gin-refresh-button">Refresh feed</button>
       </div>
     </header>
 
@@ -56,24 +55,24 @@
       </aside>
 
       <div class="gin-map-column">
-        <!-- Controls -->
-        <div id="ui">
-          <div class="row">
-            <input id="q" placeholder="Search system…" />
-            <button id="go">Go</button>
-          </div>
-          <label class="toggle">
-            <input type="checkbox" id="toggle-names" />
-            <span>Show Names</span>
-          </label>
-          <label class="toggle">
-            <input type="checkbox" id="toggle-lanes" checked />
-            <span>Show Hyperlanes</span>
-          </label>
-        </div>
-
-        <!-- Map -->
         <div class="gin-map-wrapper">
+          <!-- Controls -->
+          <div id="ui">
+            <div class="row">
+              <input id="q" placeholder="Search system…" />
+              <button id="go">Go</button>
+            </div>
+            <label class="toggle">
+              <input type="checkbox" id="toggle-names" />
+              <span>Show Names</span>
+            </label>
+            <label class="toggle">
+              <input type="checkbox" id="toggle-lanes" checked />
+              <span>Show Hyperlanes</span>
+            </label>
+          </div>
+
+          <!-- Map -->
           <div id="map"></div>
         </div>
       </div>

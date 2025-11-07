@@ -8,15 +8,20 @@ const bounds = [[0, 0], [mapHeight, mapWidth]];
 // create the map
 const map = L.map('map', {
   crs: L.CRS.Simple,
-  minZoom: -2,
   maxZoom: 2,
-  zoomControl: true
+  zoomControl: true,
+  maxBounds: bounds,
+  maxBoundsViscosity: 1.0
 });
 window.map = map;
 
 // add your background
 L.imageOverlay('images/aegir-sector.png', bounds).addTo(map);
 map.fitBounds(bounds);
+map.setMaxBounds(bounds);
+const minZoom = map.getBoundsZoom(bounds);
+map.setMinZoom(minZoom);
+map.setZoom(minZoom);
 
 // ---------- global registries ----------
 const SYS = {};                               // systems by unique id
