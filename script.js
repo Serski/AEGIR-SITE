@@ -8,15 +8,30 @@ const bounds = [[0, 0], [mapHeight, mapWidth]];
 // create the map
 const map = L.map('map', {
   crs: L.CRS.Simple,
-  minZoom: -2,
   maxZoom: 2,
-  zoomControl: true
+  zoomControl: true,
+  maxBounds: bounds,
+  maxBoundsViscosity: 1.0
 });
 window.map = map;
 
 // add your background
 L.imageOverlay('images/aegir-sector.png', bounds).addTo(map);
-map.fitBounds(bounds);
+const minZoom = map.getBoundsZoom(bounds, true);
+map.setMinZoom(minZoom);
+map.setMaxBounds(bounds);
+map.setView([mapHeight / 2, mapWidth / 2], minZoom, { animate: false });
+
+map.whenReady(() => {
+  map.invalidateSize();
+  requestAnimationFrame(() => map.invalidateSize());
+});
+
+let resizeTimer = null;
+window.addEventListener('resize', () => {
+  if (resizeTimer) clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(() => map.invalidateSize(), 120);
+});
 
 // ---------- global registries ----------
 const SYS = {};                               // systems by unique id

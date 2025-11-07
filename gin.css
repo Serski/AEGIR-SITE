@@ -180,35 +180,11 @@
   left: 7px;
 }
 
-.gin-refresh-button {
-  background: rgba(93, 220, 255, 0.18);
-  border: 1px solid rgba(93, 220, 255, 0.45);
-  color: var(--gin-text);
-  padding: 0.45rem 1rem;
-  border-radius: 999px;
-  font-size: 0.85rem;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  cursor: pointer;
-  transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease;
-}
-
-.gin-refresh-button:hover,
-.gin-refresh-button:focus-visible {
-  background: rgba(93, 220, 255, 0.35);
-  border-color: rgba(93, 220, 255, 0.65);
-  outline: none;
-}
-
-.gin-refresh-button:active {
-  background: rgba(93, 220, 255, 0.5);
-}
-
 .gin-main {
   display: grid;
-  grid-template-columns: minmax(240px, 320px) minmax(0, 1fr) minmax(240px, 320px);
-  gap: 1.75rem;
-  padding: calc(var(--gin-top-bar-height) + 2rem) 2rem 2.5rem;
+  grid-template-columns: minmax(240px, 300px) minmax(0, 1fr) minmax(240px, 300px);
+  gap: 1.25rem;
+  padding: calc(var(--gin-top-bar-height) + 1.75rem) 1.5rem 2.5rem;
 }
 
 .gin-panel {
@@ -342,7 +318,7 @@
 .gin-map-wrapper {
   position: relative;
   flex: 1;
-  min-height: calc(100vh - var(--gin-top-bar-height) - 5rem);
+  min-height: calc(100vh - var(--gin-top-bar-height) - 4rem);
   border-radius: 24px;
   overflow: hidden;
   border: 1px solid rgba(93, 220, 255, 0.2);
@@ -442,7 +418,8 @@
 }
 
 #ui {
-  top: calc(var(--gin-top-bar-height) + 12px);
+  top: 10px;
+  right: 10px;
 }
 
 @media (max-width: 1280px) {
