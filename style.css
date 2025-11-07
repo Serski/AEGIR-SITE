@@ -31,8 +31,9 @@ html, body {
 /* UI panel — floats inside map */
 #ui {
   position: absolute;
-  top: 16px;
-  right: 16px;
+  top: 12px;
+  left: 64px;
+  right: auto;
   z-index: 1000;
   background: rgba(10, 10, 20, 0.9);
   border: 1px solid rgba(100, 150, 255, 0.25);
@@ -80,9 +81,9 @@ html, body {
 /* Small screens: keep panel tidy on the right */
 @media (max-width: 720px) {
   #ui {
+    left: 56px;
     right: 12px;
-    left: auto;
-    width: calc(100% - 24px);
+    max-width: calc(100% - 68px);
   }
   #ui input { width: 100%; }
   #ui .row { flex-wrap: wrap; }
