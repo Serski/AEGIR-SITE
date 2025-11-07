@@ -319,6 +319,8 @@
   position: relative;
   flex: 1;
   min-height: calc(100vh - var(--gin-top-bar-height) - 4rem);
+  display: flex;
+  flex-direction: column;
   border-radius: 24px;
   overflow: hidden;
   border: 1px solid rgba(93, 220, 255, 0.2);
@@ -336,8 +338,10 @@
 }
 
 .gin-map-wrapper #map {
+  flex: 1 1 auto;
   height: 100%;
   width: 100%;
+  min-height: 320px;
 }
 
 .gin-sponsored-badge {
@@ -419,12 +423,12 @@
 
 #ui {
   top: 12px;
-  left: 64px;
+  left: 108px;
 }
 
 @media (max-width: 720px) {
   #ui {
-    left: 56px;
+    left: 92px;
   }
 }
 
