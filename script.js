@@ -90,14 +90,18 @@ function addSystemIconPct(name, xPct, yPct, iconUrl, size = 36, popupImageUrl = 
   const [xPx, yPx] = pctToPx(xPct, yPct);
   const latlng = [yPx, xPx];
 
-  const icon = L.icon({
-    iconUrl,
-    iconSize: [size, size],
-    iconAnchor: [size / 2, size / 2],
-    className: "system-icon"
-  });
+  const hasIcon = Boolean(iconUrl);
+  const resolvedIconUrl = hasIcon ? iconUrl : null;
+  const icon = resolvedIconUrl
+    ? L.icon({
+        iconUrl: resolvedIconUrl,
+        iconSize: [size, size],
+        iconAnchor: [size / 2, size / 2],
+        className: "system-icon"
+      })
+    : new L.Icon.Default();
 
-  const img = popupImageUrl || iconUrl;
+  const img = popupImageUrl || resolvedIconUrl;
   const html = `<b>${name}</b>`
     + (faction ? `<div style="font-size:12px;color:#9aa7c1">Faction: ${faction}</div>` : "")
     + (img ? `<br/><img src="${img}" width="${Math.round(size * 2.5)}" style="margin-top:6px;border-radius:8px;">` : "");
@@ -108,7 +112,7 @@ function addSystemIconPct(name, xPct, yPct, iconUrl, size = 36, popupImageUrl = 
     .addTo(map);
 
   const uid = makeId(name, id);
-  SYS[uid] = { id: uid, name, faction, latlng, xPct, yPct, xPx, yPx, icon: iconUrl, marker: m };
+  SYS[uid] = { id: uid, name, faction, latlng, xPct, yPct, xPx, yPx, icon: resolvedIconUrl, marker: m };
   return uid;
 }
 
@@ -167,18 +171,18 @@ const C = {
 // ---------- local emblem icon paths ----------
 const ICONS = {
   AEGIR:     "images/icons/AEGIR.png",
-  YAMATO:    "images/icons/yamato.png",
+  YAMATO:    "images/icons/YAMATO.png",
   NOVA:      "images/icons/nova.png",
-  CRIMSON:   "images/icons/crimson.png",
-  ORION:     "images/icons/orion.png",
+  CRIMSON:   "images/icons/CRIMSON.png",
+  ORION:     "images/icons/Orion.png",
   EAGLE:     "images/icons/Eagle rep.png"
 };
 // add these two files to your /images/icons/ folder:
-ICONS.FED      = "images/icons/federation.png";
-ICONS.DOMINION = "images/icons/dominion.png";
+ICONS.FED      = "images/icons/Federation.png";
+ICONS.DOMINION = "images/icons/Dominion.png";
 
 // ---------- EXTRA RESOURCE ICONS ----------
-ICONS.PIRATES = "images/icons/pirates.png"; // ensure these files exist
+ICONS.PIRATES = "images/icons/Pirates.png"; // ensure these files exist
 ICONS.AFM     = "images/icons/AFM.png";
 ICONS.GGP     = "images/icons/GGP.png";
 
