@@ -366,7 +366,7 @@ const SYSTEM_IMAGE_OVERRIDES = {
 const aegir_outpost   = addSystemIconPct("Aegir Outpost",                 68.58, 75.46, ICONS.AEGIR,   40, null, "aegir_outpost", "AEGIR");
 const thalyron        = addSystemIconPct("Thalyron — Yamato Syndicate",   67.08, 82.97, ICONS.YAMATO,  36, null, "thalyron", "Yamato Syndicate");
 const serothis_nova   = addSystemIconPct("Serothis — Nova Confederation", 81.11, 92.58, ICONS.NOVA,    36, null, "serothis_nova", "Nova Confederation");
-const drelith_crimson = addSystemIconPct("Drelith — Crimson Collective",  52.00, 92.71, ICONS.CRIMSON, 36, null, "drelith_crimson", "Crimson Collective");
+const ormun = addSystemIconPct("Ormun — Crimson Collective Capital",  50.84, 90.73, ICONS.CRIMSON, 36, null, "ormun", "Crimson Collective");
 const veil_orion      = addSystemIconPct("Veil — Orion Industries",       47.48, 81.72, ICONS.ORION,   36, null, "veil_orion", "Orion Industries");
 const akrion_eagle    = addSystemIconPct(
   "Akrion — Eagle Republic",
@@ -424,7 +424,7 @@ const serohis  = addSystemDotPct("Serohis", 48.97, 79.43, C.NEUTRAL, null, "sero
 const korneth  = addSystemDotPct("Korneth", 50.83, 83.88, C.NEUTRAL, null, "korneth");
 const seren    = addSystemDotPct("Seren", 43.27, 82.36, C.NEUTRAL, null, "seren");
 const vayth    = addSystemDotPct("Vayth", 53.46, 89.65, C.NEUTRAL, null, "vayth");
-const ormun    = addSystemDotPct("Ormun", 50.84, 90.73, C.NEUTRAL, null, "ormun");
+const drelith  = addSystemDotPct("Drelith", 52.00, 92.71, C.CRIMSON, null, "drelith", "Crimson Collective");
 const zhaen    = addSystemDotPct("Zhaen", 53.80, 92.00, C.NEUTRAL, null, "zhaen");
 const olk      = addSystemDotPct("Olk Prime", 56.93, 94.04, C.NEUTRAL, null, "olk_prime");
 const col      = addSystemDotPct("Col", 55.73, 96.94, C.NEUTRAL, null, "col");
@@ -1019,13 +1019,13 @@ addLaneByIds(coda, irri);
 addLaneByIds(coda, laertis);
 
 addLaneByIds(ormun, vayth);
-addLaneByIds(ormun, drelith_crimson);
+addLaneByIds(ormun, drelith);
 addLaneByIds(ormun, oryx);
 
-addLaneByIds(drelith_crimson, ormun);
-addLaneByIds(drelith_crimson, zhaen);
+addLaneByIds(drelith, ormun);
+addLaneByIds(drelith, zhaen);
 
-addLaneByIds(zhaen, drelith_crimson);
+addLaneByIds(zhaen, drelith);
 addLaneByIds(zhaen, vayth);
 addLaneByIds(zhaen, olk);
 
