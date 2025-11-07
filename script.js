@@ -17,11 +17,21 @@ window.map = map;
 
 // add your background
 L.imageOverlay('images/aegir-sector.png', bounds).addTo(map);
-map.fitBounds(bounds);
 map.setMaxBounds(bounds);
-const minZoom = map.getBoundsZoom(bounds);
+const minZoom = map.getBoundsZoom(bounds, true);
 map.setMinZoom(minZoom);
-map.setZoom(minZoom);
+map.setView([mapHeight / 2, mapWidth / 2], minZoom, { animate: false });
+
+const ensureMapSize = () => map.invalidateSize();
+map.whenReady(() => {
+  setTimeout(() => {
+    ensureMapSize();
+  }, 0);
+});
+window.addEventListener('resize', ensureMapSize);
+window.addEventListener('orientationchange', () => {
+  setTimeout(ensureMapSize, 200);
+});
 
 // ---------- global registries ----------
 const SYS = {};                               // systems by unique id
