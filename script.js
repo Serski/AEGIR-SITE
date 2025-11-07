@@ -351,6 +351,7 @@ const SYSTEM_IMAGE_OVERRIDES = {
   thalyron: "Star Systems/Thalyron.jpg",
   serothis_nova: "Star Systems/Serothis.jpg",
   aelyth_prime: "Star Systems/Aelyth Prime.jpg",
+  eryndor: "Star Systems/Eryndor.png",
   orpheas: "Star Systems/Orpheas.jpg",
   veyra_null: "Star Systems/Veyra Null.jpg",
   netra: "Star Systems/Netra.jpg",
@@ -360,6 +361,7 @@ const SYSTEM_IMAGE_OVERRIDES = {
   veil_orion: "Star Systems/Veil.jpg",
   akrion_eagle: "Star Systems/Akrion.jpg",
   ormun: "Star Systems/Ormun.jpg",
+  kharon_capital: "Star Systems/Kharon.png",
 };
 
 // ---------- EXISTING FACTION EMBLEMS ----------
@@ -618,7 +620,7 @@ function setDotColor(uid, color) {
 const DOMINION_DOTS = [
   'alctor', 'ho_nass', 'egos_v', 'byz', 'otip', 'vica',
   'delos', 'ix4', 'ho_prime', 'phaex', 'ris', 'leo',
-  'spyr', 'xavouz', 'racko', 'xdat', 'aelyth_prime', 'ifo',
+  'spyr', 'xavouz', 'racko', 'xdat', 'ifo',
   'aka', 'zorg', 'aq', 'lob', 'orhax', 'hexon', 'decrix',
   'paxi_prime'
 ];
