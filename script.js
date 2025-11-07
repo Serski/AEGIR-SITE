@@ -476,6 +476,8 @@ const poly        = addSystemDotPct("Poly", 17.92, 64.35, C.NEUTRAL, null, "poly
 const asvo        = addSystemDotPct("Asvo", 20.03, 63.54, C.NEUTRAL, null, "asvo");
 const riki        = addSystemDotPct("Riki", 22.95, 61.41, C.NEUTRAL, null, "riki");
 const iraklo      = addSystemDotPct("Iraklo", 19.63, 59.14, C.NEUTRAL, null, "iraklo");
+const dolca       = addSystemDotPct("Dolca", 13.70, 52.63, C.NEUTRAL, null, "dolca");
+const knatz       = addSystemDotPct("Knatz", 16.93, 60.36, C.NEUTRAL, null, "knatz");
 
 const oraethos    = addSystemDotPct("Oraethos", 85.61, 88.79, C.NEUTRAL, null, "oraethos");
 const artemis     = addSystemDotPct("Artemis", 94.41, 91.97, C.NEUTRAL, null, "artemis");
@@ -513,6 +515,14 @@ const jns         = addSystemDotPct("Jns", 93.64, 74.05, C.NEUTRAL, null, "jns")
 const xably       = addSystemDotPct("Xably", 93.65, 72.27, C.NEUTRAL, null, "xably");
 const phila       = addSystemDotPct("Phila", 89.37, 67.69, C.NEUTRAL, null, "phila");
 const ho_prime    = addSystemDotPct("Ho Prime", 85.19, 66.60, C.NEUTRAL, null, "ho_prime");
+const ifo         = addSystemDotPct("Ifo", 92.50, 60.97, C.NEUTRAL, null, "ifo");
+const aka         = addSystemDotPct("Aka", 93.23, 61.32, C.NEUTRAL, null, "aka");
+const zorg        = addSystemDotPct("Zorg", 93.25, 59.48, C.NEUTRAL, null, "zorg");
+const aq          = addSystemDotPct("Aq", 92.05, 59.79, C.NEUTRAL, null, "aq");
+const lob         = addSystemDotPct("Lob", 97.26, 61.09, C.NEUTRAL, null, "lob");
+const orhax       = addSystemDotPct("Orhax", 99.27, 64.87, C.NEUTRAL, null, "orhax");
+const hexon       = addSystemDotPct("Hexon", 96.62, 57.67, C.NEUTRAL, null, "hexon");
+const decrix      = addSystemDotPct("Decrix", 94.43, 55.28, C.NEUTRAL, null, "decrix");
 const byz         = addSystemDotPct("Byz", 78.70, 66.50, C.NEUTRAL, null, "byz");
 const otip        = addSystemDotPct("Otip", 77.22, 66.47, C.NEUTRAL, null, "otip");
 const vica        = addSystemDotPct("Vica", 78.00, 65.40, C.NEUTRAL, null, "vica");
@@ -608,7 +618,9 @@ function setDotColor(uid, color) {
 const DOMINION_DOTS = [
   'alctor', 'ho_nass', 'egos_v', 'byz', 'otip', 'vica',
   'delos', 'ix4', 'ho_prime', 'phaex', 'ris', 'leo',
-  'spyr', 'xavouz', 'racko', 'xdat'
+  'spyr', 'xavouz', 'racko', 'xdat', 'kharon', 'ifo',
+  'aka', 'zorg', 'aq', 'lob', 'orhax', 'hexon', 'decrix',
+  'paxi_prime'
 ];
 DOMINION_DOTS.forEach(id => setDotColor(id, C.DOMINION));
 
@@ -631,6 +643,19 @@ function setFactionAndPopup(uid, faction) {
 }
 DOMINION_DOTS.forEach(id => setFactionAndPopup(id, "Dominion"));
 FEDERATION_DOTS.forEach(id => setFactionAndPopup(id, "Federation"));
+
+function setTagline(uid, text) {
+  const s = SYS[uid];
+  if (!s) return;
+  s.tagline = text;
+  const factionLine = s.faction ? `<div style="font-size:12px;color:#9aa7c1">Faction: ${s.faction}</div>` : "";
+  const taglineLine = text ? `<div style="margin-top:4px;color:#ffddaa">${text}</div>` : "";
+  const imgHtml = s.image ? `<br/><img src="${s.image}" width="200" style="margin-top:6px;border-radius:8px;">` : "";
+  const html = `<b>${s.name}</b>${factionLine}${taglineLine}${imgHtml}`;
+  updateSystemPopup(uid, html);
+}
+
+['paxi_prime', 'ho_prime'].forEach(uid => setTagline(uid, 'Dominion Crucible Citadel (Megastructure)'));
 
 // ---------- HYPERLANES — REMADE WITH YOUR CORRECTIONS ----------
 // Solara-Ys (Aegir Outpost) → Aelyth Prime, Pone V, Veyra Null
@@ -851,6 +876,61 @@ addLaneByIds(paxi_prime, ris);
 // Ris ↔ Paxi Prime, Phaex
 addLaneByIds(ris, paxi_prime);
 addLaneByIds(ris, phaex);
+
+// Delos ↔ Ix 4
+addLaneByIds(delos, ix4);
+addLaneByIds(ix4, delos);
+
+// Ermis ↔ Kata
+addLaneByIds(ermis, kata);
+addLaneByIds(kata, ermis);
+
+// Eryndor — Federation Capital ↔ Noki II
+addLaneByIds(eryndor, nokii);
+addLaneByIds(nokii, eryndor);
+
+// Kharon — Dominion Capital ↔ Xdat, Ifo
+addLaneByIds(kharon_1, xdat);
+addLaneByIds(kharon_1, ifo);
+
+// Xdat ↔ Kharon — Dominion Capital, Phila, Ifo
+addLaneByIds(xdat, kharon_1);
+addLaneByIds(xdat, phila);
+addLaneByIds(xdat, ifo);
+
+// Ifo ↔ Kharon — Dominion Capital, Xdat, Aka, Zorg
+addLaneByIds(ifo, kharon_1);
+addLaneByIds(ifo, xdat);
+addLaneByIds(ifo, aka);
+addLaneByIds(ifo, zorg);
+
+// Aka ↔ Ifo
+addLaneByIds(aka, ifo);
+
+// Zorg ↔ Ifo, Aq, Lob, Decrix
+addLaneByIds(zorg, ifo);
+addLaneByIds(zorg, aq);
+addLaneByIds(zorg, lob);
+addLaneByIds(zorg, decrix);
+
+// Aq ↔ Zorg
+addLaneByIds(aq, zorg);
+
+// Lob ↔ Zorg, Hexon, Orhax
+addLaneByIds(lob, zorg);
+addLaneByIds(lob, hexon);
+addLaneByIds(lob, orhax);
+
+// Orhax ↔ Lob
+addLaneByIds(orhax, lob);
+
+// Hexon ↔ Lob, Decrix
+addLaneByIds(hexon, lob);
+addLaneByIds(hexon, decrix);
+
+// Decrix ↔ Zorg, Hexon
+addLaneByIds(decrix, zorg);
+addLaneByIds(decrix, hexon);
 
 // ---------- NEW HYPERLANES (Phaex–Astar cluster) ----------
 addLaneByIds(phaex, ris);
@@ -1131,6 +1211,9 @@ addLaneByIds(tetra_prime, poly);
 addLaneByIds(poly, tetra_prime);
 addLaneByIds(poly, asvo);
 addLaneByIds(poly, anto);
+addLaneByIds(poly, knatz);
+
+addLaneByIds(dolca, knatz);
 
 addLaneByIds(anto, poly);
 addLaneByIds(anto, kraw);
@@ -1145,10 +1228,20 @@ addLaneByIds(alexa, rem_s);
 
 addLaneByIds(asvo, poly);
 addLaneByIds(asvo, riki);
+addLaneByIds(asvo, knatz);
+
+addLaneByIds(knatz, dolca);
+addLaneByIds(knatz, iraklo);
+addLaneByIds(knatz, riki);
+addLaneByIds(knatz, asvo);
+addLaneByIds(knatz, poly);
 
 addLaneByIds(riki, asvo);
 addLaneByIds(riki, iraklo);
 addLaneByIds(riki, tromp);
+addLaneByIds(riki, knatz);
+
+addLaneByIds(iraklo, knatz);
 
 addLaneByIds(tromp, emiprime);
 addLaneByIds(tromp, gona);
