@@ -18,20 +18,22 @@ window.map = map;
 // add your background
 L.imageOverlay('images/aegir-sector.png', bounds).addTo(map);
 map.setMaxBounds(bounds);
-const minZoom = map.getBoundsZoom(bounds, true);
+const fitZoom = map.getBoundsZoom(bounds, true);
+const minZoom = fitZoom - 0.75;
+const initialZoom = Math.max(minZoom, fitZoom - 0.5);
 map.setMinZoom(minZoom);
-map.setView([mapHeight / 2, mapWidth / 2], minZoom, { animate: false });
+map.setView([mapHeight / 2, mapWidth / 2], initialZoom, { animate: false });
 
 const ensureMapSize = () => map.invalidateSize();
+const scheduleMapResize = (delay = 0) => window.setTimeout(ensureMapSize, delay);
+
 map.whenReady(() => {
-  setTimeout(() => {
-    ensureMapSize();
-  }, 0);
+  scheduleMapResize(0);
+  scheduleMapResize(250);
 });
-window.addEventListener('resize', ensureMapSize);
-window.addEventListener('orientationchange', () => {
-  setTimeout(ensureMapSize, 200);
-});
+window.addEventListener('load', () => scheduleMapResize(150));
+window.addEventListener('resize', () => scheduleMapResize(100));
+window.addEventListener('orientationchange', () => scheduleMapResize(300));
 
 // ---------- global registries ----------
 const SYS = {};                               // systems by unique id
