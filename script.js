@@ -405,13 +405,13 @@ const calisa      = addSystemDotPct("Calisa",      44.98, 65.60, C.NEUTRAL, "htt
 const kaldur      = addSystemDotPct("Kaldur",      33.74, 68.15, C.NEUTRAL, "https://i.imgur.com/RL66SJO.png", "kaldur");
 const razathaar   = addSystemDotPct("Razathaar",   55.59, 73.33, C.NEUTRAL, "https://i.imgur.com/DTxUwRY.png", "razathaar");
 const veyra_null  = addSystemDotPct("Veyra-Null",  66.43, 73.91, C.NEUTRAL, null, "veyra_null");
-const aelyth      = addSystemDotPct("Aelyth Prime",68.97, 81.81, C.NEUTRAL, null, "aelyth_prime");
+const haron       = addSystemDotPct("Haron",        68.97, 81.81, C.NEUTRAL, null, "haron");
 const orpheas     = addSystemDotPct("Orpheas",     70.45, 77.09, C.NEUTRAL, null, "orpheas");
 
 // NEW DOTS (previous batch)
 const pone_v   = addSystemDotPct("Pone V", 67.20, 77.66, C.NEUTRAL, null, "pone_v");
 const ozyrane  = addSystemDotPct("Ozyrane", 67.14, 80.64, C.NEUTRAL, null, "ozyrane");
-const kharon_1 = addSystemDotPct("Kharon", 71.13, 74.33, C.NEUTRAL, null, "kharon");
+const aelyth   = addSystemDotPct("Aelyth Prime", 71.13, 74.33, C.NEUTRAL, null, "aelyth_prime");
 const nytheris = addSystemDotPct("Nytheris", 69.28, 83.59, C.NEUTRAL, null, "nytheris");
 const tavro_v  = addSystemDotPct("Tavro V", 80.82, 88.36, C.NEUTRAL, null, "tavro_v");
 const voruthen = addSystemDotPct("Voruthen", 84.78, 91.76, C.NEUTRAL, null, "voruthen");
@@ -424,7 +424,7 @@ const serohis  = addSystemDotPct("Serohis", 48.97, 79.43, C.NEUTRAL, null, "sero
 const korneth  = addSystemDotPct("Korneth", 50.83, 83.88, C.NEUTRAL, null, "korneth");
 const seren    = addSystemDotPct("Seren", 43.27, 82.36, C.NEUTRAL, null, "seren");
 const vayth    = addSystemDotPct("Vayth", 53.46, 89.65, C.NEUTRAL, null, "vayth");
-const drelith  = addSystemDotPct("Drelith", 52.00, 92.71, C.CRIMSON, null, "drelith", "Crimson Collective");
+const drelith  = addSystemDotPct("Drelith", 52.00, 92.71, C.NEUTRAL, null, "drelith", "Crimson Collective");
 const zhaen    = addSystemDotPct("Zhaen", 53.80, 92.00, C.NEUTRAL, null, "zhaen");
 const olk      = addSystemDotPct("Olk Prime", 56.93, 94.04, C.NEUTRAL, null, "olk_prime");
 const col      = addSystemDotPct("Col", 55.73, 96.94, C.NEUTRAL, null, "col");
@@ -618,7 +618,7 @@ function setDotColor(uid, color) {
 const DOMINION_DOTS = [
   'alctor', 'ho_nass', 'egos_v', 'byz', 'otip', 'vica',
   'delos', 'ix4', 'ho_prime', 'phaex', 'ris', 'leo',
-  'spyr', 'xavouz', 'racko', 'xdat', 'kharon', 'ifo',
+  'spyr', 'xavouz', 'racko', 'xdat', 'aelyth_prime', 'ifo',
   'aka', 'zorg', 'aq', 'lob', 'orhax', 'hexon', 'decrix',
   'paxi_prime'
 ];
@@ -663,11 +663,10 @@ addLaneByIds(aegir_outpost, aelyth);
 addLaneByIds(aegir_outpost, pone_v);
 addLaneByIds(aegir_outpost, veyra_null);
 
-// Aelyth Prime → Solara-Ys (Aegir Outpost), Netra, Orpheas, Veyra Null
+// Aelyth Prime → Solara-Ys (Aegir Outpost), Netra, Orpheas
 addLaneByIds(aelyth, aegir_outpost);
 addLaneByIds(aelyth, netra);
 addLaneByIds(aelyth, orpheas);
-addLaneByIds(aelyth, veyra_null);
 
 // Orpheas → Solara-Ys (Aegir Outpost), Aelyth Prime, Erethis, Pone V
 addLaneByIds(orpheas, aegir_outpost);
@@ -680,20 +679,19 @@ addLaneByIds(pone_v, aegir_outpost);
 addLaneByIds(pone_v, orpheas);
 addLaneByIds(pone_v, ozyrane);
 
-// Veyra Null → Solara-Ys (Aegir Outpost), Otik, Mikro, Aelyth Prime
+// Veyra Null → Solara-Ys (Aegir Outpost), Otik, Mikro
 addLaneByIds(veyra_null, aegir_outpost);
 addLaneByIds(veyra_null, otik);
 addLaneByIds(veyra_null, mikro);
-addLaneByIds(veyra_null, aelyth);
 
-// Ozyrane → Pone V, Kharon, Nyren
+// Ozyrane → Pone V, Haron, Nyren
 addLaneByIds(ozyrane, pone_v);
-addLaneByIds(ozyrane, kharon_1);
+addLaneByIds(ozyrane, haron);
 addLaneByIds(ozyrane, nyren);
 
-// Kharon → Ozyrane, Nytheris
-addLaneByIds(kharon_1, ozyrane);
-addLaneByIds(kharon_1, nytheris);
+// Haron → Ozyrane, Nytheris
+addLaneByIds(haron, ozyrane);
+addLaneByIds(haron, nytheris);
 
 // Loret → Tessar, Erethis, Yarin
 addLaneByIds(loret, tessar);
@@ -742,9 +740,9 @@ addLaneByIds(byz, otip);
 addLaneByIds(thalyron, ozyrane);
 addLaneByIds(thalyron, nytheris);
 
-// Nytheris → Thalyron, Kharon, Anvyr
+// Nytheris → Thalyron, Haron, Anvyr
 addLaneByIds(nytheris, thalyron);
-addLaneByIds(nytheris, kharon_1);
+addLaneByIds(nytheris, haron);
 addLaneByIds(nytheris, anvyr);
 
 // ---------- EXTRA HYPERLANES (new batch) ----------
