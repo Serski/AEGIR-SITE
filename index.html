@@ -36,6 +36,21 @@
   <!-- Map -->
   <div id="map"></div>
 
+  <!-- System Detail Modal -->
+  <div id="system-modal" class="system-modal" aria-hidden="true">
+    <div class="system-modal-backdrop" role="presentation"></div>
+    <div class="system-modal-card" role="dialog" aria-modal="true" aria-labelledby="system-modal-title">
+      <button id="system-modal-close" class="system-modal-close" type="button" aria-label="Close system details">&times;</button>
+      <h2 id="system-modal-title" class="system-modal-title"></h2>
+      <div id="system-modal-faction" class="system-modal-faction"></div>
+      <div class="system-modal-media">
+        <img id="system-modal-image" class="system-modal-image" alt="" loading="lazy" />
+        <div id="system-modal-image-fallback" class="system-modal-image-fallback">No image available yet.</div>
+      </div>
+      <div id="system-modal-body" class="system-modal-body"></div>
+    </div>
+  </div>
+
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="script.js"></script>
 </body>

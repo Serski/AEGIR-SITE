@@ -24,6 +24,101 @@ const laneLayer  = L.layerGroup().addTo(map); // hyperlanes
 const labelLayer = L.layerGroup().addTo(map); // permanent labels
 window.SYS = SYS;
 
+// ---------- system detail modal wiring ----------
+const modalEl = document.getElementById('system-modal');
+const modalBackdropEl = modalEl ? modalEl.querySelector('.system-modal-backdrop') : null;
+const modalCardEl = modalEl ? modalEl.querySelector('.system-modal-card') : null;
+const modalCloseBtn = document.getElementById('system-modal-close');
+const modalTitleEl = document.getElementById('system-modal-title');
+const modalFactionEl = document.getElementById('system-modal-faction');
+const modalMediaEl = modalEl ? modalEl.querySelector('.system-modal-media') : null;
+const modalImageEl = document.getElementById('system-modal-image');
+const modalImageFallbackEl = document.getElementById('system-modal-image-fallback');
+const modalBodyEl = document.getElementById('system-modal-body');
+
+let activeModalSystem = null;
+
+function closeSystemModal() {
+  if (!modalEl) return;
+  modalEl.classList.remove('active');
+  modalEl.setAttribute('aria-hidden', 'true');
+  document.body.classList.remove('modal-open');
+  activeModalSystem = null;
+}
+
+function openSystemModal(uid) {
+  if (!modalEl) return;
+  const s = SYS[uid];
+  if (!s) return;
+
+  activeModalSystem = uid;
+  modalTitleEl.textContent = s.name;
+
+  if (s.faction) {
+    modalFactionEl.textContent = s.faction;
+    modalFactionEl.style.display = '';
+  } else {
+    modalFactionEl.textContent = '';
+    modalFactionEl.style.display = 'none';
+  }
+
+  const imageSrc = s.imageLarge || s.image || null;
+  if (modalMediaEl) {
+    modalMediaEl.classList.remove('has-image', 'no-image');
+    modalMediaEl.classList.add(imageSrc ? 'has-image' : 'no-image');
+  }
+
+  if (imageSrc && modalImageEl) {
+    modalImageEl.src = imageSrc;
+    modalImageEl.alt = `${s.name} system visualization`;
+  } else if (modalImageEl) {
+    modalImageEl.removeAttribute('src');
+    modalImageEl.alt = '';
+  }
+
+  if (modalImageFallbackEl && !imageSrc) {
+    modalImageFallbackEl.textContent = 'No image available yet.';
+  }
+
+  if (modalBodyEl) {
+    const bodyFragments = [];
+    if (s.tagline) {
+      bodyFragments.push(`<div class="system-modal-tagline">${s.tagline}</div>`);
+    } else {
+      bodyFragments.push('<div class="system-modal-placeholder">No additional intel available yet.</div>');
+    }
+    if (typeof s.xPct === 'number' && typeof s.yPct === 'number') {
+      bodyFragments.push(
+        `<div class="system-modal-coords">Coordinates: ${s.xPct.toFixed(2)}% · ${s.yPct.toFixed(2)}%</div>`
+      );
+    }
+    modalBodyEl.innerHTML = bodyFragments.join('');
+  }
+
+  modalEl.classList.add('active');
+  modalEl.setAttribute('aria-hidden', 'false');
+  document.body.classList.add('modal-open');
+  if (modalCloseBtn) {
+    setTimeout(() => modalCloseBtn.focus(), 0);
+  }
+}
+
+if (modalCloseBtn) modalCloseBtn.addEventListener('click', closeSystemModal);
+if (modalBackdropEl) modalBackdropEl.addEventListener('click', closeSystemModal);
+if (modalEl) {
+  modalEl.addEventListener('click', evt => {
+    if (evt.target === modalEl) closeSystemModal();
+  });
+}
+if (modalCardEl) {
+  modalCardEl.addEventListener('click', evt => evt.stopPropagation());
+}
+document.addEventListener('keydown', evt => {
+  if (evt.key === 'Escape' && modalEl && modalEl.classList.contains('active')) {
+    closeSystemModal();
+  }
+});
+
 // ---------- helpers ----------
 function pctToPx(xPct, yPct) {
   const xPx = (xPct / 100) * mapWidth;
@@ -61,10 +156,21 @@ function focusSystemByNameFragment(frag) {
   setTimeout(() => blink.remove(), 800);
 }
 
+function updateSystemPopup(uid, html) {
+  const s = SYS[uid];
+  if (!s || !s.marker) return;
+  s.popupHtml = html;
+  s.marker.bindPopup(html);
+}
+
 // DOT marker (for planets) with optional image in popup
 function addSystemDotPct(name, xPct, yPct, color = "#e5e7eb", imageUrl = null, id = null, faction = null) {
+  const uid = makeId(name, id);
   const [xPx, yPx] = pctToPx(xPct, yPct);
   const latlng = [yPx, xPx];
+
+  const overrideImage = SYSTEM_IMAGE_OVERRIDES[uid];
+  const finalImage = overrideImage || imageUrl;
 
   const marker = L.circleMarker(latlng, {
     radius: 3.5,
@@ -76,17 +182,45 @@ function addSystemDotPct(name, xPct, yPct, color = "#e5e7eb", imageUrl = null, i
 
   let html = `<b>${name}</b>`;
   if (faction) html += `<div style="font-size:12px;color:#9aa7c1">Faction: ${faction}</div>`;
-  if (imageUrl) html += `<br/><img src="${imageUrl}" width="200" style="margin-top:6px;border-radius:8px;">`;
+  if (finalImage) html += `<br/><img src="${finalImage}" width="220" style="margin-top:6px;border-radius:8px;">`;
 
-  marker.bindTooltip(name, { direction: "top", offset: [0, -8] }).bindPopup(html).addTo(map);
+  marker
+    .bindTooltip(name, { direction: "top", offset: [0, -8] })
+    .bindPopup(html)
+    .addTo(map);
 
-  const uid = makeId(name, id);
-  SYS[uid] = { id: uid, name, faction, latlng, xPct, yPct, xPx, yPx, color, image: imageUrl, marker };
+  const record = {
+    id: uid,
+    name,
+    faction,
+    latlng,
+    xPct,
+    yPct,
+    xPx,
+    yPx,
+    color,
+    image: finalImage || null,
+    imageLarge: overrideImage || finalImage || null,
+    marker,
+    popupHtml: html,
+    tagline: null,
+  };
+
+  SYS[uid] = record;
+
+  if (modalEl) {
+    marker.on('popupopen', () => {
+      openSystemModal(uid);
+      marker.closePopup();
+    });
+  }
+
   return uid;
 }
 
 // ICON marker (for factions/capitals) + optional large image in popup
 function addSystemIconPct(name, xPct, yPct, iconUrl, size = 36, popupImageUrl = null, id = null, faction = null) {
+  const uid = makeId(name, id);
   const [xPx, yPx] = pctToPx(xPct, yPct);
   const latlng = [yPx, xPx];
 
@@ -101,18 +235,41 @@ function addSystemIconPct(name, xPct, yPct, iconUrl, size = 36, popupImageUrl = 
       })
     : new L.Icon.Default();
 
-  const img = popupImageUrl || resolvedIconUrl;
+  const overrideImage = SYSTEM_IMAGE_OVERRIDES[uid];
+  const finalImage = overrideImage || popupImageUrl || resolvedIconUrl || null;
   const html = `<b>${name}</b>`
     + (faction ? `<div style="font-size:12px;color:#9aa7c1">Faction: ${faction}</div>` : "")
-    + (img ? `<br/><img src="${img}" width="${Math.round(size * 2.5)}" style="margin-top:6px;border-radius:8px;">` : "");
+    + (finalImage ? `<br/><img src="${finalImage}" width="${Math.round(size * 2.5)}" style="margin-top:6px;border-radius:8px;">` : "");
 
-  const m = L.marker(latlng, { icon })
+  const marker = L.marker(latlng, { icon })
     .bindTooltip(name, { direction: "top", offset: [0, -8] })
     .bindPopup(html)
     .addTo(map);
 
-  const uid = makeId(name, id);
-  SYS[uid] = { id: uid, name, faction, latlng, xPct, yPct, xPx, yPx, icon: resolvedIconUrl, marker: m };
+  SYS[uid] = {
+    id: uid,
+    name,
+    faction,
+    latlng,
+    xPct,
+    yPct,
+    xPx,
+    yPx,
+    icon: resolvedIconUrl,
+    image: finalImage,
+    imageLarge: overrideImage || finalImage,
+    marker,
+    popupHtml: html,
+    tagline: null,
+  };
+
+  if (modalEl) {
+    marker.on('popupopen', () => {
+      openSystemModal(uid);
+      marker.closePopup();
+    });
+  }
+
   return uid;
 }
 
@@ -137,11 +294,13 @@ function tagSystem(uid, { iconUrl, popupText, dotColor = null, iconSize = 20 }) 
   // recolor the circle marker if requested
   if (dotColor && s.marker.setStyle) {
     s.marker.setStyle({ color: dotColor, fillColor: dotColor });
+    s.color = dotColor;
   }
 
   // popup content (title + subtitle line)
   const html = `<b>${s.name}</b><div style="margin-top:4px;color:#ffddaa">${popupText}</div>`;
-  s.marker.bindPopup(html);
+  s.tagline = popupText;
+  updateSystemPopup(uid, html);
 
   // tiny badge icon centered on the dot (non-interactive)
   const icon = L.icon({
@@ -185,6 +344,23 @@ ICONS.DOMINION = "images/icons/Dominion.png";
 ICONS.PIRATES = "images/icons/Pirates.png"; // ensure these files exist
 ICONS.AFM     = "images/icons/AFM.png";
 ICONS.GGP     = "images/icons/GGP.png";
+
+// ---------- local star system artwork overrides ----------
+const SYSTEM_IMAGE_OVERRIDES = {
+  aegir_outpost: "Star Systems/Solara -Ys.jpg",
+  thalyron: "Star Systems/Thalyron.jpg",
+  serothis_nova: "Star Systems/Serothis.jpg",
+  aelyth_prime: "Star Systems/Aelyth Prime.jpg",
+  orpheas: "Star Systems/Orpheas.jpg",
+  veyra_null: "Star Systems/Veyra Null.jpg",
+  netra: "Star Systems/Netra.jpg",
+  alctor: "Star Systems/Alctor.jpg",
+  egos_v: "Star Systems/Egos V.png",
+  phaex: "Star Systems/Phaex.jpg",
+  veil_orion: "Star Systems/Veil.jpg",
+  akrion_eagle: "Star Systems/Akrion.jpg",
+  ormun: "Star Systems/Ormun.jpg",
+};
 
 // ---------- EXISTING FACTION EMBLEMS ----------
 const aegir_outpost   = addSystemIconPct("Aegir Outpost",                 68.58, 75.46, ICONS.AEGIR,   40, null, "aegir_outpost", "AEGIR");
@@ -450,7 +626,8 @@ function setFactionAndPopup(uid, faction) {
   s.faction = faction;
   const imgHtml = s.image ? `<br/><img src="${s.image}" width="200" style="margin-top:6px;border-radius:8px;">` : "";
   const factionLine = `<div style="font-size:12px;color:#9aa7c1">Faction: ${faction}</div>`;
-  s.marker.bindPopup(`<b>${s.name}</b>${factionLine}${imgHtml}`);
+  const html = `<b>${s.name}</b>${factionLine}${imgHtml}`;
+  updateSystemPopup(uid, html);
 }
 DOMINION_DOTS.forEach(id => setFactionAndPopup(id, "Dominion"));
 FEDERATION_DOTS.forEach(id => setFactionAndPopup(id, "Federation"));
@@ -1075,7 +1252,9 @@ addLaneByIds(omega, nica);
 ["phosyr","panag","isvo","defok","oryx","fisu","hat","penta_ii"].forEach(uid => {
   const s = SYS[uid];
   if (s && s.marker) {
-    s.marker.bindPopup(`<b>${s.name}</b><div style="margin-top:4px;color:#ffddaa">Major AFM deposits</div>`);
+    const html = `<b>${s.name}</b><div style="margin-top:4px;color:#ffddaa">Major AFM deposits</div>`;
+    s.tagline = "Major AFM deposits";
+    updateSystemPopup(uid, html);
   } else {
     console.warn("AFM: system not found:", uid);
   }
@@ -1085,7 +1264,9 @@ addLaneByIds(omega, nica);
 ["omega","erethis","aliti","ika"].forEach(uid => {
   const s = SYS[uid];
   if (s && s.marker) {
-    s.marker.bindPopup(`<b>${s.name}</b><div style="margin-top:4px;color:#ffddaa">Major GGP deposits</div>`);
+    const html = `<b>${s.name}</b><div style="margin-top:4px;color:#ffddaa">Major GGP deposits</div>`;
+    s.tagline = "Major GGP deposits";
+    updateSystemPopup(uid, html);
   } else {
     console.warn("GGP: system not found:", uid);
   }
