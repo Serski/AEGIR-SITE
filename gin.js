@@ -301,8 +301,9 @@
       return;
     }
 
+    const safeUrl = encodeURI(url);
     adImageEl.hidden = false;
-    adImageEl.src = url;
+    adImageEl.src = safeUrl;
     adImageEl.alt = title ? `${title} artwork` : 'Sponsored transmission image';
     adImageFallbackEl.hidden = true;
 
