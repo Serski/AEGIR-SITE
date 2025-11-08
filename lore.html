@@ -43,65 +43,126 @@
       </div>
     </header>
 
-    <main class="gin-page-main">
-      <section class="gin-article-section">
-        <h2>Featured Chronicles</h2>
-        <div class="gin-article-grid">
-          <article class="gin-article-card">
-            <img src="images/aegir-sector.png" alt="Star map of the Aegir sector" loading="lazy" />
-            <p class="gin-article-meta">Cycle 782.04 &bull; Archivist Nera Sol</p>
-            <h3>The Founding of Outpost Aegir</h3>
-            <p>
-              From a chain of scattered listening posts grew the fortress-hub that now binds the frontier.
-              Explore the original expedition orders, the first transmissions from the ice moon surface,
-              and the oath that united the Syndicate and Federation crews under a single banner.
-            </p>
-          </article>
-          <article class="gin-article-card">
-            <img src="images/icons/AFM.png" alt="AFM resource glyph" loading="lazy" />
-            <p class="gin-article-meta">Cycle 780.17 &bull; Keeper Dal Akran</p>
-            <h3>Echoes in the AFM Mines</h3>
-            <p>
-              The luminous caverns beneath Phosyr hold murals predating jump-drive civilization by millennia.
-              Newly translated glyphs reveal a warning about the Custodians and the price of reckless extraction.
-            </p>
-          </article>
-          <article class="gin-article-card">
-            <img src="images/icons/Orion.png" alt="Orion Industries emblem" loading="lazy" />
-            <p class="gin-article-meta">Cycle 779.33 &bull; Sage Council Dossier</p>
-            <h3>The Orion Schism</h3>
-            <p>
-              Discover how Orion Industries fractured after the fall of the Veridian Gate. Personal letters,
-              sealed tribunal logs, and recovered AI fragments paint a tense portrait of loyalty, ambition,
-              and the desperate race to restore the lost gate-chain.
-            </p>
-          </article>
-        </div>
-      </section>
+    <main class="gin-page-main gin-newsroom">
+      <div class="gin-news-grid">
+        <div class="gin-news-grid__main">
+          <section aria-labelledby="lore-frontier">
+            <p class="gin-section-header" id="lore-frontier">Frontier Spotlight</p>
+            <article class="gin-lead-story">
+              <img src="images/aegir-sector.png" alt="Star map of the Aegir sector" loading="lazy" />
+              <div class="gin-lead-story__body">
+                <p class="gin-lead-kicker">Cycle 782.04 &bull; Archivist Nera Sol</p>
+                <h2 class="gin-lead-title">The Founding of Outpost Aegir</h2>
+                <p class="gin-lead-summary">
+                  From a chain of scattered listening posts grew the fortress-hub that now binds the frontier. The
+                  Archives desk revisits the original expedition orders, first-signal transcripts from the ice moon,
+                  and the oath that united Syndicate and Federation crews beneath a single crest.
+                </p>
+                <div class="gin-inline-callout">
+                  <h4>Document Vault</h4>
+                  <p>
+                    Expeditionary scans, sworn testimonies, and the inaugural stewardship charter are available for
+                    on-station review. Archivists highlight the passages that continue to guide station doctrine.
+                  </p>
+                </div>
+              </div>
+            </article>
+          </section>
 
-      <section class="gin-article-section">
-        <h2>Recovered Datapads</h2>
-        <div class="gin-article-grid">
-          <article class="gin-article-card">
-            <img src="images/icons/Pirates.png" alt="Pirate fleet insignia" loading="lazy" />
-            <p class="gin-article-meta">Cycle 777.05 &bull; Ranger Corps</p>
-            <h3>Charts of the Crimson Tide</h3>
-            <p>
-              Starmaps etched with encrypted pirate routes describe hidden caches and refit yards scattered
-              along the Tenebris Run. Decode the coordinates and uncover the fates of missing convoy escorts.
-            </p>
-          </article>
-          <article class="gin-article-card">
-            <img src="images/icons/YAMATO.png" alt="Yamato Syndicate crest" loading="lazy" />
-            <p class="gin-article-meta">Cycle 775.92 &bull; Lorekeeper Aya Jun</p>
-            <h3>The Yamato Concord</h3>
-            <p>
-              A treaty signed in the glow of shattered moons. Annotated holoscripts recount how Syndicate
-              admirals forged an uneasy truce with the Nova Confederation to repel the first Scion incursion.
-            </p>
-          </article>
+          <section aria-labelledby="lore-chronicles">
+            <p class="gin-section-header" id="lore-chronicles">Featured Chronicles</p>
+            <div class="gin-story-grid">
+              <article class="gin-story gin-story--feature">
+                <img src="images/icons/AFM.png" alt="AFM resource glyph" loading="lazy" />
+                <p class="gin-story__meta">Cycle 780.17 &bull; Keeper Dal Akran</p>
+                <h3 class="gin-story__headline">Echoes in the AFM Mines</h3>
+                <p class="gin-story__summary">
+                  The luminous caverns beneath Phosyr hold murals predating jump-drive civilization by millennia. Newly
+                  translated glyphs reveal a warning about the Custodians and the price of reckless extraction.
+                </p>
+              </article>
+              <article class="gin-story">
+                <img src="images/icons/Orion.png" alt="Orion Industries emblem" loading="lazy" />
+                <p class="gin-story__meta">Cycle 779.33 &bull; Sage Council Dossier</p>
+                <h3 class="gin-story__headline">The Orion Schism</h3>
+                <p class="gin-story__summary">
+                  Discover how Orion Industries fractured after the fall of the Veridian Gate. Personal letters, sealed
+                  tribunal logs, and recovered AI fragments paint a tense portrait of loyalty, ambition, and the
+                  desperate race to restore the lost gate-chain.
+                </p>
+              </article>
+            </div>
+          </section>
+
+          <section aria-labelledby="lore-datapads">
+            <p class="gin-section-header" id="lore-datapads">Recovered Datapads</p>
+            <div class="gin-multi-column">
+              <article class="gin-brief-card">
+                <h3>Charts of the Crimson Tide</h3>
+                <p class="gin-story__meta">Cycle 777.05 &bull; Ranger Corps</p>
+                <p>
+                  Starmaps etched with encrypted pirate routes describe hidden caches and refit yards scattered along
+                  the Tenebris Run. Decode the coordinates and uncover the fates of missing convoy escorts.
+                </p>
+              </article>
+              <article class="gin-brief-card">
+                <h3>The Yamato Concord</h3>
+                <p class="gin-story__meta">Cycle 775.92 &bull; Lorekeeper Aya Jun</p>
+                <p>
+                  A treaty signed in the glow of shattered moons. Annotated holoscripts recount how Syndicate admirals
+                  forged an uneasy truce with the Nova Confederation to repel the first Scion incursion.
+                </p>
+              </article>
+              <article class="gin-brief-card">
+                <h3>Archivist Alerts</h3>
+                <p>
+                  Curators across the rim request additional eyewitness accounts from early shield-grid failures. Submit
+                  testimony through the secure relay to expand the oral history thread.
+                </p>
+              </article>
+            </div>
+          </section>
         </div>
-      </section>
+
+        <aside class="gin-side-rail" aria-label="Lore briefs">
+          <section class="gin-rail-card">
+            <h3>Chronicle Snapshots</h3>
+            <ul class="gin-rail-list">
+              <li class="gin-rail-item">
+                <h4>Yamato Envoys</h4>
+                <p>Envoys reopen Concord negotiation notes for cadets studying treaty protocol this cycle.</p>
+              </li>
+              <li class="gin-rail-item">
+                <h4>Custodian Watch</h4>
+                <p>Seismic monitors in the AFM caverns flag a new resonant hymn beneath gallery twelve.</p>
+              </li>
+              <li class="gin-rail-item">
+                <h4>Ranger Archive</h4>
+                <p>Fresh telemetry from the Crimson Tide charts verifies three dormant pirate refuges.</p>
+              </li>
+            </ul>
+          </section>
+
+          <section class="gin-rail-card">
+            <h3>Ice-Moon Weather Tape</h3>
+            <p>
+              Atmospheric balancers predict auroral storms cresting over the habitation domes at 0300 station time.
+              Expect intermittent relay static and luminous horizon arcs visible from docking tier six.
+            </p>
+          </section>
+
+          <section class="gin-rail-card">
+            <div class="gin-ad-slot">
+              <p class="gin-ad-label">Sponsored Relay</p>
+              <img src="Adverts/VANTISYN ADV.png" alt="Advertisement for VANTISYN augmentations" loading="lazy" />
+              <p class="gin-story__summary">
+                VANTISYN&trade; bio-symphonic upgrades keep archivists alert through triple-length decoding shifts. Ask
+                for the Vault Scholar package in Med Bay Three.
+              </p>
+            </div>
+          </section>
+        </aside>
+      </div>
     </main>
 
     <footer class="gin-page-footer">
