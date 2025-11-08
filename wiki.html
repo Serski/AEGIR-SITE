@@ -43,73 +43,126 @@
       </div>
     </header>
 
-    <main class="gin-page-main">
-      <section class="gin-article-section">
-        <h2>Faction Briefings</h2>
-        <div class="gin-article-grid">
-          <article class="gin-article-card">
-            <img src="images/icons/Federation.png" alt="Federation emblem" loading="lazy" />
-            <p class="gin-article-meta">Updated Cycle 782.09</p>
-            <h3>United Federation Navy</h3>
-            <p>
-              Fleet composition charts, preferred engagement ranges, and recommended countermeasures for the
-              United Federation Navy. Cross-reference jump signatures to anticipate cruiser reinforcements
-              before they breach the sector perimeter.
-            </p>
-          </article>
-          <article class="gin-article-card">
-            <img src="images/icons/Dominion.png" alt="Dominion order seal" loading="lazy" />
-            <p class="gin-article-meta">Updated Cycle 782.02</p>
-            <h3>Dominion Pact Forces</h3>
-            <p>
-              Recon dossiers cataloging Dominion warforms, shielding tolerances, and known psionic command
-              nodes. Suggested strike packages highlight EMP deployment and prioritized target hierarchies.
-            </p>
-          </article>
-          <article class="gin-article-card">
-            <img src="images/icons/CRIMSON.png" alt="Crimson Collective emblem" loading="lazy" />
-            <p class="gin-article-meta">Updated Cycle 781.22</p>
-            <h3>Crimson Collective Cells</h3>
-            <p>
-              Network mapping of insurgent safe harbors, smuggler lanes, and sabotage specialists. Includes
-              field tips for negotiating temporary cease-fires and identifying covert operatives in port.
-            </p>
-          </article>
-        </div>
-      </section>
+    <main class="gin-page-main gin-newsroom">
+      <div class="gin-news-grid">
+        <div class="gin-news-grid__main">
+          <section aria-labelledby="wiki-operations">
+            <p class="gin-section-header" id="wiki-operations">Operations Dossier</p>
+            <article class="gin-lead-story">
+              <img src="images/icons/Federation.png" alt="Federation emblem" loading="lazy" />
+              <div class="gin-lead-story__body">
+                <p class="gin-lead-kicker">Updated Cycle 782.09 &bull; Tactical Bureau</p>
+                <h2 class="gin-lead-title">United Federation Navy Readiness Manual</h2>
+                <p class="gin-lead-summary">
+                  Fleet composition charts, preferred engagement ranges, and recommended countermeasures help crews
+                  interpret Federation battle doctrine in a single glance. Cross-reference jump signatures to anticipate
+                  cruiser reinforcements before they breach the sector perimeter.
+                </p>
+                <div class="gin-inline-callout">
+                  <h4>Immediate Orders</h4>
+                  <p>
+                    Patrol captains are instructed to refresh carrier intercept patterns and review the updated escort
+                    attrition matrix before launching sortie rotations.
+                  </p>
+                </div>
+              </div>
+            </article>
+          </section>
 
-      <section class="gin-article-section">
-        <h2>Equipment &amp; Craft</h2>
-        <div class="gin-article-grid">
-          <article class="gin-article-card">
-            <img src="images/icons/YAMATO.png" alt="Yamato Syndicate crest" loading="lazy" />
-            <p class="gin-article-meta">Tech Ref. 118-A</p>
-            <h3>Yamato Frigate Upgrades</h3>
-            <p>
-              Step-by-step retrofit guides for the Yamato Syndicate's modular frigates. Learn optimal reactor
-              pairings, recommended drone complements, and emergency power shunting routines for prolonged sieges.
-            </p>
-          </article>
-          <article class="gin-article-card">
-            <img src="images/icons/nova.png" alt="Nova Confederation emblem" loading="lazy" />
-            <p class="gin-article-meta">Tech Ref. 98-C</p>
-            <h3>Nova Gatecasters</h3>
-            <p>
-              A technical overview of the Nova Confederation's gatecaster pylons, including maintenance cycles,
-              calibration schematics, and the security protocols required to safely anchor temporary jump lanes.
-            </p>
-          </article>
-          <article class="gin-article-card">
-            <img src="images/icons/Pirates.png" alt="Pirate insignia" loading="lazy" />
-            <p class="gin-article-meta">Tech Ref. 76-B</p>
-            <h3>Repurposed Pirate Arsenal</h3>
-            <p>
-              Field-proven conversions that turn captured pirate weaponry into dependable defenses. Covers
-              volatile munitions handling, jury-rigged targeting suites, and recommended safety overrides.
-            </p>
-          </article>
+          <section aria-labelledby="wiki-factions">
+            <p class="gin-section-header" id="wiki-factions">Faction Briefings</p>
+            <div class="gin-story-grid">
+              <article class="gin-story gin-story--feature">
+                <img src="images/icons/Dominion.png" alt="Dominion order seal" loading="lazy" />
+                <p class="gin-story__meta">Updated Cycle 782.02</p>
+                <h3 class="gin-story__headline">Dominion Pact Forces</h3>
+                <p class="gin-story__summary">
+                  Recon dossiers catalog Dominion warforms, shielding tolerances, and known psionic command nodes.
+                  Suggested strike packages highlight EMP deployment and prioritized target hierarchies.
+                </p>
+              </article>
+              <article class="gin-story">
+                <img src="images/icons/CRIMSON.png" alt="Crimson Collective emblem" loading="lazy" />
+                <p class="gin-story__meta">Updated Cycle 781.22</p>
+                <h3 class="gin-story__headline">Crimson Collective Cells</h3>
+                <p class="gin-story__summary">
+                  Network mapping charts insurgent safe harbors, smuggler lanes, and sabotage specialists. Field tips
+                  outline cease-fire etiquette and covert operative tells for port security teams.
+                </p>
+              </article>
+            </div>
+          </section>
+
+          <section aria-labelledby="wiki-equipment">
+            <p class="gin-section-header" id="wiki-equipment">Equipment &amp; Craft</p>
+            <div class="gin-multi-column">
+              <article class="gin-brief-card">
+                <h3>Yamato Frigate Upgrades</h3>
+                <p class="gin-story__meta">Tech Ref. 118-A</p>
+                <p>
+                  Step-by-step retrofit guides for the Yamato Syndicate's modular frigates. Learn optimal reactor pairings
+                  and emergency power shunting routines for prolonged sieges.
+                </p>
+              </article>
+              <article class="gin-brief-card">
+                <h3>Nova Gatecasters</h3>
+                <p class="gin-story__meta">Tech Ref. 98-C</p>
+                <p>
+                  A technical overview of Nova gatecaster pylons, including maintenance cycles, calibration schematics,
+                  and the security protocols required to safely anchor temporary jump lanes.
+                </p>
+              </article>
+              <article class="gin-brief-card">
+                <h3>Repurposed Pirate Arsenal</h3>
+                <p class="gin-story__meta">Tech Ref. 76-B</p>
+                <p>
+                  Field-proven conversions turn captured pirate weaponry into dependable defenses while mitigating volatile
+                  munitions and jury-rigged targeting suites.
+                </p>
+              </article>
+            </div>
+          </section>
         </div>
-      </section>
+
+        <aside class="gin-side-rail" aria-label="Wiki updates">
+          <section class="gin-rail-card">
+            <h3>Watch Desk Notices</h3>
+            <ul class="gin-rail-list">
+              <li class="gin-rail-item">
+                <h4>Scion Intrusions</h4>
+                <p>Perimeter stations report faint psionic bleed matching Dominion signatures near the Rimway.</p>
+              </li>
+              <li class="gin-rail-item">
+                <h4>Logistics Pulse</h4>
+                <p>Freighter convoys rerouted via Route Kappa; update cargo interdiction parameters accordingly.</p>
+              </li>
+              <li class="gin-rail-item">
+                <h4>Academy Brief</h4>
+                <p>Officer cadets requested to audit the Crimson Collective dossier before graduation week.</p>
+              </li>
+            </ul>
+          </section>
+
+          <section class="gin-rail-card">
+            <h3>Simulation Room Feed</h3>
+            <p>
+              Tactical holosuites now include the revised Federation cruiser AI pack. Expect heavier flanking drills and
+              randomized missile swarms during training runs.
+            </p>
+          </section>
+
+          <section class="gin-rail-card">
+            <div class="gin-ad-slot">
+              <p class="gin-ad-label">Sponsored Relay</p>
+              <img src="Adverts/Galactic Fed.jpg" alt="Galactic Federation recruitment advertisement" loading="lazy" />
+              <p class="gin-story__summary">
+                "Chart the safer route." Register with the Galactic Federation auxiliary to receive hazard pay and
+                shield harmonics tuned for long-haul escorts.
+              </p>
+            </div>
+          </section>
+        </aside>
+      </div>
     </main>
 
     <footer class="gin-page-footer">
