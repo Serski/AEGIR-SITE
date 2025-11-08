@@ -668,6 +668,56 @@ const sma    = addSystemDotPct("Sma", 39.94, 93.02, C.NEUTRAL, null, "sma");
 const wondir = addSystemDotPct("Wondir", 42.00, 95.18, C.NEUTRAL, null, "wondir");
 const otha   = addSystemDotPct("Otha", 41.70, 97.86, C.NEUTRAL, null, "otha");
 
+// ---------- NEW SYSTEMS: FEDERATION EXPANSION ----------
+const otheu   = addSystemDotPct("Otheu",   37.10, 63.49, C.NEUTRAL, null, "otheu");
+const dram    = addSystemDotPct("Dram",    36.87, 61.25, C.NEUTRAL, null, "dram");
+const kolkas  = addSystemDotPct("Kolkas",  35.53, 58.45, C.NEUTRAL, null, "kolkas");
+const tifli   = addSystemDotPct("Tifli",   39.62, 57.60, C.NEUTRAL, null, "tifli");
+const noki_iv = addSystemDotPct("Noki IV", 43.73, 60.43, C.NEUTRAL, null, "noki_iv");
+const xaxan   = addSystemDotPct("Xaxan",   44.87, 61.42, C.NEUTRAL, null, "xaxan");
+const aslopo  = addSystemDotPct("Aslopo",  44.59, 57.32, C.NEUTRAL, null, "aslopo");
+const koretor = addSystemDotPct("Koretor", 44.66, 55.51, C.NEUTRAL, null, "koretor");
+const fesao   = addSystemDotPct("Fesao",   49.96, 57.69, C.NEUTRAL, null, "fesao");
+const ikopoc  = addSystemDotPct("Ikopoc",  50.09, 53.68, C.NEUTRAL, null, "ikopoc");
+const iso9    = addSystemDotPct("Iso9",    52.03, 53.72, C.NEUTRAL, null, "iso9");
+const vazompa = addSystemDotPct("Vazompa", 54.49, 58.11, C.NEUTRAL, null, "vazompa");
+const kpax    = addSystemDotPct("Kpax",    53.48, 60.37, C.NEUTRAL, null, "kpax");
+const akonto  = addSystemDotPct("Akonto",  52.32, 61.37, C.NEUTRAL, null, "akonto");
+const naerk   = addSystemDotPct("Naerk",   51.40, 64.75, C.NEUTRAL, null, "naerk");
+const pokaki  = addSystemDotPct("Pokaki",  56.37, 64.92, C.NEUTRAL, null, "pokaki");
+const odjo    = addSystemDotPct("Odjo",    59.48, 63.54, C.NEUTRAL, null, "odjo");
+const ert     = addSystemDotPct("Ert",     59.67, 69.46, C.NEUTRAL, null, "ert");
+const massa   = addSystemDotPct("Massa",   63.29, 65.20, C.NEUTRAL, null, "massa");
+const verga   = addSystemDotPct("Verga",   62.19, 66.91, C.NEUTRAL, null, "verga");
+
+// Coordinates inferred from neighbouring lanes pending official survey data
+const consa   = addSystemDotPct("Consa",   51.64, 55.80, C.NEUTRAL, null, "consa");
+const toss    = addSystemDotPct("Toss",    53.43, 59.95, C.NEUTRAL, null, "toss");
+const ganapo  = addSystemDotPct("Ganapo",  59.17, 66.09, C.NEUTRAL, null, "ganapo");
+
+// ---------- NEW SYSTEMS: FRONTIER EXPANSION ----------
+const ipsak    = addSystemDotPct("Ipsak",    6.02, 58.91, C.NEUTRAL, null, "ipsak");
+const toxxo    = addSystemDotPct("Toxxo",    9.34, 57.99, C.NEUTRAL, null, "toxxo");
+const xoxk     = addSystemDotPct("Xoxk",     6.24, 55.04, C.NEUTRAL, null, "xoxk");
+const sotir    = addSystemDotPct("Sotir",    4.87, 52.39, C.NEUTRAL, null, "sotir");
+const josokuk  = addSystemDotPct("Josokuk", 10.35, 51.68, C.NEUTRAL, null, "josokuk");
+const pakama   = addSystemDotPct("Pakama",  11.60, 47.69, C.NEUTRAL, null, "pakama");
+const opostoki = addSystemDotPct("Opostoki", 15.99, 41.74, C.NEUTRAL, null, "opostoki");
+const megalok  = addSystemDotPct("Megalok",   9.49, 43.95, C.NEUTRAL, null, "megalok");
+
+// ---------- NEW SYSTEMS: DOMINION EXPANSION ----------
+const o_dominion  = addSystemDotPct("O",       70.10, 66.31, C.NEUTRAL, null, "o_dominion");
+const xisaki      = addSystemDotPct("Xisaki",  73.02, 63.58, C.NEUTRAL, null, "xisaki");
+const riril       = addSystemDotPct("Riril",   71.75, 62.83, C.NEUTRAL, null, "riril");
+const edox        = addSystemDotPct("Edox",    73.80, 61.93, C.NEUTRAL, null, "edox");
+const xex         = addSystemDotPct("Xex",     74.16, 60.53, C.NEUTRAL, null, "xex");
+const zo_dominion = addSystemDotPct("Zo",      75.06, 61.67, C.NEUTRAL, null, "zo_dominion");
+const zokra      = addSystemDotPct("Zokra",   68.55, 58.38, C.NEUTRAL, null, "zokra");
+const zao        = addSystemDotPct("Zao",     66.04, 58.73, C.NEUTRAL, null, "zao");
+const miskran    = addSystemDotPct("Miskran", 67.03, 57.25, C.NEUTRAL, null, "miskran");
+const krixa      = addSystemDotPct("Krixa",   72.17, 57.52, C.NEUTRAL, null, "krixa");
+const zandarki   = addSystemDotPct("Zandarki",74.83, 52.42, C.NEUTRAL, null, "zandarki");
+
 // ---------- RECOLOR EXISTING DOTS ----------
 function setDotColor(uid, color) {
   const s = SYS[uid];
@@ -682,14 +732,18 @@ const DOMINION_DOTS = [
   'delos', 'ix4', 'ho_prime', 'phaex', 'ris', 'leo',
   'spyr', 'xavouz', 'racko', 'xdat', 'ifo',
   'aka', 'zorg', 'aq', 'lob', 'orhax', 'hexon', 'decrix',
-  'paxi_prime'
+  'paxi_prime', 'o_dominion', 'xisaki', 'riril', 'edox',
+  'xex', 'zo_dominion', 'zokra', 'zao', 'miskran', 'krixa', 'zandarki'
 ];
 DOMINION_DOTS.forEach(id => setDotColor(id, C.DOMINION));
 
 // --- Federation systems (DOTS only; capital is an icon marker) ---
 const FEDERATION_DOTS = [
   'otik','ermis','kata','dosa','vessu','omega','okarin','pao7',
-  'seres','ver','ioso','nica','laka','calisa','colo','toda','nokii','naok'
+  'seres','ver','ioso','nica','laka','calisa','colo','toda','nokii','naok',
+  'otheu','dram','kolkas','tifli','noki_iv','xaxan','aslopo','koretor','fesao',
+  'ikopoc','iso9','vazompa','kpax','akonto','naerk','pokaki','odjo','ert','massa','verga',
+  'consa','toss','ganapo'
 ];
 FEDERATION_DOTS.forEach(id => setDotColor(id, C.FED));
 
@@ -950,6 +1004,210 @@ addLaneByIds(kata, ermis);
 // Eryndor — Federation Capital ↔ Noki II
 addLaneByIds(eryndor, nokii);
 addLaneByIds(nokii, eryndor);
+
+// ---------- NEW HYPERLANES (Federation expansion) ----------
+addLaneByIds(otheu, naok);
+addLaneByIds(naok, otheu);
+
+addLaneByIds(otheu, dram);
+addLaneByIds(dram, otheu);
+
+addLaneByIds(dram, kolkas);
+addLaneByIds(kolkas, dram);
+
+addLaneByIds(dram, nokii);
+addLaneByIds(nokii, dram);
+
+addLaneByIds(kolkas, tifli);
+addLaneByIds(tifli, kolkas);
+
+addLaneByIds(tifli, eryndor);
+addLaneByIds(eryndor, tifli);
+
+addLaneByIds(noki_iv, nokii);
+addLaneByIds(nokii, noki_iv);
+
+addLaneByIds(noki_iv, xaxan);
+addLaneByIds(xaxan, noki_iv);
+
+addLaneByIds(xaxan, toda);
+addLaneByIds(toda, xaxan);
+
+addLaneByIds(xaxan, aslopo);
+addLaneByIds(aslopo, xaxan);
+
+addLaneByIds(xaxan, akonto);
+addLaneByIds(akonto, xaxan);
+
+addLaneByIds(aslopo, koretor);
+addLaneByIds(koretor, aslopo);
+
+addLaneByIds(koretor, eryndor);
+addLaneByIds(eryndor, koretor);
+
+addLaneByIds(koretor, fesao);
+addLaneByIds(fesao, koretor);
+
+addLaneByIds(fesao, ikopoc);
+addLaneByIds(ikopoc, fesao);
+
+addLaneByIds(ikopoc, iso9);
+addLaneByIds(iso9, ikopoc);
+
+addLaneByIds(ikopoc, vazompa);
+addLaneByIds(vazompa, ikopoc);
+
+addLaneByIds(ikopoc, consa);
+addLaneByIds(consa, ikopoc);
+
+addLaneByIds(iso9, vazompa);
+addLaneByIds(vazompa, iso9);
+
+addLaneByIds(vazompa, kpax);
+addLaneByIds(kpax, vazompa);
+
+addLaneByIds(vazompa, toss);
+addLaneByIds(toss, vazompa);
+
+addLaneByIds(kpax, akonto);
+addLaneByIds(akonto, kpax);
+
+addLaneByIds(kpax, toss);
+addLaneByIds(toss, kpax);
+
+addLaneByIds(akonto, toss);
+addLaneByIds(toss, akonto);
+
+addLaneByIds(akonto, naerk);
+addLaneByIds(naerk, akonto);
+
+addLaneByIds(naerk, calisa);
+addLaneByIds(calisa, naerk);
+
+addLaneByIds(naerk, nica);
+addLaneByIds(nica, naerk);
+
+addLaneByIds(naerk, pokaki);
+addLaneByIds(pokaki, naerk);
+
+addLaneByIds(pokaki, omega);
+addLaneByIds(omega, pokaki);
+
+addLaneByIds(odjo, omega);
+addLaneByIds(omega, odjo);
+
+addLaneByIds(odjo, ert);
+addLaneByIds(ert, odjo);
+
+addLaneByIds(odjo, massa);
+addLaneByIds(massa, odjo);
+
+addLaneByIds(odjo, ganapo);
+addLaneByIds(ganapo, odjo);
+
+addLaneByIds(ert, omega);
+addLaneByIds(omega, ert);
+
+addLaneByIds(ert, ermis);
+addLaneByIds(ermis, ert);
+
+addLaneByIds(ert, kata);
+addLaneByIds(kata, ert);
+
+addLaneByIds(massa, otik);
+addLaneByIds(otik, massa);
+
+addLaneByIds(massa, verga);
+addLaneByIds(verga, massa);
+
+addLaneByIds(verga, otik);
+addLaneByIds(otik, verga);
+
+addLaneByIds(verga, ermis);
+addLaneByIds(ermis, verga);
+
+// ---------- NEW HYPERLANES (Frontier expansion) ----------
+addLaneByIds(ipsak, toxxo);
+addLaneByIds(toxxo, ipsak);
+
+addLaneByIds(ipsak, tetra_prime);
+addLaneByIds(tetra_prime, ipsak);
+
+addLaneByIds(ipsak, xoxk);
+addLaneByIds(xoxk, ipsak);
+
+addLaneByIds(toxxo, xoxk);
+addLaneByIds(xoxk, toxxo);
+
+addLaneByIds(xoxk, sotir);
+addLaneByIds(sotir, xoxk);
+
+addLaneByIds(xoxk, josokuk);
+addLaneByIds(josokuk, xoxk);
+
+addLaneByIds(josokuk, dolca);
+addLaneByIds(dolca, josokuk);
+
+addLaneByIds(pakama, dolca);
+addLaneByIds(dolca, pakama);
+
+addLaneByIds(pakama, opostoki);
+addLaneByIds(opostoki, pakama);
+
+addLaneByIds(opostoki, megalok);
+addLaneByIds(megalok, opostoki);
+
+// ---------- NEW HYPERLANES (Dominion expansion) ----------
+addLaneByIds(o_dominion, ix4);
+addLaneByIds(ix4, o_dominion);
+
+addLaneByIds(o_dominion, delos);
+addLaneByIds(delos, o_dominion);
+
+addLaneByIds(o_dominion, otik);
+addLaneByIds(otik, o_dominion);
+
+addLaneByIds(xisaki, ix4);
+addLaneByIds(ix4, xisaki);
+
+addLaneByIds(xisaki, edox);
+addLaneByIds(edox, xisaki);
+
+addLaneByIds(xisaki, riril);
+addLaneByIds(riril, xisaki);
+
+addLaneByIds(xisaki, zo_dominion);
+addLaneByIds(zo_dominion, xisaki);
+
+addLaneByIds(riril, zokra);
+addLaneByIds(zokra, riril);
+
+addLaneByIds(edox, zo_dominion);
+addLaneByIds(zo_dominion, edox);
+
+addLaneByIds(edox, xex);
+addLaneByIds(xex, edox);
+
+addLaneByIds(edox, zokra);
+addLaneByIds(zokra, edox);
+
+addLaneByIds(xex, zo_dominion);
+addLaneByIds(zo_dominion, xex);
+
+addLaneByIds(zo_dominion, vica);
+addLaneByIds(vica, zo_dominion);
+
+addLaneByIds(zokra, zao);
+addLaneByIds(zao, zokra);
+
+addLaneByIds(zokra, miskran);
+addLaneByIds(miskran, zokra);
+
+addLaneByIds(zokra, krixa);
+addLaneByIds(krixa, zokra);
+
+addLaneByIds(krixa, zandarki);
+addLaneByIds(zandarki, krixa);
 
 // Kharon — Dominion Capital ↔ Xdat, Ifo
 addLaneByIds(kharon_cap, xdat);
