@@ -11,7 +11,8 @@ const map = L.map('map', {
   maxZoom: 2,
   zoomControl: true,
   maxBounds: bounds,
-  maxBoundsViscosity: 1.0
+  maxBoundsViscosity: 1.0,
+  tapTolerance: 18
 });
 window.map = map;
 
@@ -39,6 +40,9 @@ window.addEventListener('orientationchange', () => scheduleMapResize(300));
 const SYS = {};                               // systems by unique id
 const laneLayer  = L.layerGroup().addTo(map); // hyperlanes
 const labelLayer = L.layerGroup().addTo(map); // permanent labels
+
+const DOT_RADIUS_PX = 5.5;       // increase click/tap target for system dots
+const DOT_STROKE_WEIGHT = 1.1;
 window.SYS = SYS;
 
 // ---------- system detail modal wiring ----------
@@ -190,11 +194,11 @@ function addSystemDotPct(name, xPct, yPct, color = "#e5e7eb", imageUrl = null, i
   const finalImage = overrideImage || imageUrl;
 
   const marker = L.circleMarker(latlng, {
-    radius: 3.5,
-    weight: 0.8,
+    radius: DOT_RADIUS_PX,
+    weight: DOT_STROKE_WEIGHT,
     color,
     fillColor: color,
-    fillOpacity: 0.85,
+    fillOpacity: 0.9,
   });
 
   let html = `<b>${name}</b>`;
