@@ -53,18 +53,168 @@
     <main class="gin-page-main gin-newsroom">
       <div class="gin-news-grid">
         <div class="gin-news-grid__main">
-          <section aria-labelledby="simulator-placeholder">
-            <p class="gin-section-header" id="simulator-placeholder">Training Uplink</p>
+          <section aria-labelledby="simulator-overview">
+            <p class="gin-section-header" id="simulator-overview">Training Uplink</p>
             <article class="gin-lead-story">
               <div class="gin-lead-story__body">
-                <p class="gin-lead-kicker">Prototype Status &bull; Engineering Deck</p>
-                <h2 class="gin-lead-title">Simulator Module in Construction</h2>
+                <p class="gin-lead-kicker">Battle Doctrine &bull; Tactical Ops</p>
+                <h2 class="gin-lead-title">Aegir Battle Simulator &mdash; Compact Summary</h2>
                 <p class="gin-lead-summary">
-                  The Aegir simulator interface is currently under development. Check back soon to experience tactical
-                  drills and scenario planning across the sector.
+                  Configure opposing task forces, track shield and morale shifts, and resolve three-round engagements in
+                  Aegir&rsquo;s strategic sandbox. The following outline captures the current rules draft.
                 </p>
               </div>
             </article>
+          </section>
+
+          <section class="gin-article" aria-labelledby="simulator-setup">
+            <h3 class="gin-article__title" id="simulator-setup">1. Match Setup</h3>
+            <p>
+              Dual fleet panels let you assign ship counts by class, choose a commander, pick one formation, one tactic,
+              per-class orders for each round, and toggle withdrawal attempts. Battles resolve across three rounds
+              covering Detection &amp; Initiative, Engagement, and Resolution, with optional withdraw checks after rounds one
+              and two (slower fleets risk pursuit).
+            </p>
+          </section>
+
+          <section class="gin-article" aria-labelledby="simulator-roster">
+            <h3 class="gin-article__title" id="simulator-roster">2. Ship Roster, Base Stats &amp; Shields</h3>
+            <p>
+              Each hull lists Attack / Defense / Hull Points / Speed / Shield level (capacity &bull; regen). The roster
+              currently includes:
+            </p>
+            <ul>
+              <li><strong>Corvette</strong> &mdash; <strong>45 / 25 / 300 / 90 / L0</strong> (no shields).</li>
+              <li><strong>Destroyer</strong> &mdash; <strong>70 / 55 / 550 / 65 / L1</strong> (200 &bull; 10).</li>
+              <li><strong>Heavy Frigate</strong> &mdash; <strong>90 / 75 / 800 / 45 / L2</strong> (300 &bull; 15).</li>
+              <li><strong>Cruiser</strong> &mdash; <strong>130 / 90 / 1200 / 35 / L3</strong> (500 &bull; 20).</li>
+              <li><strong>Battleship</strong> &mdash; <strong>190 / 130 / 2000 / 20 / L4</strong> (800 &bull; 25).</li>
+              <li><strong>Mega Battle Station</strong> &mdash; <strong>1300 / 900 / 12000 / 0 / L5</strong> (5000 &bull; 50).
+              </li>
+            </ul>
+            <p>
+              Starting with all six classes unlocks the Combined-Arms bonus: +10% Command Sync, &ndash;10% incoming damage,
+              and one Volley Coordination declaration (+15% fleet damage) during Detection.
+            </p>
+          </section>
+
+          <section class="gin-article" aria-labelledby="simulator-formations">
+            <h3 class="gin-article__title" id="simulator-formations">3. Formations</h3>
+            <p>Pick one fleet-wide stance:</p>
+            <ul>
+              <li><strong>Spearhead</strong> &mdash; increased attack, reduced evasion.</li>
+              <li><strong>Phalanx</strong> &mdash; boosted defense and shield regeneration, lower initiative.</li>
+              <li><strong>Dispersed Line</strong> &mdash; heightened evasion, reduced accuracy.</li>
+            </ul>
+          </section>
+
+          <section class="gin-article" aria-labelledby="simulator-tactics">
+            <h3 class="gin-article__title" id="simulator-tactics">4. Tactics</h3>
+            <p>
+              Choose one approach lasting all three rounds:
+            </p>
+            <ul>
+              <li>
+                <strong>Aggressive</strong> &mdash; +15% damage (+25% in round one), +5% crit, +10% incoming damage, and &ndash;5%
+                shield regen.
+              </li>
+              <li>
+                <strong>Balanced</strong> &mdash; +5% accuracy, +5% damage, +8 morale at the end of each round, and &ndash;5%
+                incoming damage.
+              </li>
+              <li>
+                <strong>Defensive</strong> &mdash; &ndash;15% damage, +30% shield regen and +10% shield capacity (non-Corvettes),
+                +5% evasion for Corvettes and Destroyers, and +10% withdraw success after rounds one and two.
+              </li>
+            </ul>
+          </section>
+
+          <section class="gin-article" aria-labelledby="simulator-orders">
+            <h3 class="gin-article__title" id="simulator-orders">5. Class Special Orders</h3>
+            <p>
+              Assign one order per class each round. Highlights include:
+            </p>
+            <ul>
+              <li>
+                <strong>Corvettes</strong> &mdash; Flank (extra accuracy and crit vs capitals, more damage taken), Evade Pattern
+                (high evasion, lower damage, safer in belts), or Overdrive (faster initiative, more damage, accuracy drop,
+                minor self-hull tick).
+              </li>
+              <li>
+                <strong>Destroyers</strong> &mdash; Shield Screen (redirect hits, raise shield cap), Target Lock (accuracy and
+                crit vs DD/Frig, ignore evasion), or PD Overclock (intercept boost, lower damage and regen).
+              </li>
+              <li>
+                <strong>Heavy Frigates</strong> &mdash; Suppressive Volley (enemy accuracy/evasion debuff next round, self
+                damage penalty) or Focus Fire (big bonus vs one class, heavy penalty elsewhere).
+              </li>
+              <li>
+                <strong>Cruisers</strong> &mdash; Broadside (large damage spike, accuracy loss vs evasive, cooldown), Lance
+                Overcharge (shield pierce vs capitals, temporary shield penalty, misfire risk), or Command Relay (fleet
+                command and morale boost, damage trade-off).
+              </li>
+              <li>
+                <strong>Battleships</strong> &mdash; Spinal Salvo (burst damage with cooldown), Fortress Posture (armor &amp; PD
+                boost, initiative and damage penalty), Command Beacon (fleet accuracy/crit and escort evasion, reduced
+                battleship damage), or Shock Barrage (enemy accuracy and shield regen debuff).
+              </li>
+              <li>
+                <strong>Mega Battle Station</strong> &mdash; Bastion Shield (fleet regen/cap boost, station heavies offline),
+                Cataclysm Lance (shield-piercing strike with shockwave, regen penalty, max two uses), Grav-Well Snare
+                (locks withdraw, hinders enemy initiative/evasion), or Dock &amp; Repair (restore allied capital hull/shields,
+                disables station PD this round).
+              </li>
+            </ul>
+            <p>Effects stack in the order: Formation &rarr; Tactic &rarr; Class Orders &rarr; Theater/Event.</p>
+          </section>
+
+          <section class="gin-article" aria-labelledby="simulator-theaters">
+            <h3 class="gin-article__title" id="simulator-theaters">6. Battle Theaters</h3>
+            <p>Pick one environment to shape engagements:</p>
+            <ul>
+              <li>
+                <strong>Gas-Giant Storm Layer</strong> &mdash; Lightning storms jam comms: lower beam accuracy, higher shield
+                regen, random sensor desyncs.
+              </li>
+              <li>
+                <strong>Asteroid Belts</strong> &mdash; Small craft gain evasion, capital ships lose initiative, collision checks
+                trigger each round.
+              </li>
+              <li>
+                <strong>Station Yard / High Orbit</strong> &mdash; Friendly turrets assist, better salvage on victory, with
+                political fallout risk for wide-area fire.
+              </li>
+              <li>
+                <strong>Graveglass Veil / Nebula</strong> &mdash; Harder detection, beam attenuation, and ghost-lock misfires.
+              </li>
+              <li>
+                <strong>Temporal-Slip Corridor</strong> &mdash; Scrambled initiative, crit re-rolls, and dangerous retreats.
+              </li>
+            </ul>
+          </section>
+
+          <section class="gin-article" aria-labelledby="simulator-round-flow">
+            <h3 class="gin-article__title" id="simulator-round-flow">7. Round Flow &amp; Outcomes</h3>
+            <p>Each round resolves in three phases:</p>
+            <ol>
+              <li>
+                <strong>Detection &amp; Initiative</strong> &mdash; Formation, speed, and ECM (notably in the Graveglass Veil)
+                establish firing order.
+              </li>
+              <li>
+                <strong>Engagement</strong> &mdash; Apply tactics and orders, deal damage, track shields, criticals, and morale.
+              </li>
+              <li>
+                <strong>Resolution</strong> &mdash; Tally disabled or routed units, adjust morale/command, and trigger events.
+              </li>
+            </ol>
+            <p>
+              After three rounds, report outcomes as Victory, Pyrrhic Victory, Stalemate, Collapse, or Anomaly (sector
+              oddities). Loot, salvage, commander experience, repairs, and theater fallout follow.
+            </p>
+            <p class="gin-article__footer">
+              Core raid concepts mirror the bot&rsquo;s combat logic, blending weighted stats, variance, and tiered results.
+            </p>
           </section>
         </div>
       </div>
