@@ -1142,6 +1142,15 @@
   }
 }
 
+@media (max-width: 600px) {
+  #ui {
+    left: 12px;
+    right: 12px;
+    max-width: calc(100% - 24px);
+    width: auto;
+  }
+}
+
 @media (max-width: 1280px) {
   .gin-main {
     grid-template-columns: minmax(220px, 280px) minmax(0, 1fr) minmax(220px, 280px);
