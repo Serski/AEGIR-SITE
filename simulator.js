@@ -91,6 +91,12 @@ const DAMAGE_POOL_WEIGHTS = {
   super: 0.2
 };
 
+const BASELINE_SHIELD_PIERCE = 0.12;
+const GLOBAL_SHIELD_REGEN_PENALTY = -0.25;
+const ATTRITION_BASE_PERCENT = 0.012;
+const LOW_MORALE_ATTRITION_PENALTY = 0.006;
+const CRITICAL_MORALE_ATTRITION_PENALTY = 0.004;
+
 const REPAIR_COST_RANGES = {
   corvette: { min: 100, max: 500 },
   destroyer: { min: 300, max: 700 },
@@ -225,6 +231,13 @@ const THEATERS = [
     summary: 'Initiative scrambles, crits reroll – chaotic outcomes likely.',
     describe: 'Reality twitches; time-skews can produce anomalous results and risky retreats.',
     effects: () => ({ initiativeChaos: true, critBonus: 0.05 })
+  },
+  {
+    id: 'intense_firefight',
+    name: 'Intense Firefight',
+    summary: 'Cascading strikes punch through shields; regen suppressed amid maelstrom.',
+    describe: 'Battered task forces exchange brutal salvos at knifefight ranges, overwhelming defensive grids.',
+    effects: () => ({ directHullFraction: 0.08, shieldRegenMult: -0.25, moralePerRound: -4 })
   }
 ];
 
@@ -564,7 +577,13 @@ function getPoolIdForClass(cls) {
 function computeSurvivorCount(state) {
   if (!state || state.hullPerShip <= 0) return 0;
   if (state.currentHull <= 0) return 0;
-  return Math.max(0, Math.ceil(state.currentHull / state.hullPerShip));
+  const maxHull = state.hullPerShip * (state.initialCount || 0);
+  const ratio = maxHull > 0 ? state.currentHull / maxHull : 0;
+  let survivors = Math.floor(state.currentHull / state.hullPerShip);
+  if (ratio > 0 && ratio < 0.8 && survivors > 0) {
+    survivors -= 1;
+  }
+  return Math.max(0, Math.min(state.initialCount || 0, survivors));
 }
 
 function computeRepairCosts(fleet) {
@@ -1088,8 +1107,8 @@ function computeRoundModifiers(fleet, enemy, theater, roundReport, round) {
   applyEffectBucket(modifiers, theaterEffects);
 
   if (fleet.composition.combinedArms) {
-    modifiers.globalIncomingDamageMult -= 0.1;
-    roundReport.messages.push(`${fleet.label} combined-arms bonus trims incoming fire.`);
+    modifiers.globalIncomingDamageMult -= 0.05;
+    roundReport.messages.push(`${fleet.label} combined-arms doctrine still trims some incoming fire.`);
     if (fleet.volley && round === 1) {
       modifiers.globalDamageMult += 0.15;
       roundReport.messages.push(`${fleet.label} declares Volley Coordination during detection.`);
@@ -1137,7 +1156,7 @@ function evaluateDamageOutput(fleet, enemy, modifiers, initiativeEdge) {
   const damageBoost = 1 + (modifiers.damageMult || 0) + (modifiers.globalDamageMult || 0);
   const commanderBonus = 1;
   const initiativeFactor = initiativeEdge > 0 ? 1.05 : initiativeEdge < 0 ? 0.95 : 1;
-  const randomFactor = randomBetween(0.92, 1.08);
+  const randomFactor = randomBetween(0.95, 1.15);
   let damage = baseDamage * damageBoost * accuracy * commanderBonus * initiativeFactor * randomFactor;
 
   if (modifiers.critBonus) damage *= 1 + modifiers.critBonus * randomBetween(0.5, 1.1);
@@ -1151,7 +1170,7 @@ function evaluateDamageOutput(fleet, enemy, modifiers, initiativeEdge) {
 function computePoolMitigation(pool) {
   const defenseRating = pool && pool.shipCount > 0 ? pool.defenseSum / pool.shipCount : 0;
   if (defenseRating <= 0) return 1;
-  const capped = Math.min(0.45, defenseRating / (defenseRating + 80));
+  const capped = Math.min(0.35, defenseRating / (defenseRating + 140));
   return 1 - capped;
 }
 
@@ -1215,7 +1234,7 @@ function applyDamage(enemy, damage, attackerModifiers, defenderModifiers, roundR
   if (damage <= 0) return { damageToHull: 0, damageToShields: 0 };
   const incomingFactor = 1 + (defenderModifiers.incomingDamageMult || 0) + (defenderModifiers.globalIncomingDamageMult || 0);
   const adjustedDamage = Math.max(0, damage * incomingFactor);
-  const pierceFraction = attackerModifiers.directHullFraction || 0;
+  const pierceFraction = clamp(BASELINE_SHIELD_PIERCE + (attackerModifiers.directHullFraction || 0), 0, 0.95);
   const weights = normalizeDamageWeights(enemy);
   let totalHull = 0;
   let totalShields = 0;
@@ -1243,7 +1262,7 @@ function applyDamage(enemy, damage, attackerModifiers, defenderModifiers, roundR
 function regenerateShields(fleet, modifiers) {
   if (fleet.totals.shieldCapacity <= 0 || !fleet.classStates) return;
   const capModifier = 1 + clamp(modifiers.shieldCapMult || 0, -0.5, 0.5);
-  const regenModifier = 1 + (modifiers.shieldRegenMult || 0);
+  const regenModifier = 1 + GLOBAL_SHIELD_REGEN_PENALTY + (modifiers.shieldRegenMult || 0);
 
   Object.values(fleet.classStates).forEach((state) => {
     if (!state) return;
@@ -1327,6 +1346,46 @@ function resolveCollisionHazards(fleet, roundReport) {
   return 0;
 }
 
+function applyEndOfRoundAttrition(fleet, roundReport, theater) {
+  if (!fleet.classStates) return 0;
+  const states = Object.values(fleet.classStates).filter((state) => state && state.currentHull > 0);
+  if (!states.length) return 0;
+  const totalHull = states.reduce((sum, state) => sum + state.currentHull, 0);
+  if (totalHull <= 0) return 0;
+
+  let percent = ATTRITION_BASE_PERCENT;
+  if (theater.id === 'intense_firefight') percent += 0.008;
+  if (fleet.morale < 35) percent += LOW_MORALE_ATTRITION_PENALTY;
+  if (fleet.morale < 20) percent += CRITICAL_MORALE_ATTRITION_PENALTY;
+
+  let remaining = Math.min(totalHull, fleet.totals.hull * percent);
+  if (remaining <= 0) return 0;
+
+  let applied = 0;
+  const lastIndex = states.length - 1;
+  states.forEach((state, idx) => {
+    if (remaining <= 0) return;
+    const share = state.currentHull / totalHull;
+    let loss = Math.min(state.currentHull, remaining * share);
+    if (idx === lastIndex) loss = Math.min(state.currentHull, remaining);
+    if (loss <= 0) return;
+    state.currentHull -= loss;
+    applied += loss;
+    remaining -= loss;
+  });
+
+  Object.values(fleet.pools).forEach((pool) => syncPoolState(pool));
+  recalcFleetVitals(fleet);
+
+  if (applied > 0) {
+    roundReport.messages.push(`${fleet.label} suffers ${Math.round(applied)} attritional hull losses amid the chaos.`);
+    const moraleShock = applied / fleet.totals.hull * 18;
+    fleet.morale = clamp(fleet.morale - moraleShock, 0, 110);
+  }
+
+  return applied;
+}
+
 function determineInitiative(fleet, enemy, modifiers, enemyModifiers, theater) {
   let score = fleet.avgSpeed + (modifiers.initiativeBonus || 0);
   let enemyScore = enemy.avgSpeed + (enemyModifiers.initiativeBonus || 0);
@@ -1379,6 +1438,9 @@ function simulateBattle(fleetConfigA, fleetConfigB, theater) {
       resolveCollisionHazards(fleetA, roundReportA);
       resolveCollisionHazards(fleetB, roundReportB);
     }
+
+    applyEndOfRoundAttrition(fleetA, roundReportA, theater);
+    applyEndOfRoundAttrition(fleetB, roundReportB, theater);
 
     const roundMessages = [...roundReportA.messages, ...roundReportB.messages];
 
