@@ -15,7 +15,7 @@
 </head>
 <body>
   <div id="gin-ui" class="gin-page">
-    <header id="gin-top-bar" class="gin-top-bar" data-theater-skin>
+    <header id="gin-top-bar" class="gin-top-bar">
       <div class="gin-top-left">
         <button
           id="gin-menu-button"
@@ -37,17 +37,7 @@
         </a>
       </div>
       <div class="gin-top-center">
-        <h1 class="gin-page-heading">Battle Simulator</h1>
-      </div>
-      <div class="gin-top-right">
-        <label class="cinematic-toggle" for="cinematic-mode">
-          <input type="checkbox" id="cinematic-mode" />
-          <span class="cinematic-toggle__label">
-            <span class="cinematic-toggle__mode">Tactical</span>
-            <span class="cinematic-toggle__thumb" aria-hidden="true"></span>
-            <span class="cinematic-toggle__mode">Cinematic</span>
-          </span>
-        </label>
+        <h1 class="gin-page-heading">Aegir Battle Simulator</h1>
       </div>
     </header>
 
@@ -83,11 +73,17 @@
             <div class="theater-card-grid" id="theater-card-grid" role="listbox" aria-labelledby="simulator-environment-heading"></div>
           </label>
           <p id="theater-help" class="simulator-help-text"></p>
-          <div class="theater-event-cards" id="theater-event-cards" aria-live="polite"></div>
         </div>
         <div class="simulator-environment__summary" aria-live="polite">
           <p class="theater-description"></p>
-          <div class="round-timeline" id="round-timeline" aria-hidden="true"></div>
+          <figure class="theater-visual">
+            <img
+              src="images/icons/Asteroid Belt.png"
+              alt="Theater visual"
+              id="theater-visual"
+              data-theater-visual
+            />
+          </figure>
           <aside class="micro-sim" aria-label="Projected Vital Curves">
             <header>
               <p>Projected Vital Curves</p>
@@ -106,7 +102,15 @@
         <section class="fleet-panel" data-side="alpha" aria-labelledby="fleet-alpha-heading">
           <header class="fleet-panel__header">
             <div class="fleet-panel__heading">
-              <h3 id="fleet-alpha-heading">Fleet Alpha</h3>
+              <h3 id="fleet-alpha-heading">
+                <input
+                  type="text"
+                  value="Fleet Alpha"
+                  aria-label="Fleet Alpha name"
+                  data-fleet-name
+                  data-default-name="Fleet Alpha"
+                />
+              </h3>
               <p class="fleet-panel__role">Attacker / Left Column</p>
             </div>
             <div class="fleet-panel__commander-chip" data-commander-chip>
@@ -119,25 +123,27 @@
           </header>
           <div class="fleet-panel__body">
             <div class="fleet-field-group">
-              <label class="simulator-field">
-                <span>Commander</span>
-                <select data-field="commander"></select>
-              </label>
-              <label class="simulator-field simulator-field--cards">
-                <span>Formation Doctrine</span>
-                <select data-field="formation" class="visually-hidden"></select>
-                <div class="doctrine-card-grid" data-doctrine="formation" role="listbox"></div>
-              </label>
-              <label class="simulator-field simulator-field--cards">
-                <span>Engagement Tactic</span>
-                <select data-field="tactic" class="visually-hidden"></select>
-                <div class="doctrine-card-grid" data-doctrine="tactic" role="listbox"></div>
-              </label>
-            </div>
-
-            <div class="fleet-presets" data-presets>
-              <h4>Fleet Presets</h4>
-              <div class="fleet-presets__grid"></div>
+              <div class="commander-field">
+                <label class="simulator-field commander-field__select">
+                  <span>Commander</span>
+                  <select data-field="commander"></select>
+                </label>
+                <div class="commander-field__portrait">
+                  <img src="images/icons/Pilot.png" alt="Commander portrait" />
+                </div>
+              </div>
+              <div class="doctrine-field-grid">
+                <label class="simulator-field simulator-field--cards">
+                  <span>Formation Doctrine</span>
+                  <select data-field="formation" class="visually-hidden"></select>
+                  <div class="doctrine-card-grid" data-doctrine="formation" role="listbox"></div>
+                </label>
+                <label class="simulator-field simulator-field--cards">
+                  <span>Engagement Tactic</span>
+                  <select data-field="tactic" class="visually-hidden"></select>
+                  <div class="doctrine-card-grid" data-doctrine="tactic" role="listbox"></div>
+                </label>
+              </div>
             </div>
 
             <div class="fleet-flags">
@@ -192,7 +198,15 @@
         <section class="fleet-panel" data-side="beta" aria-labelledby="fleet-beta-heading">
           <header class="fleet-panel__header">
             <div class="fleet-panel__heading">
-              <h3 id="fleet-beta-heading">Fleet Beta</h3>
+              <h3 id="fleet-beta-heading">
+                <input
+                  type="text"
+                  value="Fleet Beta"
+                  aria-label="Fleet Beta name"
+                  data-fleet-name
+                  data-default-name="Fleet Beta"
+                />
+              </h3>
               <p class="fleet-panel__role">Defender / Right Column</p>
             </div>
             <div class="fleet-panel__commander-chip" data-commander-chip>
@@ -205,25 +219,27 @@
           </header>
           <div class="fleet-panel__body">
             <div class="fleet-field-group">
-              <label class="simulator-field">
-                <span>Commander</span>
-                <select data-field="commander"></select>
-              </label>
-              <label class="simulator-field simulator-field--cards">
-                <span>Formation Doctrine</span>
-                <select data-field="formation" class="visually-hidden"></select>
-                <div class="doctrine-card-grid" data-doctrine="formation" role="listbox"></div>
-              </label>
-              <label class="simulator-field simulator-field--cards">
-                <span>Engagement Tactic</span>
-                <select data-field="tactic" class="visually-hidden"></select>
-                <div class="doctrine-card-grid" data-doctrine="tactic" role="listbox"></div>
-              </label>
-            </div>
-
-            <div class="fleet-presets" data-presets>
-              <h4>Fleet Presets</h4>
-              <div class="fleet-presets__grid"></div>
+              <div class="commander-field">
+                <label class="simulator-field commander-field__select">
+                  <span>Commander</span>
+                  <select data-field="commander"></select>
+                </label>
+                <div class="commander-field__portrait">
+                  <img src="images/icons/Pilot.png" alt="Commander portrait" />
+                </div>
+              </div>
+              <div class="doctrine-field-grid">
+                <label class="simulator-field simulator-field--cards">
+                  <span>Formation Doctrine</span>
+                  <select data-field="formation" class="visually-hidden"></select>
+                  <div class="doctrine-card-grid" data-doctrine="formation" role="listbox"></div>
+                </label>
+                <label class="simulator-field simulator-field--cards">
+                  <span>Engagement Tactic</span>
+                  <select data-field="tactic" class="visually-hidden"></select>
+                  <div class="doctrine-card-grid" data-doctrine="tactic" role="listbox"></div>
+                </label>
+              </div>
             </div>
 
             <div class="fleet-flags">
