@@ -17,6 +17,20 @@
   <div id="gin-ui" class="gin-page">
     <header id="gin-top-bar" class="gin-top-bar">
       <div class="gin-top-left">
+        <button
+          id="gin-menu-button"
+          class="gin-menu-button"
+          type="button"
+          aria-expanded="false"
+          aria-controls="gin-main-menu"
+        >
+          <span class="gin-menu-icon" aria-hidden="true">
+            <span></span>
+            <span></span>
+            <span></span>
+          </span>
+          <span class="visually-hidden">Toggle navigation menu</span>
+        </button>
         <a class="gin-logo-link" href="index.html">
           <img src="favicon/favicon.svg" alt="Outpost Aegir logo" class="gin-logo" />
           <span class="gin-wordmark" aria-label="Outpost Aegir wordmark">OUTPOST AEGIR</span>
@@ -25,23 +39,16 @@
       <div class="gin-top-center">
         <h1 class="gin-page-heading">Interviews &amp; Dispatches</h1>
       </div>
-      <div class="gin-top-right">
-        <nav class="gin-top-nav" aria-label="Aegir resources">
-          <a class="gin-top-link" href="lore.html">
-            <img src="images/icons/AFM.png" alt="" aria-hidden="true" />
-            <span class="visually-hidden">Lore</span>
-          </a>
-          <a class="gin-top-link" href="wiki.html">
-            <img src="images/icons/GGP.png" alt="" aria-hidden="true" />
-            <span class="visually-hidden">Wiki</span>
-          </a>
-          <a class="gin-top-link is-active" href="interviews.html" aria-current="page">
-            <img src="images/icons/PCC.png" alt="" aria-hidden="true" />
-            <span class="visually-hidden">Interviews</span>
-          </a>
-        </nav>
-      </div>
+      <div class="gin-top-right" aria-hidden="true"></div>
     </header>
+
+    <nav id="gin-main-menu" class="gin-main-menu" aria-label="Site sections" hidden>
+      <a class="gin-main-menu__link" href="index.html">Sector Map</a>
+      <a class="gin-main-menu__link" href="lore.html">Lore</a>
+      <a class="gin-main-menu__link" href="wiki.html">Wiki</a>
+      <a class="gin-main-menu__link" href="interviews.html" aria-current="page">Interviews</a>
+      <a class="gin-main-menu__link" href="simulator.html">Simulator</a>
+    </nav>
 
     <main class="gin-page-main gin-newsroom">
       <div class="gin-news-grid">
@@ -183,5 +190,6 @@
       Return to the <a href="index.html">Aegir sector map</a> for live operations.
     </footer>
   </div>
+  <script src="menu.js"></script>
 </body>
 </html>
