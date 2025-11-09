@@ -341,3 +341,398 @@ body.modal-open {
     letter-spacing: 0.18em;
   }
 }
+
+/* ---- Battle Simulator Layout ---- */
+.simulator-main {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+  padding: 2.5rem 1.5rem 3rem;
+}
+
+.simulator-intro__content {
+  background: rgba(15, 20, 35, 0.82);
+  border: 1px solid rgba(100, 150, 255, 0.25);
+  border-radius: 16px;
+  padding: 1.75rem;
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.45);
+  max-width: 920px;
+}
+
+.simulator-intro__content h2 {
+  margin: 0 0 0.75rem;
+  font-size: 2rem;
+  letter-spacing: 0.04em;
+}
+
+.simulator-environment {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  background: rgba(10, 16, 28, 0.8);
+  border: 1px solid rgba(59, 130, 246, 0.25);
+  border-radius: 14px;
+  padding: 1.5rem;
+  box-shadow: inset 0 0 24px rgba(20, 40, 90, 0.25);
+}
+
+.simulator-environment__controls {
+  min-width: 220px;
+  flex: 1 1 220px;
+}
+
+.simulator-environment__summary {
+  flex: 2 1 320px;
+  align-self: center;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: #c4d4ff;
+}
+
+.simulator-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 1.75rem;
+}
+
+.fleet-panel {
+  background: rgba(12, 18, 32, 0.92);
+  border: 1px solid rgba(99, 102, 241, 0.35);
+  border-radius: 18px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 14px 38px rgba(0, 0, 0, 0.45);
+}
+
+.fleet-panel__header {
+  padding: 1.25rem 1.5rem 0.5rem;
+  border-bottom: 1px solid rgba(99, 102, 241, 0.25);
+}
+
+.fleet-panel__header h3 {
+  margin: 0;
+  font-size: 1.4rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.fleet-panel__role {
+  margin: 0.25rem 0 0;
+  font-size: 0.85rem;
+  color: #9faeea;
+  letter-spacing: 0.06em;
+}
+
+.fleet-panel__body {
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+  padding: 1.5rem;
+}
+
+.fleet-field-group {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 1rem;
+}
+
+.simulator-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-size: 0.95rem;
+}
+
+.simulator-field--inline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.simulator-field select,
+.simulator-field input {
+  background: rgba(15, 23, 42, 0.85);
+  border: 1px solid rgba(148, 163, 255, 0.25);
+  border-radius: 10px;
+  color: #e5e7eb;
+  font-family: inherit;
+  font-size: 0.95rem;
+  padding: 0.4rem 0.6rem;
+  min-height: 2.3rem;
+}
+
+.simulator-field input[type="number"] {
+  max-width: 110px;
+  text-align: right;
+}
+
+.fleet-flags {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.simulator-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.9rem;
+  color: #cbd5f5;
+}
+
+.simulator-checkbox input {
+  width: 1.1rem;
+  height: 1.1rem;
+  accent-color: #60a5fa;
+}
+
+.simulator-checkbox--volley {
+  margin-top: 0.35rem;
+  padding-top: 0.35rem;
+  border-top: 1px dashed rgba(148, 163, 255, 0.25);
+}
+
+.fleet-classlist__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 0.85rem;
+}
+
+.fleet-orders__container {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.class-order-block h5 {
+  margin: 0 0 0.6rem;
+  font-size: 1rem;
+  letter-spacing: 0.05em;
+}
+
+.class-order-grid {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.class-order-row {
+  display: grid;
+  grid-template-columns: 3rem minmax(140px, 1fr) minmax(140px, 1fr);
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.class-order-row label {
+  font-size: 0.85rem;
+  color: #9faeea;
+}
+
+.class-order-target[hidden] {
+  display: none;
+}
+
+.simulator-help-text {
+  font-size: 0.8rem;
+  color: #94a3b8;
+  margin: 0.25rem 0 0;
+}
+
+.fleet-panel__footer {
+  padding: 1.1rem 1.5rem 1.5rem;
+  font-size: 0.82rem;
+  line-height: 1.5;
+  color: #a5b4fc;
+  border-top: 1px solid rgba(99, 102, 241, 0.25);
+  display: grid;
+  gap: 0.35rem;
+}
+
+.simulator-run__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: center;
+}
+
+.gin-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: 999px;
+  padding: 0.6rem 1.6rem;
+  font-size: 0.95rem;
+  font-family: inherit;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.gin-button {
+  border: 1px solid rgba(99, 102, 241, 0.5);
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.8), rgba(37, 99, 235, 0.8));
+  color: #fff;
+  box-shadow: 0 10px 25px rgba(37, 99, 235, 0.35);
+}
+
+.gin-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 16px 30px rgba(37, 99, 235, 0.45);
+}
+
+.gin-button--ghost {
+  background: transparent;
+  color: #cbd5f5;
+  border: 1px solid rgba(148, 163, 255, 0.4);
+  box-shadow: none;
+}
+
+.simulator-results__content {
+  display: grid;
+  gap: 1.75rem;
+}
+
+.simulator-outcome {
+  background: rgba(12, 20, 36, 0.92);
+  border: 1px solid rgba(148, 163, 255, 0.28);
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.45);
+}
+
+.simulator-outcome__summary {
+  margin: 0.75rem 0 0.35rem;
+  font-size: 1rem;
+  line-height: 1.45;
+}
+
+.simulator-outcome__rating {
+  margin: 0;
+  font-size: 0.85rem;
+  color: #9faeea;
+}
+
+.simulator-fleet-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.5rem;
+}
+
+.simulator-fleet-card {
+  background: rgba(17, 24, 39, 0.85);
+  border: 1px solid rgba(99, 102, 241, 0.22);
+  border-radius: 14px;
+  padding: 1.25rem;
+  display: grid;
+  gap: 0.85rem;
+}
+
+.simulator-fleet-card header h5 {
+  margin: 0;
+  font-size: 1.1rem;
+  letter-spacing: 0.05em;
+}
+
+.simulator-fleet-card header p {
+  margin: 0.25rem 0 0;
+  font-size: 0.85rem;
+  color: #a5b4fc;
+}
+
+.simulator-fleet-card dl {
+  margin: 0;
+  display: grid;
+  gap: 0.4rem;
+  font-size: 0.85rem;
+}
+
+.simulator-fleet-card dl div {
+  display: flex;
+  justify-content: space-between;
+}
+
+.simulator-fleet-card ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 0.35rem;
+  font-size: 0.85rem;
+}
+
+.simulator-fleet-card ul li {
+  display: flex;
+  justify-content: space-between;
+}
+
+.simulator-round {
+  background: rgba(15, 23, 42, 0.8);
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  border-radius: 14px;
+  padding: 1.25rem 1.5rem;
+  display: grid;
+  gap: 1rem;
+}
+
+.simulator-round header h5 {
+  margin: 0;
+  font-size: 1.05rem;
+  letter-spacing: 0.06em;
+}
+
+.simulator-round header p {
+  margin: 0.3rem 0 0;
+  color: #9faeea;
+  font-size: 0.85rem;
+}
+
+.simulator-round__stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+  font-size: 0.9rem;
+}
+
+.simulator-round__log {
+  margin: 0;
+  padding-left: 1.2rem;
+  font-size: 0.85rem;
+  color: #cbd5f5;
+  line-height: 1.5;
+}
+
+.simulator-misc-log {
+  background: rgba(12, 20, 36, 0.82);
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  border-radius: 14px;
+  padding: 1.1rem 1.4rem;
+}
+
+.simulator-misc-log h5 {
+  margin: 0 0 0.6rem;
+  font-size: 1rem;
+  letter-spacing: 0.05em;
+}
+
+.simulator-misc-log ul {
+  margin: 0;
+  padding-left: 1.1rem;
+  font-size: 0.85rem;
+  color: #cbd5f5;
+  line-height: 1.5;
+}
+
+@media (max-width: 720px) {
+  .simulator-main {
+    padding: 2rem 1rem 2.5rem;
+  }
+
+  .class-order-row {
+    grid-template-columns: 3rem 1fr;
+  }
+
+  .class-order-row select:last-child {
+    grid-column: 2 / span 1;
+  }
+}
+
