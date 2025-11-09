@@ -665,6 +665,20 @@ body.modal-open {
   justify-content: space-between;
 }
 
+.simulator-fleet-card__repairs {
+  border-top: 1px solid rgba(99, 102, 241, 0.2);
+  padding-top: 0.75rem;
+  display: grid;
+  gap: 0.5rem;
+}
+
+.simulator-fleet-card__repair-total {
+  margin: 0;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: #cbd5f5;
+}
+
 .simulator-round {
   background: rgba(15, 23, 42, 0.8);
   border: 1px solid rgba(59, 130, 246, 0.2);

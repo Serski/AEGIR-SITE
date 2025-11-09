@@ -91,6 +91,14 @@ const DAMAGE_POOL_WEIGHTS = {
   super: 0.2
 };
 
+const REPAIR_COST_RANGES = {
+  corvette: { min: 100, max: 500 },
+  destroyer: { min: 300, max: 700 },
+  heavy_frigate: { min: 700, max: 1400 },
+  cruiser: { min: 1300, max: 1800 },
+  battleship: { min: 2000, max: 3000 }
+};
+
 const COMMANDERS = [
   {
     id: 'none',
@@ -557,6 +565,50 @@ function computeSurvivorCount(state) {
   if (!state || state.hullPerShip <= 0) return 0;
   if (state.currentHull <= 0) return 0;
   return Math.max(0, Math.ceil(state.currentHull / state.hullPerShip));
+}
+
+function computeRepairCosts(fleet) {
+  const breakdown = [];
+  let totalMin = 0;
+  let totalMax = 0;
+
+  SHIP_CLASSES.forEach((cls) => {
+    const range = REPAIR_COST_RANGES[cls.id];
+    if (!range) return;
+    const count = fleet.classes[cls.id]?.count || 0;
+    if (count <= 0) return;
+    const state = fleet.classStates?.[cls.id];
+    const hullPerShip = cls.hull;
+    const initialHull = count * hullPerShip;
+    const remainingHull = state ? Math.max(0, state.currentHull) : 0;
+    const hullLost = Math.max(0, initialHull - remainingHull);
+    if (hullLost <= 0) return;
+
+    const survivors = state ? computeSurvivorCount(state) : 0;
+    const lostShips = Math.max(0, count - survivors);
+    const destroyedHull = Math.min(hullLost, lostShips * hullPerShip);
+    const partialHullDamage = Math.max(0, hullLost - destroyedHull);
+    const partialEquivalents = partialHullDamage / hullPerShip;
+
+    const classMin = partialEquivalents * range.min + lostShips * range.max;
+    const classMax = partialEquivalents * range.max + lostShips * range.max;
+    if (classMin <= 0 && classMax <= 0) return;
+
+    totalMin += classMin;
+    totalMax += classMax;
+    breakdown.push({
+      classId: cls.id,
+      name: cls.name,
+      min: classMin,
+      max: classMax
+    });
+  });
+
+  return { totalMin, totalMax, breakdown };
+}
+
+function formatCredits(value) {
+  return `${Math.round(value).toLocaleString()} cr`;
 }
 
 function syncPoolState(pool) {
@@ -1463,6 +1515,21 @@ function renderResults(result) {
       const survivors = state ? computeSurvivorCount(state) : 0;
       return `<li><span>${cls.name}</span><span>${survivors} / ${start}</span></li>`;
     }).join('');
+    const repairCosts = computeRepairCosts(fleet);
+    const breakdownItems = repairCosts.breakdown
+      .map((entry) => `<li><span>${entry.name}</span><span>${formatCredits(entry.min)} - ${formatCredits(entry.max)}</span></li>`)
+      .join('');
+    const repairBlock = `
+      <div class="simulator-fleet-card__repairs">
+        <h6>Estimated Repair Costs</h6>
+        <p class="simulator-fleet-card__repair-total">
+          ${repairCosts.totalMax > 0
+            ? `${formatCredits(repairCosts.totalMin)} - ${formatCredits(repairCosts.totalMax)}`
+            : 'No significant repairs required.'}
+        </p>
+        ${repairCosts.breakdown.length ? `<ul>${breakdownItems}</ul>` : ''}
+      </div>
+    `;
     card.innerHTML = `
       <header>
         <h5>${fleet.label}</h5>
@@ -1475,6 +1542,7 @@ function renderResults(result) {
       </dl>
       <h6>Estimated Surviving Hulls</h6>
       <ul>${listItems}</ul>
+      ${repairBlock}
     `;
     fleetGrid.appendChild(card);
   });
