@@ -329,37 +329,6 @@ const THEATERS = [
   }
 ];
 
-const FLEET_PRESETS = [
-  {
-    id: 'scout_screen',
-    name: 'Scout Screen',
-    blurb: 'Fast pickets and corvettes harry the perimeter.',
-    counts: { corvette: 6, destroyer: 3, heavy_frigate: 1, cruiser: 0, battleship: 0, mega_station: 0 },
-    doctrine: { formation: 'dispersed', tactic: 'balanced' }
-  },
-  {
-    id: 'linebreaker',
-    name: 'Linebreaker',
-    blurb: 'Cruisers punch a spearhead while escorts screen.',
-    counts: { corvette: 2, destroyer: 4, heavy_frigate: 2, cruiser: 3, battleship: 1, mega_station: 0 },
-    doctrine: { formation: 'spearhead', tactic: 'aggressive' }
-  },
-  {
-    id: 'anvil',
-    name: 'Anvil',
-    blurb: 'Defensive wall anchored by capital hulls.',
-    counts: { corvette: 2, destroyer: 3, heavy_frigate: 2, cruiser: 2, battleship: 2, mega_station: 0 },
-    doctrine: { formation: 'phalanx', tactic: 'defensive' }
-  },
-  {
-    id: 'cage',
-    name: 'Cage',
-    blurb: 'Station-led task force locks the battlespace.',
-    counts: { corvette: 4, destroyer: 4, heavy_frigate: 2, cruiser: 2, battleship: 1, mega_station: 1 },
-    doctrine: { formation: 'phalanx', tactic: 'balanced' }
-  }
-];
-
 const SYNERGY_RULES = [
   {
     id: 'relay-lock',
@@ -467,8 +436,30 @@ const THEATER_EVENT_DECK = {
 
 const eventCardRefs = new Map();
 const synergyLayers = new Map();
-let cinematicMode = false;
+let cinematicMode = true;
 let audioContext = null;
+
+const THEATER_VISUAL_PATH = 'images/icons/Asteroid Belt.png';
+const FLEET_NAME_DEFAULTS = { alpha: 'Fleet Alpha', beta: 'Fleet Beta' };
+
+function getFleetPanel(side) {
+  return document.querySelector(`.fleet-panel[data-side="${side}"]`);
+}
+
+function getFleetNameInput(source) {
+  if (!source) return null;
+  if (typeof source === 'string') {
+    return getFleetPanel(source)?.querySelector('[data-fleet-name]') || null;
+  }
+  return source.querySelector ? source.querySelector('[data-fleet-name]') : null;
+}
+
+function resolveFleetName(side) {
+  const input = getFleetNameInput(side);
+  const fallback = FLEET_NAME_DEFAULTS[side] || 'Fleet';
+  const value = input && typeof input.value === 'string' ? input.value.trim() : '';
+  return value || fallback;
+}
 
 function defaultOrder() {
   return { id: 'none', name: 'No Special Order', summary: 'Standard firing patterns.', apply: () => ({}) };
@@ -894,6 +885,8 @@ function recalcFleetVitals(fleet) {
 }
 
 function buildFleetState(config, label) {
+  const configName = typeof config.name === 'string' ? config.name.trim() : '';
+  const resolvedLabel = configName || label;
   const totals = {
     attack: 0,
     defense: 0,
@@ -983,7 +976,7 @@ function buildFleetState(config, label) {
     : 0;
 
   const fleet = {
-    label,
+    label: resolvedLabel,
     commanderId: config.commander,
     formationId: config.formation,
     tacticId: config.tactic,
@@ -1212,6 +1205,12 @@ function applyPreset(panel, preset) {
 
 function applyFleetConfig(panel, config) {
   if (!config) return;
+  const nameInput = getFleetNameInput(panel);
+  if (nameInput) {
+    const defaultName = nameInput.dataset.defaultName || FLEET_NAME_DEFAULTS[panel.dataset.side] || nameInput.value;
+    const provided = typeof config.name === 'string' ? config.name.trim() : '';
+    nameInput.value = provided || defaultName;
+  }
   const commanderSelect = panel.querySelector('[data-field="commander"]');
   if (commanderSelect) {
     commanderSelect.value = config.commander || 'none';
@@ -1493,14 +1492,15 @@ function renderMicroSimPreview(preview) {
     return;
   }
   const fleets = [
-    { key: 'a', label: 'Fleet Alpha', accessor: (round) => round.alphaState },
-    { key: 'b', label: 'Fleet Beta', accessor: (round) => round.betaState }
+    { key: 'a', side: 'alpha', accessor: (round) => round.alphaState },
+    { key: 'b', side: 'beta', accessor: (round) => round.betaState }
   ];
   fleets.forEach((fleet) => {
     const spark = document.createElement('div');
     spark.className = 'micro-sim__sparkline';
     const title = document.createElement('span');
-    title.textContent = fleet.label;
+    const previewFleet = preview.fleets?.[fleet.key];
+    title.textContent = previewFleet?.label || resolveFleetName(fleet.side);
     spark.appendChild(title);
     const canvas = document.createElement('canvas');
     canvas.width = 240;
@@ -1508,7 +1508,7 @@ function renderMicroSimPreview(preview) {
     spark.appendChild(canvas);
     container.appendChild(spark);
 
-    const fleetState = preview.fleets[fleet.key];
+    const fleetState = previewFleet;
     const totalHull = fleetState?.totals?.hull || 1;
     const totalShields = fleetState?.totals?.shieldCapacity || 1;
     const hullSeries = [1];
@@ -1530,7 +1530,6 @@ function renderMicroSimPreview(preview) {
 
 function renderTimelinePreview() {
   const timeline = document.getElementById('round-timeline');
-  if (!timeline) return;
   const theaterSelect = document.getElementById('battle-theater');
   const theater = findById(THEATERS, theaterSelect.value);
   const configA = collectFleetConfig('alpha');
@@ -1539,14 +1538,7 @@ function renderTimelinePreview() {
   const totalBeta = Object.values(configB.classes).reduce((sum, entry) => sum + (entry?.count || 0), 0);
 
   if (!theater || totalAlpha === 0 || totalBeta === 0) {
-    timeline.innerHTML = '';
-    ['Detection', 'Engagement', 'Resolution'].forEach((stage) => {
-      const step = document.createElement('div');
-      step.className = 'round-timeline__step';
-      step.dataset.active = 'false';
-      step.innerHTML = `<span class="round-timeline__label">${stage}</span><span class="round-timeline__delta">Awaiting fleets</span>`;
-      timeline.appendChild(step);
-    });
+    if (timeline) timeline.innerHTML = '';
     renderMicroSimPreview(null);
     return;
   }
@@ -1554,54 +1546,56 @@ function renderTimelinePreview() {
   const seed = hashConfig(configA, configB, theater.id);
   const preview = runWithSeed(seed, () => simulateBattle(configA, configB, theater));
   const stages = ['Detection', 'Engagement', 'Resolution'];
-  timeline.innerHTML = '';
-  stages.forEach((stage, index) => {
-    const round = preview.rounds[index];
-    const step = document.createElement('div');
-    step.className = 'round-timeline__step';
-    step.dataset.active = round ? 'true' : 'false';
-    const parts = [];
-    if (round) {
-      const initiative = round.initiative.includes('Alpha')
-        ? 'Alpha initiative edge'
-        : round.initiative.includes('Beta')
-        ? 'Beta initiative edge'
-        : 'Initiative contested';
-      const hullSwing = Math.round(round.alphaDamage.damageToHull - round.betaDamage.damageToHull);
-      const shieldSwing = Math.round(round.alphaDamage.damageToShields - round.betaDamage.damageToShields);
-      const moraleDiff = Math.round(round.alphaState.morale - round.betaState.morale);
+  if (timeline) {
+    timeline.innerHTML = '';
+    stages.forEach((stage, index) => {
+      const round = preview.rounds[index];
+      const step = document.createElement('div');
+      step.className = 'round-timeline__step';
+      step.dataset.active = round ? 'true' : 'false';
+      const parts = [];
+      if (round) {
+        const initiative = round.initiative.includes('Alpha')
+          ? 'Alpha initiative edge'
+          : round.initiative.includes('Beta')
+          ? 'Beta initiative edge'
+          : 'Initiative contested';
+        const hullSwing = Math.round(round.alphaDamage.damageToHull - round.betaDamage.damageToHull);
+        const shieldSwing = Math.round(round.alphaDamage.damageToShields - round.betaDamage.damageToShields);
+        const moraleDiff = Math.round(round.alphaState.morale - round.betaState.morale);
 
-      const hullText = hullSwing === 0
-        ? 'Hull exchange even'
-        : hullSwing > 0
-        ? `Hull Δ +${hullSwing} Alpha`
-        : `Hull Δ +${Math.abs(hullSwing)} Beta`;
+        const hullText = hullSwing === 0
+          ? 'Hull exchange even'
+          : hullSwing > 0
+          ? `Hull Δ +${hullSwing} Alpha`
+          : `Hull Δ +${Math.abs(hullSwing)} Beta`;
 
-      let shieldText = null;
-      if (Math.abs(shieldSwing) <= 1) {
-        shieldText = 'Shields trading evenly';
-      } else if (shieldSwing > 0) {
-        shieldText = `Shields Δ +${shieldSwing} Alpha`;
+        let shieldText = null;
+        if (Math.abs(shieldSwing) <= 1) {
+          shieldText = 'Shields trading evenly';
+        } else if (shieldSwing > 0) {
+          shieldText = `Shields Δ +${shieldSwing} Alpha`;
+        } else {
+          shieldText = `Shields Δ +${Math.abs(shieldSwing)} Beta`;
+        }
+
+        const moraleText = Math.abs(moraleDiff) <= 1
+          ? 'Morale steady'
+          : moraleDiff > 0
+          ? `Morale +${Math.abs(moraleDiff)} Alpha`
+          : `Morale +${Math.abs(moraleDiff)} Beta`;
+
+        parts.push(initiative, hullText, shieldText, moraleText);
       } else {
-        shieldText = `Shields Δ +${Math.abs(shieldSwing)} Beta`;
+        parts.push('Resolution pending');
       }
-
-      const moraleText = Math.abs(moraleDiff) <= 1
-        ? 'Morale steady'
-        : moraleDiff > 0
-        ? `Morale +${Math.abs(moraleDiff)} Alpha`
-        : `Morale +${Math.abs(moraleDiff)} Beta`;
-
-      parts.push(initiative, hullText, shieldText, moraleText);
-    } else {
-      parts.push('Resolution pending');
-    }
-    step.innerHTML = `
-      <span class="round-timeline__label">${stage}</span>
-      <span class="round-timeline__delta">${parts.join(' · ')}</span>
-    `;
-    timeline.appendChild(step);
-  });
+      step.innerHTML = `
+        <span class="round-timeline__label">${stage}</span>
+        <span class="round-timeline__delta">${parts.join(' · ')}</span>
+      `;
+      timeline.appendChild(step);
+    });
+  }
   renderMicroSimPreview(preview);
 }
 
@@ -1701,21 +1695,6 @@ function populateFleetPanel(panel) {
   buildOrderMatrix(panel);
   updateSynergyOverlay(panel);
 
-  const presetGrid = panel.querySelector('[data-presets] .fleet-presets__grid');
-  if (presetGrid) {
-    presetGrid.innerHTML = '';
-    FLEET_PRESETS.forEach((preset) => {
-      const button = document.createElement('button');
-      button.type = 'button';
-      button.className = 'fleet-preset';
-      button.innerHTML = `<strong>${preset.name}</strong><span>${preset.blurb}</span>`;
-      button.addEventListener('click', () => {
-        applyPreset(panel, preset);
-      });
-      presetGrid.appendChild(button);
-    });
-  }
-
   panel.addEventListener('change', (event) => {
     if (event.target.matches('.ship-count-input')) {
       updateFleetStatus(panel);
@@ -1744,6 +1723,20 @@ function populateFleetPanel(panel) {
       if (!isCollapsed) {
         updateSynergyOverlay(panel);
       }
+    });
+  }
+
+  const nameInput = getFleetNameInput(panel);
+  if (nameInput) {
+    const defaultName = nameInput.dataset.defaultName || FLEET_NAME_DEFAULTS[panel.dataset.side] || '';
+    nameInput.addEventListener('input', () => {
+      renderTimelinePreview();
+    });
+    nameInput.addEventListener('blur', () => {
+      if (!nameInput.value.trim()) {
+        nameInput.value = defaultName;
+      }
+      renderTimelinePreview();
     });
   }
 
@@ -1931,12 +1924,16 @@ function updateTheaterSummary() {
   const chosen = findById(THEATERS, theaterSelect.value);
   if (!chosen) return;
   document.body.dataset.theater = chosen.skin || chosen.id;
-  helpEl.textContent = chosen.helper || chosen.summary;
+  if (helpEl) helpEl.textContent = chosen.helper || chosen.summary;
   const slug = document.querySelector('[data-slug="theater"] [data-slug-value]');
   if (slug) slug.textContent = chosen.name;
   const description = summaryContainer.querySelector('.theater-description');
   if (description) description.textContent = chosen.describe;
-  renderTheaterEvents(chosen);
+  const visual = summaryContainer.querySelector('[data-theater-visual]');
+  if (visual) {
+    visual.src = THEATER_VISUAL_PATH;
+    visual.alt = `${chosen.name} theater visual`;
+  }
   renderTimelinePreview();
 }
 
@@ -1948,6 +1945,10 @@ function collectFleetConfig(side) {
   const volley = panel.querySelector('[data-field="volley"]').checked;
   const withdrawRound1 = panel.querySelector('[data-field="withdraw-r1"]').checked;
   const withdrawRound2 = panel.querySelector('[data-field="withdraw-r2"]').checked;
+  const nameInput = getFleetNameInput(panel);
+  const fallbackName = nameInput?.dataset.defaultName || FLEET_NAME_DEFAULTS[side] || 'Fleet';
+  const nameValue = nameInput && typeof nameInput.value === 'string' ? nameInput.value.trim() : '';
+  const fleetName = nameValue || fallbackName;
 
   const classes = {};
   panel.querySelectorAll('.ship-count-input').forEach((input) => {
@@ -1969,6 +1970,7 @@ function collectFleetConfig(side) {
   });
 
   return {
+    name: fleetName,
     commander,
     formation,
     tactic,
@@ -2552,8 +2554,8 @@ function renderResults(result) {
   grid.className = 'after-action-card__grid';
 
   const fleetMeta = [
-    { key: 'a', label: 'Fleet Alpha', panelSelector: '.fleet-panel[data-side="alpha"]' },
-    { key: 'b', label: 'Fleet Beta', panelSelector: '.fleet-panel[data-side="beta"]' }
+    { key: 'a', side: 'alpha', panelSelector: '.fleet-panel[data-side="alpha"]' },
+    { key: 'b', side: 'beta', panelSelector: '.fleet-panel[data-side="beta"]' }
   ];
 
   fleetMeta.forEach((meta) => {
@@ -2596,8 +2598,9 @@ function renderResults(result) {
 
     const panelEl = document.createElement('section');
     panelEl.className = 'after-action-panel';
+    const fleetHeading = fleet?.label || resolveFleetName(meta.side);
     panelEl.innerHTML = `
-      <h5>${fleet.label}</h5>
+      <h5>${fleetHeading}</h5>
       <div class="casualty-grid">${casualtyList}</div>
       <p class="mvp-tag">MVP: ${mvp?.entry?.cls?.name || 'N/A'}${weak?.entry && weak.entry.cls ? ` · Weak Link: ${weak.entry.cls.name}` : ''}</p>
       <p>Morale ${Math.round(fleet.morale)} · Hull ${Math.round((fleet.currentHull / (fleet.totals.hull || 1)) * 100)}%</p>
@@ -2703,6 +2706,11 @@ function renderResults(result) {
 
 function resetFleets() {
   document.querySelectorAll('.fleet-panel').forEach((panel) => {
+    const nameInput = getFleetNameInput(panel);
+    if (nameInput) {
+      const defaultName = nameInput.dataset.defaultName || FLEET_NAME_DEFAULTS[panel.dataset.side] || nameInput.value;
+      nameInput.value = defaultName;
+    }
     panel.querySelectorAll('.ship-count-input').forEach((input) => {
       if (input.dataset.class === 'corvette' || input.dataset.class === 'destroyer') input.value = 4;
       else if (input.dataset.class === 'cruiser') input.value = 2;
@@ -2736,6 +2744,7 @@ function resetFleets() {
 }
 
 function init() {
+  document.body.dataset.cinematic = 'on';
   populateTheaterControls();
   document.querySelectorAll('.fleet-panel').forEach((panel) => populateFleetPanel(panel));
 
@@ -2751,68 +2760,56 @@ function init() {
     resetFleets();
   });
 
-    const shareButton = document.getElementById('share-seed');
-    const shareOutput = document.getElementById('share-seed-output');
-    const shareFeedback = (message, status = 'info') => {
-      if (!shareOutput) return;
-      shareOutput.textContent = message;
-      shareOutput.dataset.status = status;
-    };
-    if (shareButton) {
-      shareButton.addEventListener('click', async () => {
-        const configA = collectFleetConfig('alpha');
-        const configB = collectFleetConfig('beta');
-        const theater = findById(THEATERS, document.getElementById('battle-theater').value);
-        const seed = encodeShareSeed(configA, configB, theater);
-        shareFeedback(`Seed: ${seed}`, 'info');
+  const shareButton = document.getElementById('share-seed');
+  const shareOutput = document.getElementById('share-seed-output');
+  const shareFeedback = (message, status = 'info') => {
+    if (!shareOutput) return;
+    shareOutput.textContent = message;
+    shareOutput.dataset.status = status;
+  };
+  if (shareButton) {
+    shareButton.addEventListener('click', async () => {
+      const configA = collectFleetConfig('alpha');
+      const configB = collectFleetConfig('beta');
+      const theater = findById(THEATERS, document.getElementById('battle-theater').value);
+      const seed = encodeShareSeed(configA, configB, theater);
+      shareFeedback(`Seed: ${seed}`, 'info');
 
-        let copyState = 'unsupported';
-        if (navigator.clipboard && typeof navigator.clipboard.writeText === 'function' && window.isSecureContext) {
-          try {
-            await navigator.clipboard.writeText(seed);
-            copyState = 'success';
-          } catch (error) {
-            console.warn('Failed to copy share seed', error);
-            copyState = 'error';
-          }
+      let copyState = 'unsupported';
+      if (navigator.clipboard && typeof navigator.clipboard.writeText === 'function' && window.isSecureContext) {
+        try {
+          await navigator.clipboard.writeText(seed);
+          copyState = 'success';
+        } catch (error) {
+          console.warn('Failed to copy share seed', error);
+          copyState = 'error';
         }
+      }
 
-        if (copyState === 'success') {
-          shareFeedback(`Seed: ${seed} · Copied`, 'success');
-        } else if (copyState === 'error') {
-          shareFeedback(`Seed: ${seed} · Copy failed—use manual copy.`, 'error');
-        } else {
-          shareFeedback(`Seed: ${seed} · Copy manually.`, 'warn');
-        }
+      if (copyState === 'success') {
+        shareFeedback(`Seed: ${seed} · Copied`, 'success');
+      } else if (copyState === 'error') {
+        shareFeedback(`Seed: ${seed} · Copy failed—use manual copy.`, 'error');
+      } else {
+        shareFeedback(`Seed: ${seed} · Copy manually.`, 'warn');
+      }
 
-        const url = new URL(window.location.href);
-        url.searchParams.set('seed', seed);
-        window.history.replaceState({}, '', url.toString());
-      });
-    }
-
-  const cinematicToggle = document.getElementById('cinematic-mode');
-  if (cinematicToggle) {
-    document.body.dataset.cinematic = cinematicToggle.checked ? 'on' : 'off';
-    cinematicMode = cinematicToggle.checked;
-    cinematicToggle.addEventListener('change', (event) => {
-      cinematicMode = event.target.checked;
-      document.body.dataset.cinematic = cinematicMode ? 'on' : 'off';
+      const url = new URL(window.location.href);
+      url.searchParams.set('seed', seed);
+      window.history.replaceState({}, '', url.toString());
     });
-  } else {
-    document.body.dataset.cinematic = 'off';
   }
 
   resetFleets();
 
   const params = new URLSearchParams(window.location.search);
   const seedFromQuery = params.get('seed') || (window.location.hash.startsWith('#seed=') ? window.location.hash.slice(6) : null);
-    if (seedFromQuery) {
-      applyShareSeed(seedFromQuery, {
-        onSuccess: () => shareFeedback('Loaded configuration seed.', 'success'),
-        onError: (message) => shareFeedback(message, 'error')
-      });
-    }
+  if (seedFromQuery) {
+    applyShareSeed(seedFromQuery, {
+      onSuccess: () => shareFeedback('Loaded configuration seed.', 'success'),
+      onError: (message) => shareFeedback(message, 'error')
+    });
   }
+}
 
 window.addEventListener('DOMContentLoaded', init);
