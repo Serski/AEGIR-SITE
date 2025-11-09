@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Outpost Aegir Simulator</title>
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="icon" type="image/png" sizes="96x96" href="favicon-96x96.png">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="manifest" href="site.webmanifest">
+  <meta name="theme-color" content="#000000" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="gin.css" />
+</head>
+<body>
+  <div id="gin-ui" class="gin-page">
+    <header id="gin-top-bar" class="gin-top-bar">
+      <div class="gin-top-left">
+        <button
+          id="gin-menu-button"
+          class="gin-menu-button"
+          type="button"
+          aria-expanded="false"
+          aria-controls="gin-main-menu"
+        >
+          <span class="gin-menu-icon" aria-hidden="true">
+            <span></span>
+            <span></span>
+            <span></span>
+          </span>
+          <span class="visually-hidden">Toggle navigation menu</span>
+        </button>
+        <a class="gin-logo-link" href="index.html">
+          <img src="favicon/favicon.svg" alt="Outpost Aegir logo" class="gin-logo" />
+          <span class="gin-wordmark" aria-label="Outpost Aegir wordmark">OUTPOST AEGIR</span>
+        </a>
+      </div>
+      <div class="gin-top-center">
+        <h1 class="gin-page-heading">Simulator</h1>
+      </div>
+      <div class="gin-top-right" aria-hidden="true"></div>
+    </header>
+
+    <nav id="gin-main-menu" class="gin-main-menu" aria-label="Site sections" hidden>
+      <a class="gin-main-menu__link" href="index.html">Sector Map</a>
+      <a class="gin-main-menu__link" href="lore.html">Lore</a>
+      <a class="gin-main-menu__link" href="wiki.html">Wiki</a>
+      <a class="gin-main-menu__link" href="interviews.html">Interviews</a>
+      <a class="gin-main-menu__link" href="simulator.html" aria-current="page">Simulator</a>
+    </nav>
+
+    <main class="gin-page-main gin-newsroom">
+      <div class="gin-news-grid">
+        <div class="gin-news-grid__main">
+          <section aria-labelledby="simulator-placeholder">
+            <p class="gin-section-header" id="simulator-placeholder">Training Uplink</p>
+            <article class="gin-lead-story">
+              <div class="gin-lead-story__body">
+                <p class="gin-lead-kicker">Prototype Status &bull; Engineering Deck</p>
+                <h2 class="gin-lead-title">Simulator Module in Construction</h2>
+                <p class="gin-lead-summary">
+                  The Aegir simulator interface is currently under development. Check back soon to experience tactical
+                  drills and scenario planning across the sector.
+                </p>
+              </div>
+            </article>
+          </section>
+        </div>
+      </div>
+    </main>
+
+    <footer class="gin-page-footer">
+      Return to the <a href="index.html">Aegir sector map</a> to continue your survey.
+    </footer>
+  </div>
+  <script src="menu.js"></script>
+</body>
+</html>

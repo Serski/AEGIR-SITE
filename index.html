@@ -21,6 +21,20 @@
   <div id="gin-ui">
     <header id="gin-top-bar" class="gin-top-bar">
       <div class="gin-top-left">
+        <button
+          id="gin-menu-button"
+          class="gin-menu-button"
+          type="button"
+          aria-expanded="false"
+          aria-controls="gin-main-menu"
+        >
+          <span class="gin-menu-icon" aria-hidden="true">
+            <span></span>
+            <span></span>
+            <span></span>
+          </span>
+          <span class="visually-hidden">Toggle navigation menu</span>
+        </button>
         <img src="favicon/favicon.svg" alt="Outpost Aegir logo" class="gin-logo" />
         <span class="gin-wordmark" aria-label="Outpost Aegir wordmark">OUTPOST AEGIR</span>
       </div>
@@ -29,23 +43,16 @@
           <span id="gin-top-headline" class="gin-headline-text" aria-label="Latest headline"></span>
         </div>
       </div>
-      <div class="gin-top-right">
-        <nav class="gin-top-nav" aria-label="Aegir resources">
-          <a class="gin-top-link" href="lore.html">
-            <img src="images/icons/AFM.png" alt="" aria-hidden="true" />
-            <span class="visually-hidden">Lore</span>
-          </a>
-          <a class="gin-top-link" href="wiki.html">
-            <img src="images/icons/GGP.png" alt="" aria-hidden="true" />
-            <span class="visually-hidden">Wiki</span>
-          </a>
-          <a class="gin-top-link" href="interviews.html">
-            <img src="images/icons/PCC.png" alt="" aria-hidden="true" />
-            <span class="visually-hidden">Interviews</span>
-          </a>
-        </nav>
-      </div>
+      <div class="gin-top-right" aria-hidden="true"></div>
     </header>
+
+    <nav id="gin-main-menu" class="gin-main-menu" aria-label="Site sections" hidden>
+      <a class="gin-main-menu__link" href="index.html" aria-current="page">Sector Map</a>
+      <a class="gin-main-menu__link" href="lore.html">Lore</a>
+      <a class="gin-main-menu__link" href="wiki.html">Wiki</a>
+      <a class="gin-main-menu__link" href="interviews.html">Interviews</a>
+      <a class="gin-main-menu__link" href="simulator.html">Simulator</a>
+    </nav>
 
     <div class="gin-main">
       <aside class="gin-panel gin-left-panel" data-panel="news">
@@ -157,6 +164,7 @@
     </div>
   </div>
 
+  <script src="menu.js"></script>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="script.js"></script>
   <script src="gin.js"></script>
