@@ -746,3 +746,161 @@ body.modal-open {
     text-align: center;
   }
 }
+
+/* Simulator refresh adjustments */
+.sim-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.9rem;
+  margin: 0.25rem 0;
+}
+
+.sim-toggle input[type='checkbox'] {
+  width: 1rem;
+  height: 1rem;
+  accent-color: #3b82f6;
+}
+
+.sim-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  margin-bottom: 1rem;
+}
+
+.sim-roster {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.25rem 0;
+  font-size: 0.9rem;
+}
+
+.sim-roster th,
+.sim-roster td {
+  border-bottom: 1px solid rgba(59, 130, 246, 0.15);
+  padding: 0.5rem 0.75rem;
+  text-align: left;
+}
+
+.sim-roster th {
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  color: #9ca3af;
+}
+
+.sim-roster__stats {
+  color: #9ca3af;
+  font-size: 0.85rem;
+}
+
+.sim-orders {
+  margin-top: 1.5rem;
+  display: grid;
+  gap: 1.5rem;
+}
+
+.sim-orders__class {
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(59, 130, 246, 0.18);
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+}
+
+.sim-orders__class h5 {
+  margin: 0 0 0.5rem 0;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  color: #cbd5f5;
+}
+
+.sim-field--inline {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.sim-order-descriptions {
+  margin: 1rem 0 0 0;
+  padding-left: 1.1rem;
+  font-size: 0.8rem;
+  color: #9ca3af;
+  line-height: 1.5;
+}
+
+.sim-orders__note {
+  color: #9ca3af;
+  font-size: 0.85rem;
+  font-style: italic;
+}
+
+.battle-report__summary {
+  background: rgba(17, 24, 39, 0.85);
+  border: 1px solid rgba(59, 130, 246, 0.35);
+  border-radius: 16px;
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.battle-report__summary h3 {
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+  font-size: 1.2rem;
+  letter-spacing: 0.05em;
+}
+
+.battle-report__round ul {
+  margin: 0.75rem 0 0 0;
+  padding-left: 1.2rem;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.battle-report__fleet {
+  background: rgba(15, 23, 42, 0.75);
+  border: 1px solid rgba(96, 165, 250, 0.2);
+  border-radius: 14px;
+  padding: 1rem 1.25rem;
+  margin-top: 1rem;
+}
+
+.battle-report__fleet h4 {
+  margin: 0 0 0.5rem 0;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-size: 0.95rem;
+}
+
+.battle-report__losses {
+  margin: 0.75rem 0 0 0;
+  padding-left: 1.1rem;
+  font-size: 0.85rem;
+  line-height: 1.45;
+}
+
+.battle-report__errors {
+  background: rgba(185, 28, 28, 0.1);
+  border: 1px solid rgba(248, 113, 113, 0.6);
+  color: #fecaca;
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+  margin: 1.25rem 0;
+}
+
+.battle-report__errors li {
+  margin-left: 1rem;
+  line-height: 1.4;
+}
+
+@media (max-width: 720px) {
+  .sim-field--inline {
+    grid-template-columns: 1fr;
+  }
+
+  .sim-order-descriptions {
+    padding-left: 1rem;
+  }
+}
