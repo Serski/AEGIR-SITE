@@ -341,3 +341,408 @@ body.modal-open {
     letter-spacing: 0.18em;
   }
 }
+
+/* --- Simulator layout --- */
+.simulator-app {
+  display: grid;
+  gap: 2.5rem;
+  padding: 1.5rem;
+}
+
+.simulator-hero__inner {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  align-items: stretch;
+}
+
+.simulator-hero__text {
+  flex: 1 1 320px;
+  min-width: 280px;
+}
+
+.simulator-hero__aside {
+  flex: 0 1 260px;
+  background: rgba(26, 32, 44, 0.7);
+  border: 1px solid rgba(96, 165, 250, 0.35);
+  border-radius: 16px;
+  padding: 1rem 1.25rem;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.35);
+}
+
+.simulator-hero__aside h3 {
+  margin-top: 0;
+  margin-bottom: 0.75rem;
+  font-size: 1rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.simulator-hero__aside ul {
+  list-style: square;
+  padding-left: 1.2rem;
+  margin: 0 0 0.75rem 0;
+}
+
+.simulator-hero__note {
+  font-size: 0.85rem;
+  color: #9ca3af;
+}
+
+.simulator-form {
+  display: grid;
+  gap: 2rem;
+}
+
+.fleet-config-grid {
+  display: grid;
+  gap: 1.75rem;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+}
+
+.fleet-card {
+  background: rgba(17, 24, 39, 0.8);
+  border: 1px solid rgba(59, 130, 246, 0.25);
+  border-radius: 18px;
+  padding: 1.5rem;
+  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.35);
+}
+
+.fleet-card__header {
+  margin-bottom: 1.25rem;
+}
+
+.fleet-card__title {
+  margin: 0;
+  font-size: 1.3rem;
+  letter-spacing: 0.06em;
+}
+
+.fleet-card__subtitle {
+  margin: 0.25rem 0 0;
+  font-size: 0.8rem;
+  color: #9ca3af;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.fleet-card__grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}
+
+.fleet-card__grid--minor {
+  margin-top: 1rem;
+}
+
+.sim-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  font-size: 0.95rem;
+}
+
+.sim-field__label {
+  text-transform: uppercase;
+  font-size: 0.78rem;
+  letter-spacing: 0.1em;
+  color: #9ca3af;
+}
+
+.sim-field__hint {
+  font-size: 0.75rem;
+  color: #9ca3af;
+  margin-top: 0.3rem;
+}
+
+.sim-input {
+  background: rgba(15, 23, 42, 0.85);
+  border: 1px solid rgba(96, 165, 250, 0.35);
+  border-radius: 10px;
+  padding: 0.55rem 0.75rem;
+  color: #f9fafb;
+  font-family: inherit;
+  font-size: 0.95rem;
+}
+
+.sim-input:focus {
+  outline: 2px solid rgba(59, 130, 246, 0.65);
+  outline-offset: 2px;
+}
+
+.sim-input--order {
+  width: 100%;
+}
+
+.sim-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-top: 0.75rem;
+  font-size: 0.9rem;
+}
+
+.sim-checkbox input[type="checkbox"] {
+  width: 1.1rem;
+  height: 1.1rem;
+}
+
+.combined-status {
+  margin: 0.75rem 0 1rem;
+  font-size: 0.8rem;
+  color: #a5b4fc;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.fleet-composition {
+  margin-top: 1rem;
+}
+
+.fleet-section-title {
+  margin: 0 0 0.75rem 0;
+  font-size: 0.95rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #9ca3af;
+}
+
+.fleet-composition__grid {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.sim-ship-field {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.sim-ship-field__title {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.sim-ship-field__name {
+  font-weight: 600;
+}
+
+.sim-ship-field__stats {
+  font-size: 0.75rem;
+  color: #94a3b8;
+}
+
+.fleet-orders {
+  margin-top: 1.5rem;
+}
+
+.sim-order-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+
+.sim-order-table th,
+.sim-order-table td {
+  border: 1px solid rgba(59, 130, 246, 0.25);
+  padding: 0.45rem;
+  text-align: left;
+}
+
+.simulator-shared {
+  background: rgba(17, 24, 39, 0.75);
+  border: 1px solid rgba(96, 165, 250, 0.3);
+  border-radius: 18px;
+  padding: 1.5rem;
+  box-shadow: 0 18px 36px rgba(0, 0, 0, 0.35);
+}
+
+.simulator-shared__title {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-size: 0.95rem;
+  color: #9ca3af;
+}
+
+.simulator-shared__grid {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.simulator-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.simulator-action-button {
+  background: linear-gradient(135deg, #2563eb, #7c3aed);
+  color: #fff;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 999px;
+  font-family: inherit;
+  font-size: 0.95rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.simulator-action-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 24px rgba(37, 99, 235, 0.35);
+}
+
+.simulator-action-button--ghost {
+  background: transparent;
+  border: 1px solid rgba(96, 165, 250, 0.4);
+  color: #bfdbfe;
+}
+
+.battle-report {
+  background: rgba(15, 23, 42, 0.75);
+  border: 1px solid rgba(96, 165, 250, 0.2);
+  border-radius: 20px;
+  padding: 1.75rem;
+  box-shadow: 0 22px 44px rgba(0, 0, 0, 0.35);
+}
+
+.battle-report__placeholder {
+  margin: 0;
+  font-size: 0.95rem;
+  color: #9ca3af;
+}
+
+.battle-report__header h2 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.4rem;
+}
+
+.battle-report__header p {
+  margin: 0.25rem 0;
+  color: #d1d5db;
+}
+
+.battle-report__context {
+  font-size: 0.85rem;
+  color: #9ca3af;
+}
+
+.battle-report__fleets {
+  display: grid;
+  gap: 1.25rem;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  margin-top: 1.5rem;
+}
+
+.battle-report__fleet-card {
+  background: rgba(17, 24, 39, 0.9);
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  border-radius: 16px;
+  padding: 1.25rem;
+}
+
+.battle-report__fleet-card h3 {
+  margin-top: 0;
+  margin-bottom: 0.4rem;
+  font-size: 1.1rem;
+}
+
+.battle-report__commander {
+  margin: 0 0 0.75rem 0;
+  font-size: 0.85rem;
+  color: #9ca3af;
+}
+
+.battle-report__stats {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1rem 0;
+  display: grid;
+  gap: 0.35rem;
+}
+
+.battle-report__stats li {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  letter-spacing: 0.04em;
+}
+
+.battle-report__table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.8rem;
+}
+
+.battle-report__table th,
+.battle-report__table td {
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  padding: 0.4rem;
+}
+
+.battle-report__timeline {
+  margin-top: 2rem;
+}
+
+.battle-report__timeline h3 {
+  margin-top: 0;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-size: 0.9rem;
+  color: #9ca3af;
+}
+
+.battle-report__round {
+  background: rgba(17, 24, 39, 0.75);
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  border-radius: 14px;
+  padding: 0.75rem 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.battle-report__round summary {
+  cursor: pointer;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+.battle-report__orders {
+  font-size: 0.85rem;
+  color: #cbd5f5;
+  margin: 0.75rem 0;
+}
+
+.battle-report__events {
+  padding-left: 1.1rem;
+  margin: 0;
+  font-size: 0.85rem;
+  line-height: 1.45;
+}
+
+@media (max-width: 720px) {
+  .simulator-app {
+    padding: 1rem;
+  }
+
+  .simulator-hero__inner {
+    flex-direction: column;
+  }
+
+  .simulator-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .simulator-action-button,
+  .simulator-action-button--ghost {
+    width: 100%;
+    text-align: center;
+  }
+}

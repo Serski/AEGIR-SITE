@@ -51,22 +51,75 @@
     </nav>
 
     <main class="gin-page-main gin-newsroom">
-      <div class="gin-news-grid">
-        <div class="gin-news-grid__main">
-          <section aria-labelledby="simulator-placeholder">
-            <p class="gin-section-header" id="simulator-placeholder">Training Uplink</p>
-            <article class="gin-lead-story">
-              <div class="gin-lead-story__body">
-                <p class="gin-lead-kicker">Prototype Status &bull; Engineering Deck</p>
-                <h2 class="gin-lead-title">Simulator Module in Construction</h2>
-                <p class="gin-lead-summary">
-                  The Aegir simulator interface is currently under development. Check back soon to experience tactical
-                  drills and scenario planning across the sector.
-                </p>
-              </div>
-            </article>
+      <div class="simulator-app">
+        <section class="simulator-hero" aria-labelledby="simulator-overview">
+          <p class="gin-section-header" id="simulator-overview">Training Uplink</p>
+          <div class="simulator-hero__inner">
+            <div class="simulator-hero__text">
+              <p class="gin-lead-kicker">Battle Doctrine &bull; Tactical Ops</p>
+              <h2 class="gin-lead-title">Run live exercises with the Aegir battle simulator</h2>
+              <p class="gin-lead-summary">
+                Configure opposing task forces, pick formations and tactics, assign special orders for each round, then
+                let the uplink resolve a three-round engagement. Shield pools, morale, and environmental hazards are all
+                tracked in the after-action report.
+              </p>
+            </div>
+            <aside class="simulator-hero__aside" aria-label="Quick reference">
+              <h3>Simulator cadence</h3>
+              <ul>
+                <li>Detection &amp; Initiative</li>
+                <li>Engagement &amp; Damage Resolution</li>
+                <li>Morale checks &amp; Withdraw rolls</li>
+              </ul>
+              <p class="simulator-hero__note">Three rounds maximum &mdash; unless one side collapses or withdraws.</p>
+            </aside>
+          </div>
+        </section>
+
+        <form id="simulator-form" class="simulator-form" novalidate>
+          <div class="fleet-config-grid">
+            <section class="fleet-card" data-fleet="alpha">
+              <header class="fleet-card__header">
+                <h3 class="fleet-card__title">Fleet Alpha</h3>
+                <p class="fleet-card__subtitle">Attacker / Left column</p>
+              </header>
+              <div class="fleet-card__body js-fleet-config" data-fleet="alpha"></div>
+            </section>
+            <section class="fleet-card" data-fleet="beta">
+              <header class="fleet-card__header">
+                <h3 class="fleet-card__title">Fleet Beta</h3>
+                <p class="fleet-card__subtitle">Defender / Right column</p>
+              </header>
+              <div class="fleet-card__body js-fleet-config" data-fleet="beta"></div>
+            </section>
+          </div>
+
+          <section class="simulator-shared" aria-labelledby="battle-environment">
+            <h3 class="simulator-shared__title" id="battle-environment">Engagement parameters</h3>
+            <div class="simulator-shared__grid">
+              <label class="sim-field">
+                <span class="sim-field__label">Battle theater</span>
+                <select name="battle-theater" id="battle-theater" class="sim-input"></select>
+              </label>
+              <label class="sim-field">
+                <span class="sim-field__label">Variance seed</span>
+                <input type="number" name="variance-seed" id="variance-seed" class="sim-input" min="0" max="9999" step="1" placeholder="Auto" />
+                <span class="sim-field__hint">Optional &mdash; rerun with the same seed for repeatability.</span>
+              </label>
+            </div>
           </section>
-        </div>
+
+          <div class="simulator-actions">
+            <button type="button" id="run-simulation" class="simulator-action-button">Run battle</button>
+            <button type="reset" id="reset-simulation" class="simulator-action-button simulator-action-button--ghost">Reset</button>
+          </div>
+        </form>
+
+        <section id="simulator-report" class="battle-report" aria-live="polite">
+          <div class="battle-report__placeholder">
+            Configure both fleets, then launch the simulator to review a full after-action breakdown.
+          </div>
+        </section>
       </div>
     </main>
 
@@ -75,5 +128,6 @@
     </footer>
   </div>
   <script src="menu.js"></script>
+  <script src="simulator.js"></script>
 </body>
 </html>
