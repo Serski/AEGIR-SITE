@@ -84,6 +84,13 @@ const CLASS_LOOKUP = SHIP_CLASSES.reduce((acc, cls) => {
   return acc;
 }, {});
 
+const DAMAGE_POOL_WEIGHTS = {
+  escort: 0.24,
+  line: 0.26,
+  capital: 0.3,
+  super: 0.2
+};
+
 const COMMANDERS = [
   {
     id: 'none',
@@ -478,21 +485,33 @@ const CLASS_ORDERS = {
       name: 'Dock & Repair',
       summary: 'Restore 12% hull and +300 shields to a friendly cruiser/battleship.',
       apply: ({ fleet, roundReport }) => {
-        const cruiserCount = fleet.classes.cruiser?.count || 0;
-        const battleshipCount = fleet.classes.battleship?.count || 0;
-        const targetHull = Math.max(
-          CLASS_LOOKUP.cruiser.hull * cruiserCount,
-          CLASS_LOOKUP.battleship.hull * battleshipCount
-        );
-        if (targetHull <= 0) {
+        const cruiserState = fleet.classStates.cruiser;
+        const battleshipState = fleet.classStates.battleship;
+        const candidates = [cruiserState, battleshipState]
+          .filter((state) => state && computeSurvivorCount(state) > 0)
+          .sort((a, b) => {
+            const missingA = a.hullPerShip * a.initialCount - a.currentHull;
+            const missingB = b.hullPerShip * b.initialCount - b.currentHull;
+            return missingB - missingA;
+          });
+        const targetState = candidates[0];
+        if (!targetState) {
           roundReport.messages.push('No cruiser or battleship available for dock repairs.');
           return;
         }
-        const healHull = targetHull * 0.12;
-        const repairedCount = Math.max(cruiserCount, battleshipCount);
-        const healShield = 300 * repairedCount;
-        fleet.currentHull = Math.min(fleet.currentHull + healHull, fleet.totals.hull);
-        fleet.currentShields = Math.min(fleet.currentShields + healShield, fleet.totals.shieldCapacity);
+        const maxHull = targetState.hullPerShip * targetState.initialCount;
+        const healHull = maxHull * 0.12;
+        const hullMissing = Math.max(0, maxHull - targetState.currentHull);
+        const hullRestored = Math.min(hullMissing, healHull);
+        targetState.currentHull += hullRestored;
+        const survivors = computeSurvivorCount(targetState);
+        const classCap = targetState.shieldPerShip * survivors;
+        const healShield = 300 * survivors;
+        const shieldMissing = Math.max(0, classCap - targetState.currentShields);
+        const shieldRestored = Math.min(shieldMissing, healShield);
+        targetState.currentShields += shieldRestored;
+        syncPoolState(fleet.pools[targetState.poolId]);
+        recalcFleetVitals(fleet);
         roundReport.messages.push('Station dry-docks a capital hull for rapid repairs.');
         modifiers.notes.push('Dock crews patch up frontline capitals mid-fight.');
       }
@@ -527,6 +546,53 @@ function clamp(value, min, max) {
   return Math.max(min, Math.min(max, value));
 }
 
+function getPoolIdForClass(cls) {
+  if (cls.category === 'escort') return 'escort';
+  if (cls.category === 'super') return 'super';
+  if (cls.archetype === 'line') return 'line';
+  return 'capital';
+}
+
+function computeSurvivorCount(state) {
+  if (!state || state.hullPerShip <= 0) return 0;
+  if (state.currentHull <= 0) return 0;
+  return Math.max(0, Math.ceil(state.currentHull / state.hullPerShip));
+}
+
+function syncPoolState(pool) {
+  if (!pool) return;
+  let hull = 0;
+  let shields = 0;
+  let defenseSum = 0;
+  let shipCount = 0;
+  let regen = 0;
+  pool.classes.forEach((state) => {
+    const survivors = computeSurvivorCount(state);
+    hull += Math.max(0, state.currentHull);
+    shields += Math.max(0, state.currentShields);
+    defenseSum += state.defense * survivors;
+    shipCount += survivors;
+    regen += state.regenPerShip * survivors;
+  });
+  pool.currentHull = hull;
+  pool.currentShields = shields;
+  pool.defenseSum = defenseSum;
+  pool.shipCount = shipCount;
+  pool.regen = regen;
+}
+
+function recalcFleetVitals(fleet) {
+  if (!fleet || !fleet.pools) return;
+  let hull = 0;
+  let shields = 0;
+  Object.values(fleet.pools).forEach((pool) => {
+    hull += pool.currentHull || 0;
+    shields += pool.currentShields || 0;
+  });
+  fleet.currentHull = hull;
+  fleet.currentShields = shields;
+}
+
 function buildFleetState(config, label) {
   const totals = {
     attack: 0,
@@ -539,11 +605,14 @@ function buildFleetState(config, label) {
   };
 
   const classPresence = {};
+  const classStates = {};
+  const pools = {};
 
   SHIP_CLASSES.forEach((cls) => {
     const count = config.classes[cls.id]?.count || 0;
     if (count <= 0) {
       classPresence[cls.id] = 0;
+      classStates[cls.id] = null;
       return;
     }
     totals.attack += cls.attack * count;
@@ -554,6 +623,49 @@ function buildFleetState(config, label) {
     totals.speedSum += cls.speed * count;
     totals.shipCount += count;
     classPresence[cls.id] = count;
+
+    const poolId = getPoolIdForClass(cls);
+    if (!pools[poolId]) {
+      pools[poolId] = {
+        id: poolId,
+        classes: [],
+        maxHull: 0,
+        currentHull: 0,
+        maxShields: 0,
+        currentShields: 0,
+        defenseSum: 0,
+        shipCount: 0,
+        regen: 0
+      };
+    }
+
+    const state = {
+      id: cls.id,
+      initialCount: count,
+      hullPerShip: cls.hull,
+      shieldPerShip: cls.shieldCapacity,
+      regenPerShip: cls.shieldRegen,
+      defense: cls.defense,
+      currentHull: cls.hull * count,
+      currentShields: cls.shieldCapacity * count,
+      poolId
+    };
+    classStates[cls.id] = state;
+
+    const pool = pools[poolId];
+    pool.classes.push(state);
+    pool.maxHull += cls.hull * count;
+    pool.currentHull += state.currentHull;
+    pool.maxShields += cls.shieldCapacity * count;
+    pool.currentShields += state.currentShields;
+    pool.defenseSum += cls.defense * count;
+    pool.shipCount += count;
+    pool.regen += cls.shieldRegen * count;
+  });
+
+  Object.values(pools).forEach((pool) => {
+    pool.classes.sort((a, b) => a.hullPerShip - b.hullPerShip);
+    syncPoolState(pool);
   });
 
   const avgSpeed = totals.shipCount > 0 ? totals.speedSum / totals.shipCount : 0;
@@ -570,7 +682,7 @@ function buildFleetState(config, label) {
       totals.hull
     : 0;
 
-  return {
+  const fleet = {
     label,
     commanderId: config.commander,
     formationId: config.formation,
@@ -599,8 +711,13 @@ function buildFleetState(config, label) {
       escortShare: clamp(escortShare, 0, 1),
       classPresence
     },
+    classStates,
+    pools,
     logs: []
   };
+
+  recalcFleetVitals(fleet);
+  return fleet;
 }
 
 function prepareOrders(selectEl, options) {
@@ -938,16 +1055,26 @@ function computeRoundModifiers(fleet, enemy, theater, roundReport, round) {
 }
 
 function resolveSelfDamage(fleet, roundReport) {
+  const affectedPools = new Set();
+  let totalLoss = 0;
   roundReport.selfDamage.forEach((entry) => {
-    const cls = CLASS_LOOKUP[entry.classId];
-    const count = fleet.classes[cls.id]?.count || 0;
-    if (!count) return;
-    const hullPool = cls.hull * count * entry.hullPercent;
-    fleet.currentHull = Math.max(0, fleet.currentHull - hullPool);
+    const state = fleet.classStates[entry.classId];
+    if (!state) return;
+    const percent = entry.hullPercent || 0;
+    const lossAmount = state.hullPerShip * state.initialCount * percent;
+    const applied = Math.min(state.currentHull, lossAmount);
+    if (applied <= 0) return;
+    state.currentHull -= applied;
+    totalLoss += applied;
+    affectedPools.add(state.poolId);
     if (entry.note) {
       roundReport.messages.push(entry.note);
     }
   });
+  if (totalLoss > 0) {
+    affectedPools.forEach((poolId) => syncPoolState(fleet.pools[poolId]));
+    recalcFleetVitals(fleet);
+  }
 }
 
 function evaluateDamageOutput(fleet, enemy, modifiers, initiativeEdge) {
@@ -969,44 +1096,127 @@ function evaluateDamageOutput(fleet, enemy, modifiers, initiativeEdge) {
   return damage;
 }
 
-function applyDamage(enemy, damage, attackerModifiers, defenderModifiers, roundReport) {
-  if (damage <= 0) return { damageToHull: 0, damageToShields: 0 };
-  const defenseRating = enemy.totals.defense / Math.max(enemy.totals.shipCount, 1);
-  const mitigation = 1 - Math.min(0.65, defenseRating / (defenseRating + 180));
-  let adjustedDamage = damage * mitigation;
-  const incomingFactor = 1 + (defenderModifiers.incomingDamageMult || 0) + (defenderModifiers.globalIncomingDamageMult || 0);
-  adjustedDamage *= incomingFactor;
-  adjustedDamage = Math.max(0, adjustedDamage);
+function computePoolMitigation(pool) {
+  const defenseRating = pool && pool.shipCount > 0 ? pool.defenseSum / pool.shipCount : 0;
+  if (defenseRating <= 0) return 1;
+  const capped = Math.min(0.45, defenseRating / (defenseRating + 80));
+  return 1 - capped;
+}
 
-  const pierceFraction = clamp(attackerModifiers.directHullFraction || 0, 0, 0.9);
-  const shieldPortion = adjustedDamage * (1 - pierceFraction);
-  let hullPortion = adjustedDamage * pierceFraction;
+function normalizeDamageWeights(enemy) {
+  const weights = {};
+  if (!enemy || !enemy.pools) return weights;
+  let total = 0;
+  Object.entries(enemy.pools).forEach(([poolId, pool]) => {
+    if (!pool || pool.currentHull + pool.currentShields <= 0) return;
+    const baseWeight = DAMAGE_POOL_WEIGHTS[poolId] ?? 0.2;
+    if (baseWeight <= 0) return;
+    weights[poolId] = baseWeight;
+    total += baseWeight;
+  });
+  if (total <= 0) return weights;
+  Object.keys(weights).forEach((poolId) => {
+    weights[poolId] /= total;
+  });
+  return weights;
+}
 
+function applyDamageToPool(pool, damage, pierceFraction) {
+  if (!pool || damage <= 0) return { hull: 0, shields: 0 };
+  const clampedPierce = clamp(pierceFraction, 0, 0.95);
+  const shieldPortion = damage * (1 - clampedPierce);
+  let hullPortion = damage * clampedPierce;
   let shieldsAbsorbed = 0;
-  if (enemy.currentShields > 0 && shieldPortion > 0) {
-    shieldsAbsorbed = Math.min(enemy.currentShields, shieldPortion);
-    enemy.currentShields -= shieldsAbsorbed;
+
+  if (shieldPortion > 0) {
+    let remainingShield = shieldPortion;
+    pool.classes.forEach((state) => {
+      if (remainingShield <= 0) return;
+      if (state.currentShields <= 0) return;
+      const taken = Math.min(state.currentShields, remainingShield);
+      state.currentShields -= taken;
+      remainingShield -= taken;
+      shieldsAbsorbed += taken;
+    });
+    const overflow = shieldPortion - shieldsAbsorbed;
+    if (overflow > 0) hullPortion += overflow;
   }
 
-  const overflow = shieldPortion - shieldsAbsorbed;
-  hullPortion += Math.max(0, overflow);
+  let appliedHull = 0;
+  if (hullPortion > 0) {
+    let remainingHull = hullPortion;
+    pool.classes.forEach((state) => {
+      if (remainingHull <= 0) return;
+      if (state.currentHull <= 0) return;
+      const taken = Math.min(state.currentHull, remainingHull);
+      state.currentHull -= taken;
+      remainingHull -= taken;
+      appliedHull += taken;
+    });
+  }
 
-  const appliedHullDamage = Math.min(enemy.currentHull, hullPortion);
-  enemy.currentHull = Math.max(0, enemy.currentHull - appliedHullDamage);
+  syncPoolState(pool);
+  return { hull: appliedHull, shields: shieldsAbsorbed };
+}
 
-  return { damageToHull: appliedHullDamage, damageToShields: shieldsAbsorbed };
+function applyDamage(enemy, damage, attackerModifiers, defenderModifiers, roundReport) {
+  if (damage <= 0) return { damageToHull: 0, damageToShields: 0 };
+  const incomingFactor = 1 + (defenderModifiers.incomingDamageMult || 0) + (defenderModifiers.globalIncomingDamageMult || 0);
+  const adjustedDamage = Math.max(0, damage * incomingFactor);
+  const pierceFraction = attackerModifiers.directHullFraction || 0;
+  const weights = normalizeDamageWeights(enemy);
+  let totalHull = 0;
+  let totalShields = 0;
+
+  const entries = Object.keys(weights);
+  if (entries.length === 0) {
+    return { damageToHull: 0, damageToShields: 0 };
+  }
+
+  entries.forEach((poolId) => {
+    const pool = enemy.pools[poolId];
+    if (!pool) return;
+    const poolDamage = adjustedDamage * weights[poolId];
+    const mitigation = computePoolMitigation(pool);
+    const mitigated = poolDamage * mitigation;
+    const applied = applyDamageToPool(pool, mitigated, pierceFraction);
+    totalHull += applied.hull;
+    totalShields += applied.shields;
+  });
+
+  recalcFleetVitals(enemy);
+  return { damageToHull: totalHull, damageToShields: totalShields };
 }
 
 function regenerateShields(fleet, modifiers) {
-  if (fleet.totals.shieldCapacity <= 0) return;
+  if (fleet.totals.shieldCapacity <= 0 || !fleet.classStates) return;
   const capModifier = 1 + clamp(modifiers.shieldCapMult || 0, -0.5, 0.5);
   const regenModifier = 1 + (modifiers.shieldRegenMult || 0);
-  const cap = fleet.totals.shieldCapacity * capModifier;
-  fleet.currentShields = Math.min(fleet.currentShields, cap);
-  const regen = fleet.totals.shieldRegen * regenModifier;
-  if (regen > 0) {
-    fleet.currentShields = Math.min(cap, fleet.currentShields + regen);
-  }
+
+  Object.values(fleet.classStates).forEach((state) => {
+    if (!state) return;
+    const survivors = computeSurvivorCount(state);
+    if (survivors <= 0) {
+      state.currentShields = 0;
+      return;
+    }
+    const classCap = state.shieldPerShip * survivors * capModifier;
+    state.currentShields = Math.min(state.currentShields, classCap);
+    const regen = state.regenPerShip * survivors * regenModifier;
+    if (regen > 0) {
+      const missing = classCap - state.currentShields;
+      if (missing > 0) {
+        const gain = Math.min(missing, regen);
+        state.currentShields += gain;
+      }
+    } else if (regen < 0) {
+      const reduction = Math.min(state.currentShields, Math.abs(regen));
+      state.currentShields -= reduction;
+    }
+  });
+
+  Object.values(fleet.pools).forEach((pool) => syncPoolState(pool));
+  recalcFleetVitals(fleet);
 }
 
 function updateMorale(fleet, roundReport, hullLoss, modifiers) {
@@ -1249,7 +1459,8 @@ function renderResults(result) {
     card.className = 'simulator-fleet-card';
     const listItems = SHIP_CLASSES.map((cls) => {
       const start = fleet.classes[cls.id]?.count || 0;
-      const survivors = Math.round(start * ratio);
+      const state = fleet.classStates?.[cls.id];
+      const survivors = state ? computeSurvivorCount(state) : 0;
       return `<li><span>${cls.name}</span><span>${survivors} / ${start}</span></li>`;
     }).join('');
     card.innerHTML = `
