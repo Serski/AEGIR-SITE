@@ -110,51 +110,115 @@ const COMMANDERS = [
     id: 'none',
     name: 'No Assigned Commander',
     summary: 'Baseline operations with standard discipline.',
+    traits: ['Unassigned'],
+    flavor: 'Deck chiefs handle the board in shifts.',
+    border: 'grid',
     effects: {}
   },
   {
     id: 'vahl',
     name: 'Cmdr. Serin Vahl',
     summary: '+5% accuracy and +3 initiative (sensor prodigy).',
+    traits: ['Tactician', 'Sensor Prodigy'],
+    flavor: '“No ghost-lock survives a cold equation.”',
+    border: 'grid',
     effects: { accuracyBonus: 0.05, initiativeBonus: 3 }
   },
   {
     id: 'cole',
     name: 'Cmdr. Idris Cole',
     summary: '+10% shield regeneration and +5 morale each round.',
+    traits: ['Bulwark', 'Stalwart'],
+    flavor: '“Hold the line. The choir sings for us.”',
+    border: 'shield',
     effects: { shieldRegenMult: 0.1, moralePerRound: 5 }
   },
   {
     id: 'eztan',
     name: 'Cmdr. Mara Eztan',
     summary: '+6 initiative, +5% withdraw success (hit-and-fade specialist).',
+    traits: ['Harrier', 'Zealot'],
+    flavor: '“Speed is absolution. Strike and fade.”',
+    border: 'flare',
     effects: { initiativeBonus: 6, withdrawBonus: 0.05 }
   },
   {
     id: 'sar',
     name: 'Commodore Nyla Sar',
     summary: '+6% damage output, -4% incoming damage (decisive tactician).',
+    traits: ['Tactician', 'Resolute'],
+    flavor: '“Break them cleanly and tend the wounded later.”',
+    border: 'grid',
     effects: { damageMult: 0.06, incomingDamageMult: -0.04 }
   }
 ];
+
+const COMMANDER_QUIPS = {
+  none: {
+    victory: 'Deck control reports stable lines. Requesting next drill.',
+    defeat: 'Auxiliary crews note morale dip; awaiting directives.',
+    stalemate: 'Ops chatter: “We held. Barely.”',
+    withdrawal: 'Deck chiefs log the withdrawal as orderly, pending review.'
+  },
+  vahl: {
+    victory: '“Angles aligned. Push before their ghosts settle.”',
+    defeat: '“Static lied to us. I will recalibrate every node.”',
+    stalemate: '“Sensors say enough. Next pass, we own the lattice.”',
+    withdrawal: '“Slip the net. We strike again once the choir fades.”'
+  },
+  cole: {
+    victory: '“Shield crews sing. Let the wounded rest easy.”',
+    defeat: '“We bend but do not break. Recycle the capacitors.”',
+    stalemate: '“Hold fast. We buy time for the sector.”',
+    withdrawal: '“Everyone home. Recharge, regroup, return.”'
+  },
+  eztan: {
+    victory: '“See? Hit-and-fade, and the void applauds.”',
+    defeat: '“They tagged us. Next time, we vanish between breaths.”',
+    stalemate: '“They matched our tempo. Unacceptable. Adjust vectors.”',
+    withdrawal: '“Engines hot. We choose the next field.”'
+  },
+  sar: {
+    victory: '“Formations hold. Catalog the wreckage for intel.”',
+    defeat: '“We ceded ground. Refit and ready the reserve.”',
+    stalemate: '“No trophies, no graves. We reset the board.”',
+    withdrawal: '“Orderly retreat. Prepare the counterstroke.”'
+  }
+};
+
+function getCommanderQuip(commanderId, outcomeType) {
+  const normalized = outcomeType.toLowerCase();
+  let key = 'stalemate';
+  if (normalized.includes('victory')) key = 'victory';
+  else if (normalized.includes('defeat')) key = 'defeat';
+  else if (normalized.includes('withdraw')) key = 'withdrawal';
+  const quips = COMMANDER_QUIPS[commanderId] || COMMANDER_QUIPS.none;
+  return quips[key] || COMMANDER_QUIPS.none[key];
+}
 
 const FORMATIONS = [
   {
     id: 'spearhead',
     name: 'Spearhead',
     summary: '+15% attack, but +10% incoming damage from exposed flanks.',
+    quote: '“Drive through their centerline.”',
+    cardEffects: '+15% dmg | -10% defense | +2 init',
     effects: { damageMult: 0.15, incomingDamageMult: 0.1, initiativeBonus: 2 }
   },
   {
     id: 'phalanx',
     name: 'Phalanx',
     summary: '+10% defense, +25% shield regen, -4 initiative.',
+    quote: '“Interlock shields. Nothing breaches.”',
+    cardEffects: '-10% dmg taken | +25% regen | -4 init',
     effects: { incomingDamageMult: -0.1, shieldRegenMult: 0.25, initiativeBonus: -4 }
   },
   {
     id: 'dispersed',
     name: 'Dispersed Line',
     summary: '+10% evasion (damage reduction) but -8% accuracy.',
+    quote: '“Keep them chasing ghosts.”',
+    cardEffects: '-10% dmg taken | -8% accuracy | +1 init',
     effects: { incomingDamageMult: -0.1, accuracyBonus: -0.08, initiativeBonus: 1 }
   }
 ];
@@ -164,6 +228,8 @@ const TACTICS = [
     id: 'aggressive',
     name: 'Aggressive',
     summary: 'Damage spikes (+25% R1, +15% later), +5% crit, but +10% incoming damage and -5% shield regen.',
+    quote: '“Fire before they even steady their aim.”',
+    cardEffects: '+25% dmg R1 | +5% crit | fragile',
     roundEffects: (round) => ({
       damageMult: round === 1 ? 0.25 : 0.15,
       critBonus: 0.05,
@@ -175,6 +241,8 @@ const TACTICS = [
     id: 'balanced',
     name: 'Balanced',
     summary: '+5% accuracy, +5% damage, -5% incoming damage, +8 morale at end of round.',
+    quote: '“Measure twice. Cut once.”',
+    cardEffects: '+5% acc | +5% dmg | +8 morale',
     roundEffects: () => ({
       accuracyBonus: 0.05,
       damageMult: 0.05,
@@ -186,6 +254,8 @@ const TACTICS = [
     id: 'defensive',
     name: 'Defensive',
     summary: '-15% damage, +30% shield regen, +10% shield cap, +10% withdraw success, escorts +5% evasion.',
+    quote: '“Let them exhaust themselves on the bulwark.”',
+    cardEffects: '+30% regen | +10% cap | safer withdraw',
     roundEffects: () => ({
       damageMult: -0.15,
       shieldRegenMult: 0.3,
@@ -200,46 +270,205 @@ const THEATERS = [
   {
     id: 'gas_giant',
     name: 'Gas-Giant Storm Layer',
-    summary: 'Lightning choir interference: beam accuracy down, shields surge.',
+    summary: 'Storm-choir interference: beam accuracy ↓, shield regen ↑.',
     describe: 'Sensor static and storm-choirs scramble targeting but energize shield capacitors.',
-    effects: () => ({ accuracyBonus: -0.05, shieldRegenMult: 0.18, initiativeBonus: -2 })
+    skin: 'gas_giant',
+    helper: 'Storm lightning crackles across the command glass.',
+    effects: () => ({ accuracyBonus: -0.05, shieldRegenMult: 0.18, initiativeBonus: -2 }),
+    events: ['storm_static', 'choir_surge']
   },
   {
     id: 'asteroid_belt',
     name: 'Asteroid Belt',
-    summary: 'Small craft weave easier, capital ships slow & risk collisions.',
+    summary: 'Debris swarms: escorts weave free, capitals risk hull strikes.',
     describe: 'Dense rock fields favor evasive craft; capital signatures struggle to maneuver cleanly.',
-    effects: () => ({ incomingDamageMult: -0.05, initiativeBonus: -3, collisionRisk: true })
+    skin: 'asteroid_belt',
+    helper: 'Collision alarms ping across the deck.',
+    effects: () => ({ incomingDamageMult: -0.05, initiativeBonus: -3, collisionRisk: true }),
+    events: ['debris_screen', 'impact_warning']
   },
   {
     id: 'station_yard',
     name: 'Station Yard / High Orbit',
-    summary: 'Local turret assists and improved salvage; watch civilian lanes.',
+    summary: 'Orbital batteries lend fire; civilian lanes demand precision.',
     describe: 'Orbital defenses bolster accuracy while defensive grids catch stray fire.',
-    effects: () => ({ damageMult: 0.05, incomingDamageMult: -0.03, moralePerRound: 2 })
+    skin: 'station_yard',
+    helper: 'Station controllers feed firing solutions into the deck.',
+    effects: () => ({ damageMult: 0.05, incomingDamageMult: -0.03, moralePerRound: 2 }),
+    events: ['turret_assist', 'civilian_lane']
   },
   {
     id: 'graveglass',
     name: 'Graveglass Veil / Nebula',
-    summary: 'Ghost-locks and ECM hamper detection; beams attenuated.',
+    summary: 'Ghost-lock echoes: targeting hazy, initiative slips.',
     describe: 'Nebular interference muddles initiative and causes misfire checks.',
-    effects: () => ({ accuracyBonus: -0.03, initiativeBonus: -4, ghostLock: true })
+    skin: 'graveglass',
+    helper: 'Spectral contacts hum just beyond sensor tolerances.',
+    effects: () => ({ accuracyBonus: -0.03, initiativeBonus: -4, ghostLock: true }),
+    events: ['ghost_ping', 'nebula_shear']
   },
   {
     id: 'temporal_slip',
     name: 'Temporal-Slip Corridor',
-    summary: 'Initiative scrambles, crits reroll – chaotic outcomes likely.',
+    summary: 'Time-shear: initiative shuffles, critical anomalies spike.',
     describe: 'Reality twitches; time-skews can produce anomalous results and risky retreats.',
-    effects: () => ({ initiativeChaos: true, critBonus: 0.05 })
+    skin: 'temporal_slip',
+    helper: 'Chronometers desync—crew whisper of déjà vu.',
+    effects: () => ({ initiativeChaos: true, critBonus: 0.05 }),
+    events: ['time_echo', 'retrograde_wave']
   },
   {
     id: 'intense_firefight',
     name: 'Intense Firefight',
-    summary: 'Cascading strikes punch through shields; regen suppressed amid maelstrom.',
+    summary: 'Close-range maelstrom: shields buckle, hull attrition climbs.',
     describe: 'Battered task forces exchange brutal salvos at knifefight ranges, overwhelming defensive grids.',
-    effects: () => ({ directHullFraction: 0.08, shieldRegenMult: -0.25, moralePerRound: -4 })
+    skin: 'intense_firefight',
+    helper: 'Damage control reports stream in with every volley.',
+    effects: () => ({ directHullFraction: 0.08, shieldRegenMult: -0.25, moralePerRound: -4 }),
+    events: ['shield_breach', 'hull_quake']
   }
 ];
+
+const FLEET_PRESETS = [
+  {
+    id: 'scout_screen',
+    name: 'Scout Screen',
+    blurb: 'Fast pickets and corvettes harry the perimeter.',
+    counts: { corvette: 6, destroyer: 3, heavy_frigate: 1, cruiser: 0, battleship: 0, mega_station: 0 },
+    doctrine: { formation: 'dispersed', tactic: 'balanced' }
+  },
+  {
+    id: 'linebreaker',
+    name: 'Linebreaker',
+    blurb: 'Cruisers punch a spearhead while escorts screen.',
+    counts: { corvette: 2, destroyer: 4, heavy_frigate: 2, cruiser: 3, battleship: 1, mega_station: 0 },
+    doctrine: { formation: 'spearhead', tactic: 'aggressive' }
+  },
+  {
+    id: 'anvil',
+    name: 'Anvil',
+    blurb: 'Defensive wall anchored by capital hulls.',
+    counts: { corvette: 2, destroyer: 3, heavy_frigate: 2, cruiser: 2, battleship: 2, mega_station: 0 },
+    doctrine: { formation: 'phalanx', tactic: 'defensive' }
+  },
+  {
+    id: 'cage',
+    name: 'Cage',
+    blurb: 'Station-led task force locks the battlespace.',
+    counts: { corvette: 4, destroyer: 4, heavy_frigate: 2, cruiser: 2, battleship: 1, mega_station: 1 },
+    doctrine: { formation: 'phalanx', tactic: 'balanced' }
+  }
+];
+
+const SYNERGY_RULES = [
+  {
+    id: 'relay-lock',
+    description: 'Cruiser Command Relay + Destroyer Target Lock → +8% hit chance R2',
+    pairs: [
+      { classId: 'cruiser', orderId: 'command_relay' },
+      { classId: 'destroyer', orderId: 'target_lock' }
+    ],
+    rounds: [2]
+  },
+  {
+    id: 'barrage-pin',
+    description: 'Battleship Shock Barrage + Heavy Frigate Suppressive Volley → enemy -10% accuracy R2',
+    pairs: [
+      { classId: 'battleship', orderId: 'shock_barrage' },
+      { classId: 'heavy_frigate', orderId: 'suppressive' }
+    ],
+    rounds: [2]
+  },
+  {
+    id: 'shield-dance',
+    description: 'Destroyer Shield Screen + Corvette Flank → Escorts +6% survivability R1',
+    pairs: [
+      { classId: 'destroyer', orderId: 'shield_screen' },
+      { classId: 'corvette', orderId: 'flank' }
+    ],
+    rounds: [1]
+  }
+];
+
+const THEATER_EVENT_DECK = {
+  storm_static: {
+    name: 'Storm Static',
+    round: 1,
+    description: 'Choir lightning blooms across the hull—sensors suffer initiative drag.',
+    message: () => 'Storm static blankets the battlespace; initiative buckles under the crackle.'
+  },
+  choir_surge: {
+    name: 'Choir Surge',
+    round: 2,
+    description: 'Storm harmonics refill capacitors—shield pools surge briefly.',
+    message: () => 'Choir resonance dumps charge into fleet shields.'
+  },
+  debris_screen: {
+    name: 'Debris Screen',
+    round: 1,
+    description: 'Escorts weave debris trails, muddling return fire.',
+    message: () => 'Escort pilots spin rock clouds into impromptu cover.'
+  },
+  impact_warning: {
+    name: 'Impact Warning',
+    round: 3,
+    description: 'Capital hull rattled by close-call asteroid ricochet.',
+    message: () => 'Collision klaxons wail as a stray boulder scrapes the hull.'
+  },
+  turret_assist: {
+    name: 'Orbital Assist',
+    round: 1,
+    description: 'Station turrets volley in-sync with allied fire.',
+    message: () => 'Station turrets stitch the engagement with precision bursts.'
+  },
+  civilian_lane: {
+    name: 'Civilian Lane Alert',
+    round: 2,
+    description: 'Traffic-control corridors force tempered barrages.',
+    message: () => 'Civilian lane beacons flare; fleets adjust fire arcs.'
+  },
+  ghost_ping: {
+    name: 'Ghost Ping',
+    round: 1,
+    description: 'Phantom signatures lace the nebula, obscuring locks.',
+    message: () => 'Ghost pings ripple—target lock confidence dips.'
+  },
+  nebula_shear: {
+    name: 'Nebula Shear',
+    round: 3,
+    description: 'Plasma shear destabilises beam coherence.',
+    message: () => 'Nebula shear pulls energy off lance arrays.'
+  },
+  time_echo: {
+    name: 'Time Echo',
+    round: 1,
+    description: 'Temporal after-images double returns.',
+    message: () => 'Temporal echoes create duplicate sensor tracks.'
+  },
+  retrograde_wave: {
+    name: 'Retrograde Wave',
+    round: 2,
+    description: 'Slipstream wave reverses initiative ordering briefly.',
+    message: () => 'Retrograde slipwave scrambles the order of battle.'
+  },
+  shield_breach: {
+    name: 'Shield Breach',
+    round: 1,
+    description: 'Overpressured shields flare and vent.',
+    message: () => 'Overloaded shields vent plasma into the void.'
+  },
+  hull_quake: {
+    name: 'Hull Quake',
+    round: 2,
+    description: 'Near-hit shakes morale and decks alike.',
+    message: () => 'Hull-quake reverbs through every corridor.'
+  }
+};
+
+const eventCardRefs = new Map();
+const synergyLayers = new Map();
+let cinematicMode = false;
+let audioContext = null;
 
 function defaultOrder() {
   return { id: 'none', name: 'No Special Order', summary: 'Standard firing patterns.', apply: () => ({}) };
@@ -801,9 +1030,656 @@ function prepareOrders(selectEl, options) {
   });
 }
 
-function populateFleetPanel(panel) {
-  const side = panel.dataset.side;
+function updateCommanderChip(panel) {
+  const select = panel.querySelector('[data-field="commander"]');
+  const chip = panel.querySelector('[data-commander-chip]');
+  if (!select || !chip) return;
+  const commander = findById(COMMANDERS, select.value) || COMMANDERS[0];
+  chip.querySelector('.commander-chip__name').textContent = commander.name;
+  chip.querySelector('.commander-chip__traits').textContent = commander.flavor || commander.summary;
+  const portrait = chip.querySelector('.commander-chip__portrait');
+  portrait.dataset.border = commander.border || 'grid';
+}
+
+function renderDoctrineCards(panel, type, options) {
+  const select = panel.querySelector(`[data-field="${type}"]`);
+  const grid = panel.querySelector(`.doctrine-card-grid[data-doctrine="${type}"]`);
+  if (!select || !grid) return;
+  select.innerHTML = '';
+  grid.innerHTML = '';
+  options.forEach((item, index) => {
+    const option = document.createElement('option');
+    option.value = item.id;
+    option.textContent = item.name;
+    option.dataset.summary = item.summary;
+    select.appendChild(option);
+
+    const card = document.createElement('article');
+    card.className = 'doctrine-card';
+    card.dataset.value = item.id;
+    if (item.cooldown) card.dataset.cooldown = `Cooldown ${item.cooldown}`;
+    card.innerHTML = `
+      <h5 class="doctrine-card__title">${item.name}</h5>
+      ${item.quote ? `<p class="doctrine-card__quote">${item.quote}</p>` : ''}
+      <p class="doctrine-card__effects">${item.cardEffects || item.summary}</p>
+    `;
+    card.addEventListener('click', () => {
+      select.value = item.id;
+      grid.querySelectorAll('.doctrine-card').forEach((el) => {
+        el.dataset.active = el.dataset.value === item.id ? 'true' : 'false';
+      });
+      panel.dispatchEvent(new Event('doctrinechange'));
+      updateFleetStatus(panel);
+      renderTimelinePreview();
+    });
+    card.tabIndex = 0;
+    card.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        card.click();
+      }
+    });
+    if (index === 0 && !select.value) {
+      select.value = item.id;
+    }
+    if (select.value === item.id) {
+      card.dataset.active = 'true';
+    }
+    grid.appendChild(card);
+  });
+}
+
+function capacityDotsForClass(cls) {
+  if (cls.id === 'mega_station') return 1;
+  if (cls.category === 'capital') return 4;
+  if (cls.category === 'escort') return 6;
+  return 5;
+}
+
+function updateCapacityDots(container, value, maxDots) {
+  const dots = container.querySelectorAll('.capacity-dots span');
+  dots.forEach((dot, index) => {
+    dot.dataset.active = index < Math.min(value, maxDots) ? 'true' : 'false';
+  });
+  container.closest('.count-stepper').dataset.empty = value === 0 ? 'true' : 'false';
+}
+
+function buildCountSteppers(panel) {
+  const countsContainer = panel.querySelector('[data-counts]');
+  countsContainer.innerHTML = '';
+  SHIP_CLASSES.forEach((cls) => {
+    const defaultValue = cls.id === 'corvette' || cls.id === 'destroyer' ? 4 : cls.id === 'cruiser' ? 2 : 0;
+    const stepper = document.createElement('div');
+    stepper.className = 'count-stepper';
+    stepper.dataset.classId = cls.id;
+    const dots = capacityDotsForClass(cls);
+    const dotsMarkup = Array.from({ length: dots })
+      .map(() => '<span></span>')
+      .join('');
+    stepper.innerHTML = `
+      <div class="count-stepper__label">
+        <span>${cls.name}</span>
+        <span class="count-stepper__roles">${cls.category === 'capital' ? 'Line Anchor' : cls.category === 'escort' ? 'Escort Screen' : 'Battle Asset'}</span>
+      </div>
+      <div class="count-stepper__controls">
+        <button type="button" data-action="decrement" aria-label="Decrease ${cls.name} count">-</button>
+        <input type="number" inputmode="numeric" min="0" step="1" value="${defaultValue}" data-class="${cls.id}" class="ship-count-input" aria-label="${panel.dataset.side} ${cls.name} count" />
+        <button type="button" data-action="increment" aria-label="Increase ${cls.name} count">+</button>
+      </div>
+      <div class="count-stepper__capacity">
+        <div class="capacity-dots">${dotsMarkup}</div>
+      </div>
+    `;
+    const input = stepper.querySelector('input');
+    const update = () => {
+      const value = Number(input.value) || 0;
+      updateCapacityDots(stepper.querySelector('.count-stepper__capacity'), value, dots);
+      updateFleetStatus(panel);
+      renderTimelinePreview();
+    };
+    stepper.querySelectorAll('button').forEach((button) => {
+      button.addEventListener('click', () => {
+        const delta = button.dataset.action === 'increment' ? 1 : -1;
+        const next = Math.max(0, (Number(input.value) || 0) + delta);
+        input.value = next;
+        update();
+      });
+    });
+    input.addEventListener('change', update);
+    input.addEventListener('input', update);
+    input.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter') {
+        event.preventDefault();
+        document.getElementById('simulate-button').focus();
+      }
+    });
+    updateCapacityDots(stepper.querySelector('.count-stepper__capacity'), defaultValue, dots);
+    countsContainer.appendChild(stepper);
+  });
+}
+
+function setupChipToggles(panel) {
+  panel.querySelectorAll('.chip-toggle').forEach((chip) => {
+    const input = chip.querySelector('input');
+    const sync = () => {
+      chip.dataset.active = input.checked ? 'true' : 'false';
+      updateFleetStatus(panel);
+      renderTimelinePreview();
+    };
+    input.addEventListener('change', sync);
+    const label = chip.querySelector('label');
+    if (label) {
+      label.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          input.checked = !input.checked;
+          input.dispatchEvent(new Event('change'));
+        }
+      });
+    }
+    sync();
+  });
+}
+
+function setDoctrineSelection(panel, type, value) {
+  const select = panel.querySelector(`[data-field="${type}"]`);
+  const grid = panel.querySelector(`.doctrine-card-grid[data-doctrine="${type}"]`);
+  if (select) select.value = value;
+  if (grid) {
+    grid.querySelectorAll('.doctrine-card').forEach((card) => {
+      card.dataset.active = card.dataset.value === value ? 'true' : 'false';
+    });
+  }
+}
+
+function applyPreset(panel, preset) {
+  Object.entries(preset.counts).forEach(([classId, value]) => {
+    const input = panel.querySelector(`.ship-count-input[data-class="${classId}"]`);
+    if (input) {
+      input.value = value;
+      input.dispatchEvent(new Event('change'));
+    }
+  });
+  if (preset.doctrine?.formation) {
+    setDoctrineSelection(panel, 'formation', preset.doctrine.formation);
+  }
+  if (preset.doctrine?.tactic) {
+    setDoctrineSelection(panel, 'tactic', preset.doctrine.tactic);
+  }
+  updateFleetStatus(panel);
+  renderTimelinePreview();
+}
+
+function applyFleetConfig(panel, config) {
+  if (!config) return;
   const commanderSelect = panel.querySelector('[data-field="commander"]');
+  if (commanderSelect) {
+    commanderSelect.value = config.commander || 'none';
+    commanderSelect.dispatchEvent(new Event('change'));
+  }
+  if (config.formation) setDoctrineSelection(panel, 'formation', config.formation);
+  if (config.tactic) setDoctrineSelection(panel, 'tactic', config.tactic);
+
+  ['withdrawRound1', 'withdrawRound2', 'volley'].forEach((key) => {
+    const map = { withdrawRound1: 'withdraw-r1', withdrawRound2: 'withdraw-r2', volley: 'volley' };
+    const input = panel.querySelector(`[data-field="${map[key]}"]`);
+    if (input) {
+      input.checked = Boolean(config[key]);
+      input.dispatchEvent(new Event('change'));
+    }
+  });
+
+  Object.entries(config.classes || {}).forEach(([classId, details]) => {
+    const count = details?.count ?? 0;
+    const input = panel.querySelector(`.ship-count-input[data-class="${classId}"]`);
+    if (input) {
+      input.value = count;
+      input.dispatchEvent(new Event('change'));
+    }
+    (details.orders || []).forEach((order, idx) => {
+      const select = panel.querySelector(`.class-order-select[data-class="${classId}"][data-round="${idx + 1}"]`);
+      if (!select) return;
+      select.value = order?.id || 'none';
+      handleOrderSelectChange(panel, select);
+      const targetSelect = panel.querySelector(`.class-order-target[data-class="${classId}"][data-round="${idx + 1}"]`);
+      if (targetSelect && !targetSelect.hidden && order?.target) {
+        targetSelect.value = order.target;
+      }
+    });
+  });
+  updateSynergyOverlay(panel);
+  updateFleetStatus(panel);
+}
+
+function buildOrderMatrix(panel) {
+  const ordersContainer = panel.querySelector('[data-orders]');
+  ordersContainer.innerHTML = '';
+  SHIP_CLASSES.forEach((cls) => {
+    const section = document.createElement('section');
+    section.className = 'class-order-block';
+    section.dataset.classId = cls.id;
+    section.innerHTML = `<h5>${cls.name}</h5>`;
+    const grid = document.createElement('div');
+    grid.className = 'class-order-grid';
+    section.appendChild(grid);
+    const options = CLASS_ORDERS[cls.id];
+    [1, 2, 3].forEach((round) => {
+      const row = document.createElement('div');
+      row.className = 'class-order-row';
+      row.dataset.round = round;
+      row.innerHTML = `<label>R${round}</label>`;
+      const picker = document.createElement('div');
+      picker.className = 'order-card-picker';
+      const select = document.createElement('select');
+      select.className = 'class-order-select visually-hidden';
+      select.dataset.side = panel.dataset.side;
+      select.dataset.class = cls.id;
+      select.dataset.round = String(round);
+      const targetSelect = document.createElement('select');
+      targetSelect.className = 'class-order-target order-target-select visually-hidden';
+      targetSelect.dataset.side = panel.dataset.side;
+      targetSelect.dataset.class = cls.id;
+      targetSelect.dataset.round = String(round);
+      targetSelect.hidden = true;
+      options.forEach((order, index) => {
+        const option = document.createElement('option');
+        option.value = order.id;
+        option.textContent = order.name;
+        select.appendChild(option);
+        const card = document.createElement('button');
+        card.type = 'button';
+        card.className = 'order-card';
+        card.dataset.value = order.id;
+        card.innerHTML = `
+          <strong>${order.name}</strong>
+          <span>${order.summary}</span>
+        `;
+        card.addEventListener('click', () => {
+          select.value = order.id;
+          handleOrderSelectChange(panel, select);
+        });
+        card.addEventListener('keydown', (event) => {
+          if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            card.click();
+          }
+        });
+        if (order.id === 'none' && index === 0) {
+          card.dataset.active = 'true';
+        }
+        picker.appendChild(card);
+      });
+      picker.appendChild(select);
+      picker.appendChild(targetSelect);
+      row.appendChild(picker);
+      grid.appendChild(row);
+      select.addEventListener('change', () => handleOrderSelectChange(panel, select));
+      handleOrderSelectChange(panel, select);
+    });
+    ordersContainer.appendChild(section);
+  });
+  if (!synergyLayers.has(panel)) {
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.classList.add('synergy-overlay');
+    panel.querySelector('.fleet-orders').appendChild(svg);
+    synergyLayers.set(panel, svg);
+  }
+}
+
+function updateSynergyOverlay(panel) {
+  const svg = synergyLayers.get(panel);
+  if (!svg) return;
+  const ordersSection = panel.querySelector('.fleet-orders');
+  if (!ordersSection) return;
+  const rect = ordersSection.getBoundingClientRect();
+  svg.setAttribute('width', rect.width);
+  svg.setAttribute('height', rect.height);
+  svg.innerHTML = '';
+
+  SYNERGY_RULES.forEach((rule) => {
+    rule.rounds.forEach((round) => {
+      const allMatch = rule.pairs.every(({ classId, orderId }) => {
+        const select = panel.querySelector(`.class-order-select[data-class="${classId}"][data-round="${round}"]`);
+        return select && select.value === orderId;
+      });
+      if (!allMatch) return;
+      const points = rule.pairs.map(({ classId }) => {
+        const row = panel.querySelector(`.class-order-block[data-class-id="${classId}"] .class-order-row[data-round="${round}"]`);
+        if (!row) return null;
+        const rowRect = row.getBoundingClientRect();
+        return {
+          x: rowRect.left + rowRect.width - rect.left,
+          y: rowRect.top + rowRect.height / 2 - rect.top
+        };
+      }).filter(Boolean);
+      if (points.length < 2) return;
+      for (let i = 0; i < points.length - 1; i += 1) {
+        const start = points[i];
+        const end = points[i + 1];
+        const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        line.classList.add('synergy-line');
+        line.setAttribute('x1', start.x);
+        line.setAttribute('y1', start.y);
+        line.setAttribute('x2', end.x);
+        line.setAttribute('y2', end.y);
+        line.setAttribute('data-description', rule.description);
+        svg.appendChild(line);
+        const pip = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        pip.classList.add('synergy-pip');
+        pip.setAttribute('cx', (start.x + end.x) / 2);
+        pip.setAttribute('cy', (start.y + end.y) / 2);
+        pip.setAttribute('r', 6);
+        pip.setAttribute('data-description', rule.description);
+        pip.addEventListener('mouseenter', () => {
+          ordersSection.setAttribute('data-synergy-text', rule.description);
+        });
+        pip.addEventListener('mouseleave', () => {
+          ordersSection.removeAttribute('data-synergy-text');
+        });
+        svg.appendChild(pip);
+      }
+    });
+  });
+}
+
+function hashConfig(configA, configB, theaterId) {
+  const json = JSON.stringify({ configA, configB, theaterId });
+  let hash = 0;
+  for (let i = 0; i < json.length; i += 1) {
+    hash = (hash * 31 + json.charCodeAt(i)) | 0;
+  }
+  return Math.abs(hash) + 1;
+}
+
+function createSeededRandom(seed) {
+  let state = seed >>> 0;
+  return () => {
+    state = (state * 1664525 + 1013904223) >>> 0;
+    return state / 4294967296;
+  };
+}
+
+function runWithSeed(seed, fn) {
+  const original = Math.random;
+  Math.random = createSeededRandom(seed);
+  try {
+    return fn();
+  } finally {
+    Math.random = original;
+  }
+}
+
+function playStormCrackle() {
+  if (!cinematicMode) return;
+  try {
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+    if (!AudioCtx) return;
+    audioContext = audioContext || new AudioCtx();
+    const duration = 0.35;
+    const buffer = audioContext.createBuffer(1, audioContext.sampleRate * duration, audioContext.sampleRate);
+    const channel = buffer.getChannelData(0);
+    for (let i = 0; i < channel.length; i += 1) {
+      const decay = 1 - i / channel.length;
+      channel[i] = (Math.random() * 2 - 1) * 0.25 * decay;
+    }
+    const source = audioContext.createBufferSource();
+    source.buffer = buffer;
+    const filter = audioContext.createBiquadFilter();
+    filter.type = 'bandpass';
+    filter.frequency.value = 600;
+    const gain = audioContext.createGain();
+    gain.gain.value = 0.35;
+    source.connect(filter);
+    filter.connect(gain);
+    gain.connect(audioContext.destination);
+    source.start();
+  } catch (error) {
+    console.warn('Audio unavailable', error);
+  }
+}
+
+function renderTheaterEvents(theater) {
+  const container = document.getElementById('theater-event-cards');
+  if (!container) return;
+  container.innerHTML = '';
+  eventCardRefs.clear();
+  if (!theater?.events?.length) return;
+  theater.events.forEach((eventId) => {
+    const def = THEATER_EVENT_DECK[eventId];
+    if (!def) return;
+    const card = document.createElement('article');
+    card.className = 'theater-event-card';
+    card.dataset.eventId = eventId;
+    card.dataset.status = 'face-down';
+    card.innerHTML = `
+      <header>
+        <span>R${def.round}</span>
+        <span>Pending</span>
+      </header>
+      <p>${def.description}</p>
+    `;
+    container.appendChild(card);
+    eventCardRefs.set(eventId, card);
+  });
+}
+
+function drawSparkline(canvas, datasets) {
+  const ctx = canvas.getContext('2d');
+  const width = canvas.width;
+  const height = canvas.height;
+  ctx.clearRect(0, 0, width, height);
+  ctx.lineWidth = 1.5;
+  datasets.forEach((dataset) => {
+    const points = dataset.series;
+    if (!points || points.length < 2) return;
+    ctx.beginPath();
+    ctx.strokeStyle = dataset.color;
+    points.forEach((value, index) => {
+      const x = (index / (points.length - 1)) * (width - 12) + 6;
+      const y = height - value * (height - 12) - 6;
+      if (index === 0) ctx.moveTo(x, y);
+      else ctx.lineTo(x, y);
+    });
+    ctx.stroke();
+  });
+}
+
+function renderMicroSimPreview(preview) {
+  const container = document.getElementById('micro-sim-sparklines');
+  if (!container) return;
+  container.innerHTML = '';
+  if (!preview || !preview.rounds.length) {
+    container.innerHTML = '<p class="micro-sim__empty">Awaiting configuration</p>';
+    return;
+  }
+  const fleets = [
+    { key: 'a', label: 'Fleet Alpha', accessor: (round) => round.alphaState },
+    { key: 'b', label: 'Fleet Beta', accessor: (round) => round.betaState }
+  ];
+  fleets.forEach((fleet) => {
+    const spark = document.createElement('div');
+    spark.className = 'micro-sim__sparkline';
+    const title = document.createElement('span');
+    title.textContent = fleet.label;
+    spark.appendChild(title);
+    const canvas = document.createElement('canvas');
+    canvas.width = 240;
+    canvas.height = 54;
+    spark.appendChild(canvas);
+    container.appendChild(spark);
+
+    const fleetState = preview.fleets[fleet.key];
+    const totalHull = fleetState?.totals?.hull || 1;
+    const totalShields = fleetState?.totals?.shieldCapacity || 1;
+    const hullSeries = [1];
+    const shieldSeries = [1];
+    const moraleSeries = [0.5];
+    preview.rounds.forEach((round) => {
+      const state = fleet.accessor(round);
+      hullSeries.push(totalHull > 0 ? clamp(state.hull / totalHull, 0, 1) : 0);
+      shieldSeries.push(totalShields > 0 ? clamp(state.shields / totalShields, 0, 1) : 0);
+      moraleSeries.push(clamp(state.morale / 100, 0, 1));
+    });
+    drawSparkline(canvas, [
+      { series: hullSeries, color: '#f87171' },
+      { series: shieldSeries, color: '#3b82f6' },
+      { series: moraleSeries, color: '#f59e0b' }
+    ]);
+  });
+}
+
+function renderTimelinePreview() {
+  const timeline = document.getElementById('round-timeline');
+  if (!timeline) return;
+  const theaterSelect = document.getElementById('battle-theater');
+  const theater = findById(THEATERS, theaterSelect.value);
+  const configA = collectFleetConfig('alpha');
+  const configB = collectFleetConfig('beta');
+  const totalAlpha = Object.values(configA.classes).reduce((sum, entry) => sum + (entry?.count || 0), 0);
+  const totalBeta = Object.values(configB.classes).reduce((sum, entry) => sum + (entry?.count || 0), 0);
+
+  if (!theater || totalAlpha === 0 || totalBeta === 0) {
+    timeline.innerHTML = '';
+    ['Detection', 'Engagement', 'Resolution'].forEach((stage) => {
+      const step = document.createElement('div');
+      step.className = 'round-timeline__step';
+      step.dataset.active = 'false';
+      step.innerHTML = `<span class="round-timeline__label">${stage}</span><span class="round-timeline__delta">Awaiting fleets</span>`;
+      timeline.appendChild(step);
+    });
+    renderMicroSimPreview(null);
+    return;
+  }
+
+  const seed = hashConfig(configA, configB, theater.id);
+  const preview = runWithSeed(seed, () => simulateBattle(configA, configB, theater));
+  const stages = ['Detection', 'Engagement', 'Resolution'];
+  timeline.innerHTML = '';
+  stages.forEach((stage, index) => {
+    const round = preview.rounds[index];
+    const step = document.createElement('div');
+    step.className = 'round-timeline__step';
+    step.dataset.active = round ? 'true' : 'false';
+    const parts = [];
+    if (round) {
+      const initiative = round.initiative.includes('Alpha')
+        ? 'Alpha initiative edge'
+        : round.initiative.includes('Beta')
+        ? 'Beta initiative edge'
+        : 'Initiative contested';
+      const hullSwing = Math.round(round.alphaDamage.damageToHull - round.betaDamage.damageToHull);
+      const shieldSwing = Math.round(round.alphaDamage.damageToShields - round.betaDamage.damageToShields);
+      const moraleDiff = Math.round(round.alphaState.morale - round.betaState.morale);
+
+      const hullText = hullSwing === 0
+        ? 'Hull exchange even'
+        : hullSwing > 0
+        ? `Hull Δ +${hullSwing} Alpha`
+        : `Hull Δ +${Math.abs(hullSwing)} Beta`;
+
+      let shieldText = null;
+      if (Math.abs(shieldSwing) <= 1) {
+        shieldText = 'Shields trading evenly';
+      } else if (shieldSwing > 0) {
+        shieldText = `Shields Δ +${shieldSwing} Alpha`;
+      } else {
+        shieldText = `Shields Δ +${Math.abs(shieldSwing)} Beta`;
+      }
+
+      const moraleText = Math.abs(moraleDiff) <= 1
+        ? 'Morale steady'
+        : moraleDiff > 0
+        ? `Morale +${Math.abs(moraleDiff)} Alpha`
+        : `Morale +${Math.abs(moraleDiff)} Beta`;
+
+      parts.push(initiative, hullText, shieldText, moraleText);
+    } else {
+      parts.push('Resolution pending');
+    }
+    step.innerHTML = `
+      <span class="round-timeline__label">${stage}</span>
+      <span class="round-timeline__delta">${parts.join(' · ')}</span>
+    `;
+    timeline.appendChild(step);
+  });
+  renderMicroSimPreview(preview);
+}
+
+function encodeShareSeed(configA, configB, theater) {
+  const payload = {
+    theater: theater?.id || THEATERS[0].id,
+    alpha: configA,
+    beta: configB
+  };
+  const json = JSON.stringify(payload);
+  return btoa(unescape(encodeURIComponent(json)));
+}
+
+function normaliseSeedInput(seed) {
+  return seed.replace(/\s+/g, '').replace(/-/g, '+').replace(/_/g, '/');
+}
+
+function decodeShareSeed(seed) {
+  if (typeof seed !== 'string') {
+    return { data: null, error: 'No share seed found.' };
+  }
+  const trimmed = seed.trim();
+  if (!trimmed) {
+    return { data: null, error: 'Share seed was empty.' };
+  }
+  const normalised = normaliseSeedInput(trimmed);
+  if (!/^[A-Za-z0-9+/=]+$/.test(normalised)) {
+    return { data: null, error: 'Share seed format is invalid.' };
+  }
+  const padded = normalised.padEnd(Math.ceil(normalised.length / 4) * 4, '=');
+  try {
+    const json = decodeURIComponent(escape(atob(padded)));
+    const payload = JSON.parse(json);
+    if (!payload || typeof payload !== 'object') {
+      return { data: null, error: 'Share seed payload missing.' };
+    }
+    return { data: payload, error: null };
+  } catch (error) {
+    console.warn('Failed to decode seed', error);
+    return { data: null, error: 'Share seed could not be decoded.' };
+  }
+}
+
+function applyShareSeed(seed, callbacks = {}) {
+  const { onError, onSuccess } = callbacks;
+  const source = typeof seed === 'string' ? decodeShareSeed(seed) : { data: seed || null, error: null };
+  if (source.error || !source.data) {
+    if (typeof onError === 'function') {
+      onError(source.error || 'Unable to load share seed.');
+    }
+    return false;
+  }
+  const data = source.data;
+  if (!data.alpha || typeof data.alpha !== 'object' || !data.beta || typeof data.beta !== 'object') {
+    if (typeof onError === 'function') {
+      onError('Share seed is missing fleet data.');
+    }
+    return false;
+  }
+  const theaterSelect = document.getElementById('battle-theater');
+  if (data.theater && findById(THEATERS, data.theater)) {
+    theaterSelect.value = data.theater;
+    theaterSelect.dispatchEvent(new Event('change'));
+  }
+  const panelAlpha = document.querySelector('.fleet-panel[data-side="alpha"]');
+  const panelBeta = document.querySelector('.fleet-panel[data-side="beta"]');
+  applyFleetConfig(panelAlpha, data.alpha);
+  applyFleetConfig(panelBeta, data.beta);
+  renderTimelinePreview();
+  if (typeof onSuccess === 'function') {
+    onSuccess(data);
+  }
+  return true;
+}
+
+function populateFleetPanel(panel) {
+  const commanderSelect = panel.querySelector('[data-field="commander"]');
+  commanderSelect.innerHTML = '';
   COMMANDERS.forEach((cmdr) => {
     const option = document.createElement('option');
     option.value = cmdr.id;
@@ -811,71 +1687,67 @@ function populateFleetPanel(panel) {
     option.dataset.summary = cmdr.summary;
     commanderSelect.appendChild(option);
   });
-
-  const formationSelect = panel.querySelector('[data-field="formation"]');
-  FORMATIONS.forEach((formation) => {
-    const option = document.createElement('option');
-    option.value = formation.id;
-    option.textContent = formation.name;
-    option.dataset.summary = formation.summary;
-    formationSelect.appendChild(option);
+  commanderSelect.addEventListener('change', () => {
+    updateCommanderChip(panel);
+    updateFleetStatus(panel);
+    renderTimelinePreview();
   });
 
-  const tacticSelect = panel.querySelector('[data-field="tactic"]');
-  TACTICS.forEach((tactic) => {
-    const option = document.createElement('option');
-    option.value = tactic.id;
-    option.textContent = tactic.name;
-    option.dataset.summary = tactic.summary;
-    tacticSelect.appendChild(option);
-  });
+  renderDoctrineCards(panel, 'formation', FORMATIONS);
+  renderDoctrineCards(panel, 'tactic', TACTICS);
 
-  const countsContainer = panel.querySelector('[data-counts]');
-  SHIP_CLASSES.forEach((cls) => {
-    const field = document.createElement('label');
-    field.className = 'simulator-field simulator-field--inline';
-    field.innerHTML = `
-      <span>${cls.name}</span>
-      <input type="number" inputmode="numeric" min="0" step="1" value="${cls.id === 'corvette' || cls.id === 'destroyer' ? 4 : cls.id === 'cruiser' ? 2 : 0}" data-class="${cls.id}" class="ship-count-input" aria-label="${side} ${cls.name} count" />
-    `;
-    countsContainer.appendChild(field);
-  });
+  buildCountSteppers(panel);
+  setupChipToggles(panel);
+  buildOrderMatrix(panel);
+  updateSynergyOverlay(panel);
 
-  const ordersContainer = panel.querySelector('[data-orders]');
-  SHIP_CLASSES.forEach((cls) => {
-    const section = document.createElement('section');
-    section.className = 'class-order-block';
-    section.dataset.classId = cls.id;
-    section.innerHTML = `
-      <h5>${cls.name}</h5>
-      <div class="class-order-grid"></div>
-    `;
-    const grid = section.querySelector('.class-order-grid');
-    [1, 2, 3].forEach((round) => {
-      const row = document.createElement('div');
-      row.className = 'class-order-row';
-      row.innerHTML = `
-        <label>R${round}</label>
-        <select class="class-order-select" data-side="${side}" data-class="${cls.id}" data-round="${round}"></select>
-        <select class="class-order-target" data-side="${side}" data-class="${cls.id}" data-round="${round}" hidden></select>
-      `;
-      grid.appendChild(row);
+  const presetGrid = panel.querySelector('[data-presets] .fleet-presets__grid');
+  if (presetGrid) {
+    presetGrid.innerHTML = '';
+    FLEET_PRESETS.forEach((preset) => {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'fleet-preset';
+      button.innerHTML = `<strong>${preset.name}</strong><span>${preset.blurb}</span>`;
+      button.addEventListener('click', () => {
+        applyPreset(panel, preset);
+      });
+      presetGrid.appendChild(button);
     });
-    ordersContainer.appendChild(section);
-  });
+  }
 
   panel.addEventListener('change', (event) => {
     if (event.target.matches('.ship-count-input')) {
       updateFleetStatus(panel);
     }
     if (event.target.matches('.class-order-select')) {
-      handleOrderSelectChange(panel, event.target);
-    }
-    if (event.target.matches('[data-field="formation"], [data-field="tactic"], [data-field="commander"], [data-field="volley"]')) {
+      updateSynergyOverlay(panel);
       updateFleetStatus(panel);
+    }
+    if (event.target.matches('.class-order-target')) {
+      updateFleetStatus(panel);
+      renderTimelinePreview();
     }
   });
 
+  const planToggle = panel.querySelector('[data-toggle-orders]');
+  const ordersContainer = panel.querySelector('.fleet-orders__container');
+  if (planToggle && ordersContainer) {
+    ordersContainer.dataset.collapsed = 'true';
+    planToggle.setAttribute('aria-expanded', 'false');
+    planToggle.addEventListener('click', () => {
+      const isCollapsed = ordersContainer.dataset.collapsed === 'true';
+      ordersContainer.dataset.collapsed = isCollapsed ? 'false' : 'true';
+      planToggle.dataset.open = isCollapsed ? 'true' : 'false';
+      planToggle.textContent = isCollapsed ? 'Plan Orders ▼' : 'Plan Orders ▸';
+      planToggle.setAttribute('aria-expanded', String(isCollapsed));
+      if (!isCollapsed) {
+        updateSynergyOverlay(panel);
+      }
+    });
+  }
+
+  updateCommanderChip(panel);
   updateFleetStatus(panel);
 }
 
@@ -887,13 +1759,25 @@ function handleOrderSelectChange(panel, selectEl) {
   const orders = CLASS_ORDERS[classId];
   const order = orders.find((opt) => opt.id === orderId);
 
+  const picker = selectEl.closest('.order-card-picker');
+  if (picker) {
+    picker.querySelectorAll('.order-card').forEach((card) => {
+      card.dataset.active = card.dataset.value === orderId ? 'true' : 'false';
+    });
+  }
+
   if (order && order.requiresTarget) {
     targetSelect.hidden = false;
+    targetSelect.classList.remove('visually-hidden');
     populateTargetOptions(targetSelect, order);
   } else if (targetSelect) {
     targetSelect.hidden = true;
     targetSelect.innerHTML = '';
+    targetSelect.classList.add('visually-hidden');
   }
+  updateFleetStatus(panel);
+  updateSynergyOverlay(panel);
+  renderTimelinePreview();
 }
 
 function populateTargetOptions(targetSelect, order) {
@@ -931,40 +1815,129 @@ function updateFleetStatus(panel) {
     volleyCheckbox.disabled = false;
   }
 
-  const fragments = [];
-  fragments.push(`<div><strong>Commander:</strong> ${commanderSelect.selectedOptions[0]?.dataset.summary || ''}</div>`);
-  fragments.push(`<div><strong>Formation:</strong> ${formationSelect.selectedOptions[0]?.dataset.summary || ''}</div>`);
-  fragments.push(`<div><strong>Tactic:</strong> ${tacticSelect.selectedOptions[0]?.dataset.summary || ''}</div>`);
-  fragments.push(`<div><strong>Total Hull Frames:</strong> ${totalShips}</div>`);
-  fragments.push(`<div><strong>Combined-Arms Bonus:</strong> ${combinedArms ? 'Active' : 'Incomplete roster'}</div>`);
-  if (volleyCheckbox.checked) {
-    fragments.push('<div><strong>Volley Coordination:</strong> Primed for Round 1.</div>');
+  const side = panel.dataset.side;
+  const rosterSlug = document.querySelector(`[data-slug="${side}-roster"] [data-slug-value]`);
+  if (rosterSlug) {
+    if (totalShips === 0) rosterSlug.textContent = 'Empty';
+    else rosterSlug.textContent = combinedArms ? 'Nominal' : 'Gaps Detected';
+  }
+  const ordersSlug = document.querySelector(`[data-slug="${side}-orders"] [data-slug-value]`);
+  if (ordersSlug) {
+    const hasOrders = Array.from(panel.querySelectorAll('.class-order-select')).some((select) => select.value !== 'none');
+    ordersSlug.textContent = hasOrders ? 'Sequenced' : 'Standby';
   }
 
+  const commander = findById(COMMANDERS, commanderSelect.value) || COMMANDERS[0];
+  const formation = findById(FORMATIONS, formationSelect.value) || FORMATIONS[0];
+  const tactic = findById(TACTICS, tacticSelect.value) || TACTICS[0];
+
+  const moraleMeter = panel.querySelector('[data-morale]');
+  if (moraleMeter) {
+    const current = Number(moraleMeter.dataset.current || 50);
+    const track = moraleMeter.querySelector('[data-morale-value]');
+    const ratio = clamp(current / 100, 0, 1);
+    track.style.transform = `scaleX(${ratio})`;
+    moraleMeter.querySelector('output').textContent = Math.round(current);
+  }
+
+  const volleyChip = panel.querySelector('.chip-toggle[data-toggle="volley"]');
+  if (volleyChip) {
+    volleyChip.dataset.synergy = combinedArms && volleyCheckbox.checked ? 'true' : 'false';
+  }
+  ['withdraw-r1', 'withdraw-r2'].forEach((toggle) => {
+    const chip = panel.querySelector(`.chip-toggle[data-toggle="${toggle}"]`);
+    if (!chip) return;
+    const input = chip.querySelector('input');
+    const withdrawBoost = (commander.effects && commander.effects.withdrawBonus) || tactic.id === 'defensive';
+    chip.dataset.synergy = input.checked && withdrawBoost ? 'true' : 'false';
+  });
+
+  const missingClasses = counts.filter((item) => item.value === 0).map((item) => CLASS_LOOKUP[item.classId].name);
+  const fragments = [];
+  fragments.push(`<div><strong>Commander:</strong> ${commander.summary}</div>`);
+  fragments.push(`<div><strong>Formation:</strong> ${formation.summary}</div>`);
+  fragments.push(`<div><strong>Tactic:</strong> ${tactic.summary}</div>`);
+  fragments.push(`<div><strong>Hull Frames:</strong> ${totalShips}</div>`);
+  fragments.push(
+    `<div><strong>Combined-Arms:</strong> ${combinedArms ? 'Active' : `Missing ${missingClasses.join(', ')}`}</div>`
+  );
+  if (volleyCheckbox.checked) {
+    fragments.push('<div><strong>Volley:</strong> Coordination primed for Round 1.</div>');
+  }
   statusEl.innerHTML = fragments.join('');
 }
 
 function populateTheaterControls() {
   const theaterSelect = document.getElementById('battle-theater');
-  THEATERS.forEach((theater) => {
+  const cardGrid = document.getElementById('theater-card-grid');
+  cardGrid.innerHTML = '';
+
+  THEATERS.forEach((theater, index) => {
     const option = document.createElement('option');
     option.value = theater.id;
     option.textContent = theater.name;
     option.dataset.summary = theater.summary;
     theaterSelect.appendChild(option);
+
+    const card = document.createElement('button');
+    card.type = 'button';
+    card.className = 'theater-card';
+    card.setAttribute('role', 'option');
+    card.dataset.value = theater.id;
+    card.innerHTML = `
+      <strong class="theater-card__name">${theater.name}</strong>
+      <p class="theater-card__summary">${theater.summary}</p>
+    `;
+    card.addEventListener('click', () => {
+      theaterSelect.value = theater.id;
+      cardGrid.querySelectorAll('.theater-card').forEach((el) => {
+        el.dataset.active = el.dataset.value === theater.id ? 'true' : 'false';
+        el.setAttribute('aria-selected', el.dataset.active);
+      });
+      updateTheaterSummary();
+    });
+    card.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        card.click();
+      }
+    });
+    if (index === 0) {
+      card.dataset.active = 'true';
+      card.setAttribute('aria-selected', 'true');
+    }
+    cardGrid.appendChild(card);
   });
 
-  theaterSelect.addEventListener('change', updateTheaterSummary);
+  if (!theaterSelect.value && THEATERS.length) {
+    theaterSelect.value = THEATERS[0].id;
+  }
+
+  theaterSelect.addEventListener('change', () => {
+    const selected = theaterSelect.value;
+    cardGrid.querySelectorAll('.theater-card').forEach((card) => {
+      card.dataset.active = card.dataset.value === selected ? 'true' : 'false';
+      card.setAttribute('aria-selected', card.dataset.active);
+    });
+    updateTheaterSummary();
+  });
   updateTheaterSummary();
 }
 
 function updateTheaterSummary() {
   const theaterSelect = document.getElementById('battle-theater');
-  const summaryEl = document.querySelector('.simulator-environment__summary');
+  const summaryContainer = document.querySelector('.simulator-environment__summary');
   const helpEl = document.getElementById('theater-help');
   const chosen = findById(THEATERS, theaterSelect.value);
-  helpEl.textContent = chosen.summary;
-  summaryEl.textContent = chosen.describe;
+  if (!chosen) return;
+  document.body.dataset.theater = chosen.skin || chosen.id;
+  helpEl.textContent = chosen.helper || chosen.summary;
+  const slug = document.querySelector('[data-slug="theater"] [data-slug-value]');
+  if (slug) slug.textContent = chosen.name;
+  const description = summaryContainer.querySelector('.theater-description');
+  if (description) description.textContent = chosen.describe;
+  renderTheaterEvents(chosen);
+  renderTimelinePreview();
 }
 
 function collectFleetConfig(side) {
@@ -1405,6 +2378,8 @@ function simulateBattle(fleetConfigA, fleetConfigB, theater) {
   const log = [];
   let withdrawal = null;
   const rounds = [];
+  const eventQueue = Array.isArray(theater?.events) ? [...theater.events] : [];
+  const triggeredEvents = [];
 
   for (let round = 1; round <= 3; round += 1) {
     if (fleetA.currentHull <= 0 || fleetB.currentHull <= 0 || (withdrawal && withdrawal.success)) break;
@@ -1456,6 +2431,16 @@ function simulateBattle(fleetConfigA, fleetConfigB, theater) {
       betaState: { hull: fleetB.currentHull, shields: fleetB.currentShields, morale: fleetB.morale }
     });
 
+    eventQueue.slice().forEach((eventId) => {
+      const def = THEATER_EVENT_DECK[eventId];
+      if (!def || def.round !== round) return;
+      const message = def.message ? def.message() : `${def.name} influences the engagement.`;
+      log.push(message);
+      triggeredEvents.push({ id: eventId, round, message });
+      const index = eventQueue.indexOf(eventId);
+      if (index >= 0) eventQueue.splice(index, 1);
+    });
+
     const attemptAlpha = attemptWithdraw(fleetA, fleetB, round, modifiersA, theater, log);
     if (attemptAlpha && attemptAlpha.success) {
       withdrawal = { ...attemptAlpha, side: 'alpha', round };
@@ -1470,7 +2455,7 @@ function simulateBattle(fleetConfigA, fleetConfigB, theater) {
 
   const final = determineOutcome(fleetA, fleetB, withdrawal, theater);
 
-  return { rounds, log, final, fleets: { a: fleetA, b: fleetB }, theater };
+  return { rounds, log, final, fleets: { a: fleetA, b: fleetB }, theater, events: triggeredEvents };
 }
 
 function determineOutcome(fleetA, fleetB, withdrawal, theater) {
@@ -1550,98 +2535,170 @@ function determineOutcome(fleetA, fleetB, withdrawal, theater) {
 function renderResults(result) {
   const container = document.getElementById('simulator-results');
   container.innerHTML = '';
+  const slug = document.querySelector('[data-slug="results"] [data-slug-value]');
+  if (slug) slug.textContent = result.final.type;
 
-  const outcomeCard = document.createElement('article');
-  outcomeCard.className = 'simulator-outcome';
-  outcomeCard.innerHTML = `
-    <header>
-      <h4>Outcome: ${result.final.type}</h4>
-      <p class="simulator-outcome__summary">${result.final.summary}</p>
-      <p class="simulator-outcome__rating">Assessment: ${result.final.rating}</p>
-    </header>
+  const card = document.createElement('article');
+  card.className = 'after-action-card';
+  if (cinematicMode) card.dataset.animate = 'true';
+  card.innerHTML = `
+    <div class="after-action-card__header">
+      <span class="after-action-card__badge">${result.final.type}</span>
+      <p class="after-action-card__summary">${result.final.summary}</p>
+    </div>
   `;
-  container.appendChild(outcomeCard);
 
-  const fleetGrid = document.createElement('div');
-  fleetGrid.className = 'simulator-fleet-summary-grid';
+  const grid = document.createElement('div');
+  grid.className = 'after-action-card__grid';
 
-  ['a', 'b'].forEach((key) => {
-    const fleet = result.fleets[key];
-    const card = document.createElement('section');
-    const ratio = fleet.totals.hull > 0 ? fleet.currentHull / fleet.totals.hull : 0;
-    const shieldRatio = fleet.totals.shieldCapacity > 0 ? fleet.currentShields / fleet.totals.shieldCapacity : 0;
-    card.className = 'simulator-fleet-card';
-    const listItems = SHIP_CLASSES.map((cls) => {
+  const fleetMeta = [
+    { key: 'a', label: 'Fleet Alpha', panelSelector: '.fleet-panel[data-side="alpha"]' },
+    { key: 'b', label: 'Fleet Beta', panelSelector: '.fleet-panel[data-side="beta"]' }
+  ];
+
+  fleetMeta.forEach((meta) => {
+    const fleet = result.fleets[meta.key];
+    const panel = document.querySelector(meta.panelSelector);
+    const commander = findById(COMMANDERS, fleet.commanderId);
+    if (panel) {
+      const moraleMeter = panel.querySelector('[data-morale]');
+      if (moraleMeter) {
+        moraleMeter.dataset.current = Math.round(fleet.morale);
+      }
+    }
+    const casualties = SHIP_CLASSES.map((cls) => {
       const start = fleet.classes[cls.id]?.count || 0;
       const state = fleet.classStates?.[cls.id];
       const survivors = state ? computeSurvivorCount(state) : 0;
-      return `<li><span>${cls.name}</span><span>${survivors} / ${start}</span></li>`;
-    }).join('');
+      const lost = Math.max(0, start - survivors);
+      return { cls, start, survivors, lost };
+    });
+    const mvp = casualties.reduce((best, entry) => {
+      if (entry.start === 0) return best;
+      const ratio = entry.start > 0 ? entry.survivors / entry.start : 0;
+      if (!best || ratio > best.ratio) return { entry, ratio };
+      return best;
+    }, null);
+    const weak = casualties.reduce((worst, entry) => {
+      if (entry.start === 0) return worst;
+      const ratio = entry.start > 0 ? entry.survivors / entry.start : 1;
+      if (!worst || ratio < worst.ratio) return { entry, ratio };
+      return worst;
+    }, null);
+
     const repairCosts = computeRepairCosts(fleet);
-    const breakdownItems = repairCosts.breakdown
-      .map((entry) => `<li><span>${entry.name}</span><span>${formatCredits(entry.min)} - ${formatCredits(entry.max)}</span></li>`)
-      .join('');
-    const repairBlock = `
-      <div class="simulator-fleet-card__repairs">
-        <h6>Estimated Repair Costs</h6>
-        <p class="simulator-fleet-card__repair-total">
-          ${repairCosts.totalMax > 0
-            ? `${formatCredits(repairCosts.totalMin)} - ${formatCredits(repairCosts.totalMax)}`
-            : 'No significant repairs required.'}
-        </p>
-        ${repairCosts.breakdown.length ? `<ul>${breakdownItems}</ul>` : ''}
-      </div>
+      const casualtyList = casualties
+        .map((item) => {
+          const ratio = item.start > 0 ? `${item.survivors}/${item.start}` : '—';
+          return `<div><span>${item.cls.name}</span><span>${ratio}</span></div>`;
+        })
+        .join('');
+
+    const panelEl = document.createElement('section');
+    panelEl.className = 'after-action-panel';
+    panelEl.innerHTML = `
+      <h5>${fleet.label}</h5>
+      <div class="casualty-grid">${casualtyList}</div>
+      <p class="mvp-tag">MVP: ${mvp?.entry?.cls?.name || 'N/A'}${weak?.entry && weak.entry.cls ? ` · Weak Link: ${weak.entry.cls.name}` : ''}</p>
+      <p>Morale ${Math.round(fleet.morale)} · Hull ${Math.round((fleet.currentHull / (fleet.totals.hull || 1)) * 100)}%</p>
+      <p>${getCommanderQuip(commander.id, result.final.type)}</p>
+      <div class="after-action-panel__repairs">Estimated repairs: ${
+        repairCosts.totalMax > 0
+          ? `${formatCredits(repairCosts.totalMin)} - ${formatCredits(repairCosts.totalMax)}`
+          : 'Minimal patch work'
+      }</div>
     `;
-    card.innerHTML = `
-      <header>
-        <h5>${fleet.label}</h5>
-        <p>Commander: ${findById(COMMANDERS, fleet.commanderId).name}</p>
-      </header>
-      <dl>
-        <div><dt>Hull Remaining</dt><dd>${Math.round(ratio * 100)}%</dd></div>
-        <div><dt>Shields Online</dt><dd>${Math.round(shieldRatio * 100)}%</dd></div>
-        <div><dt>Morale</dt><dd>${Math.round(fleet.morale)}</dd></div>
-      </dl>
-      <h6>Estimated Surviving Hulls</h6>
-      <ul>${listItems}</ul>
-      ${repairBlock}
-    `;
-    fleetGrid.appendChild(card);
+    grid.appendChild(panelEl);
   });
-  container.appendChild(fleetGrid);
+
+  card.appendChild(grid);
+
+  const changeChips = document.createElement('div');
+  changeChips.className = 'change-chips';
+  changeChips.innerHTML = `
+    <button type="button" data-focus="alpha-formation">Adjust Alpha Formation</button>
+    <button type="button" data-focus="alpha-orders">Retune Alpha Orders</button>
+    <button type="button" data-focus="beta-tactic">Shift Beta Tactic</button>
+  `;
+  card.appendChild(changeChips);
+  container.appendChild(card);
+
+  const focusActions = {
+    'alpha-formation': () => {
+      const el = document.querySelector('.fleet-panel[data-side="alpha"] .doctrine-card-grid[data-doctrine="formation"] .doctrine-card');
+      if (el) el.focus();
+    },
+    'alpha-orders': () => {
+      const toggle = document.querySelector('.fleet-panel[data-side="alpha"] [data-toggle-orders]');
+      if (toggle && toggle.getAttribute('aria-expanded') === 'false') toggle.click();
+      const el = document.querySelector('.fleet-panel[data-side="alpha"] .class-order-block .order-card');
+      if (el) el.focus();
+    },
+    'beta-tactic': () => {
+      const el = document.querySelector('.fleet-panel[data-side="beta"] .doctrine-card-grid[data-doctrine="tactic"] .doctrine-card');
+      if (el) el.focus();
+    }
+  };
+  changeChips.addEventListener('click', (event) => {
+    if (event.target.matches('button[data-focus]')) {
+      const action = focusActions[event.target.dataset.focus];
+      if (action) action();
+    }
+  });
 
   result.rounds.forEach((round) => {
     const section = document.createElement('section');
-    section.className = 'simulator-round';
+    section.className = 'round-report';
+    if (cinematicMode) section.dataset.animate = 'true';
     const messages = round.messages.map((msg) => `<li>${msg}</li>`).join('');
     section.innerHTML = `
       <header>
         <h5>Round ${round.round}</h5>
-        <p>${round.initiative}</p>
+        <span>${round.initiative}</span>
       </header>
-      <div class="simulator-round__stats">
+      <div class="round-report__stats">
         <div>
-          <h6>Fleet Alpha</h6>
-          <p>Damage inflicted: ${Math.round(round.alphaDamage.damageToHull)} hull / ${Math.round(round.alphaDamage.damageToShields)} shields</p>
-          <p>Hull: ${Math.round(round.alphaState.hull)} | Shields: ${Math.round(round.alphaState.shields)} | Morale: ${Math.round(round.alphaState.morale)}</p>
+          <strong>Alpha</strong>
+          <p>Damage: ${Math.round(round.alphaDamage.damageToHull)} hull / ${Math.round(round.alphaDamage.damageToShields)} shields</p>
+          <p>Hull ${Math.round(round.alphaState.hull)} · Shields ${Math.round(round.alphaState.shields)} · Morale ${Math.round(round.alphaState.morale)}</p>
         </div>
         <div>
-          <h6>Fleet Beta</h6>
-          <p>Damage inflicted: ${Math.round(round.betaDamage.damageToHull)} hull / ${Math.round(round.betaDamage.damageToShields)} shields</p>
-          <p>Hull: ${Math.round(round.betaState.hull)} | Shields: ${Math.round(round.betaState.shields)} | Morale: ${Math.round(round.betaState.morale)}</p>
+          <strong>Beta</strong>
+          <p>Damage: ${Math.round(round.betaDamage.damageToHull)} hull / ${Math.round(round.betaDamage.damageToShields)} shields</p>
+          <p>Hull ${Math.round(round.betaState.hull)} · Shields ${Math.round(round.betaState.shields)} · Morale ${Math.round(round.betaState.morale)}</p>
         </div>
       </div>
-      <ul class="simulator-round__log">${messages}</ul>
+      <ul class="round-report__log">${messages}</ul>
     `;
     container.appendChild(section);
   });
 
   if (result.log.length) {
     const misc = document.createElement('section');
-    misc.className = 'simulator-misc-log';
+    misc.className = 'additional-events';
+    if (cinematicMode) misc.dataset.animate = 'true';
     misc.innerHTML = `<h5>Additional Events</h5><ul>${result.log.map((entry) => `<li>${entry}</li>`).join('')}</ul>`;
     container.appendChild(misc);
   }
+
+  if (result.events?.length) {
+    result.events.forEach((event) => {
+      const cardRef = eventCardRefs.get(event.id);
+      if (cardRef) {
+        cardRef.dataset.status = 'revealed';
+        const header = cardRef.querySelector('header span:last-child');
+        if (header) header.textContent = 'Revealed';
+        const note = document.createElement('p');
+        note.textContent = event.message;
+        cardRef.appendChild(note);
+      }
+      if (event.id === 'choir_surge') {
+        playStormCrackle();
+      }
+    });
+  }
+
+  document.querySelectorAll('.fleet-panel').forEach((panel) => updateFleetStatus(panel));
 }
 
 function resetFleets() {
@@ -1650,38 +2707,37 @@ function resetFleets() {
       if (input.dataset.class === 'corvette' || input.dataset.class === 'destroyer') input.value = 4;
       else if (input.dataset.class === 'cruiser') input.value = 2;
       else input.value = 0;
+      input.dispatchEvent(new Event('change'));
     });
     panel.querySelector('[data-field="commander"]').value = 'none';
-    panel.querySelector('[data-field="formation"]').value = 'phalanx';
-    panel.querySelector('[data-field="tactic"]').value = 'balanced';
-    panel.querySelector('[data-field="withdraw-r1"]').checked = false;
-    panel.querySelector('[data-field="withdraw-r2"]').checked = false;
-    panel.querySelector('[data-field="volley"]').checked = false;
-    panel.querySelectorAll('.class-order-select').forEach((select) => {
-      select.value = 'none';
-      const target = panel.querySelector(`.class-order-target[data-class="${select.dataset.class}"][data-round="${select.dataset.round}"]`);
-      if (target) {
-        target.hidden = true;
-        target.innerHTML = '';
+    setDoctrineSelection(panel, 'formation', 'phalanx');
+    setDoctrineSelection(panel, 'tactic', 'balanced');
+    ['withdraw-r1', 'withdraw-r2', 'volley'].forEach((toggle) => {
+      const input = panel.querySelector(`[data-field="${toggle}"]`);
+      if (input) {
+        input.checked = false;
+        input.dispatchEvent(new Event('change'));
       }
     });
+    panel.querySelectorAll('.class-order-select').forEach((select) => {
+      select.value = 'none';
+      handleOrderSelectChange(panel, select);
+    });
+    const moraleMeter = panel.querySelector('[data-morale]');
+    if (moraleMeter) {
+      moraleMeter.dataset.current = 50;
+    }
+    updateCommanderChip(panel);
+    updateSynergyOverlay(panel);
     updateFleetStatus(panel);
   });
+  renderTimelinePreview();
   document.getElementById('simulator-results').innerHTML = '';
-}
-
-function initializeOrders() {
-  document.querySelectorAll('.class-order-select').forEach((select) => {
-    const classId = select.dataset.class;
-    const options = CLASS_ORDERS[classId];
-    prepareOrders(select, options);
-  });
 }
 
 function init() {
   populateTheaterControls();
   document.querySelectorAll('.fleet-panel').forEach((panel) => populateFleetPanel(panel));
-  initializeOrders();
 
   document.getElementById('simulate-button').addEventListener('click', () => {
     const configA = collectFleetConfig('alpha');
@@ -1695,7 +2751,68 @@ function init() {
     resetFleets();
   });
 
+    const shareButton = document.getElementById('share-seed');
+    const shareOutput = document.getElementById('share-seed-output');
+    const shareFeedback = (message, status = 'info') => {
+      if (!shareOutput) return;
+      shareOutput.textContent = message;
+      shareOutput.dataset.status = status;
+    };
+    if (shareButton) {
+      shareButton.addEventListener('click', async () => {
+        const configA = collectFleetConfig('alpha');
+        const configB = collectFleetConfig('beta');
+        const theater = findById(THEATERS, document.getElementById('battle-theater').value);
+        const seed = encodeShareSeed(configA, configB, theater);
+        shareFeedback(`Seed: ${seed}`, 'info');
+
+        let copyState = 'unsupported';
+        if (navigator.clipboard && typeof navigator.clipboard.writeText === 'function' && window.isSecureContext) {
+          try {
+            await navigator.clipboard.writeText(seed);
+            copyState = 'success';
+          } catch (error) {
+            console.warn('Failed to copy share seed', error);
+            copyState = 'error';
+          }
+        }
+
+        if (copyState === 'success') {
+          shareFeedback(`Seed: ${seed} · Copied`, 'success');
+        } else if (copyState === 'error') {
+          shareFeedback(`Seed: ${seed} · Copy failed—use manual copy.`, 'error');
+        } else {
+          shareFeedback(`Seed: ${seed} · Copy manually.`, 'warn');
+        }
+
+        const url = new URL(window.location.href);
+        url.searchParams.set('seed', seed);
+        window.history.replaceState({}, '', url.toString());
+      });
+    }
+
+  const cinematicToggle = document.getElementById('cinematic-mode');
+  if (cinematicToggle) {
+    document.body.dataset.cinematic = cinematicToggle.checked ? 'on' : 'off';
+    cinematicMode = cinematicToggle.checked;
+    cinematicToggle.addEventListener('change', (event) => {
+      cinematicMode = event.target.checked;
+      document.body.dataset.cinematic = cinematicMode ? 'on' : 'off';
+    });
+  } else {
+    document.body.dataset.cinematic = 'off';
+  }
+
   resetFleets();
-}
+
+  const params = new URLSearchParams(window.location.search);
+  const seedFromQuery = params.get('seed') || (window.location.hash.startsWith('#seed=') ? window.location.hash.slice(6) : null);
+    if (seedFromQuery) {
+      applyShareSeed(seedFromQuery, {
+        onSuccess: () => shareFeedback('Loaded configuration seed.', 'success'),
+        onError: (message) => shareFeedback(message, 'error')
+      });
+    }
+  }
 
 window.addEventListener('DOMContentLoaded', init);

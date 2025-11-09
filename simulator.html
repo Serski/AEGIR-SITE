@@ -15,7 +15,7 @@
 </head>
 <body>
   <div id="gin-ui" class="gin-page">
-    <header id="gin-top-bar" class="gin-top-bar">
+    <header id="gin-top-bar" class="gin-top-bar" data-theater-skin>
       <div class="gin-top-left">
         <button
           id="gin-menu-button"
@@ -39,7 +39,16 @@
       <div class="gin-top-center">
         <h1 class="gin-page-heading">Battle Simulator</h1>
       </div>
-      <div class="gin-top-right" aria-hidden="true"></div>
+      <div class="gin-top-right">
+        <label class="cinematic-toggle" for="cinematic-mode">
+          <input type="checkbox" id="cinematic-mode" />
+          <span class="cinematic-toggle__label">
+            <span class="cinematic-toggle__mode">Tactical</span>
+            <span class="cinematic-toggle__thumb" aria-hidden="true"></span>
+            <span class="cinematic-toggle__mode">Cinematic</span>
+          </span>
+        </label>
+      </div>
     </header>
 
     <nav id="gin-main-menu" class="gin-main-menu" aria-label="Site sections" hidden>
@@ -65,21 +74,48 @@
 
       <section class="simulator-environment" aria-labelledby="simulator-environment-heading">
         <div class="simulator-environment__controls">
-          <h3 id="simulator-environment-heading">Battle Theater</h3>
-          <label class="simulator-field">
-            <span>Theater</span>
-            <select id="battle-theater" aria-describedby="theater-help"></select>
+          <h3 id="simulator-environment-heading" class="status-slug" data-slug="theater">
+            Theater Array: <span data-slug-value>Theater Locked</span>
+          </h3>
+          <label class="simulator-field simulator-field--cards">
+            <span>Operational Layer</span>
+            <select id="battle-theater" aria-describedby="theater-help" class="visually-hidden"></select>
+            <div class="theater-card-grid" id="theater-card-grid" role="listbox" aria-labelledby="simulator-environment-heading"></div>
           </label>
           <p id="theater-help" class="simulator-help-text"></p>
+          <div class="theater-event-cards" id="theater-event-cards" aria-live="polite"></div>
         </div>
-        <div class="simulator-environment__summary" aria-live="polite"></div>
+        <div class="simulator-environment__summary" aria-live="polite">
+          <p class="theater-description"></p>
+          <div class="round-timeline" id="round-timeline" aria-hidden="true"></div>
+          <aside class="micro-sim" aria-label="Projected Vital Curves">
+            <header>
+              <p>Projected Vital Curves</p>
+              <span class="micro-sim__legend">
+                <span data-series="shields">Shields</span>
+                <span data-series="hull">Hull</span>
+                <span data-series="morale">Morale</span>
+              </span>
+            </header>
+            <div class="micro-sim__sparklines" id="micro-sim-sparklines"></div>
+          </aside>
+        </div>
       </section>
 
       <div class="simulator-grid">
         <section class="fleet-panel" data-side="alpha" aria-labelledby="fleet-alpha-heading">
           <header class="fleet-panel__header">
-            <h3 id="fleet-alpha-heading">Fleet Alpha</h3>
-            <p class="fleet-panel__role">Attacker / Left Column</p>
+            <div class="fleet-panel__heading">
+              <h3 id="fleet-alpha-heading">Fleet Alpha</h3>
+              <p class="fleet-panel__role">Attacker / Left Column</p>
+            </div>
+            <div class="fleet-panel__commander-chip" data-commander-chip>
+              <div class="commander-chip__portrait" aria-hidden="true"></div>
+              <div class="commander-chip__info">
+                <p class="commander-chip__name">Unassigned</p>
+                <p class="commander-chip__traits">No command signature detected.</p>
+              </div>
+            </div>
           </header>
           <div class="fleet-panel__body">
             <div class="fleet-field-group">
@@ -87,51 +123,85 @@
                 <span>Commander</span>
                 <select data-field="commander"></select>
               </label>
-              <label class="simulator-field">
-                <span>Formation</span>
-                <select data-field="formation"></select>
+              <label class="simulator-field simulator-field--cards">
+                <span>Formation Doctrine</span>
+                <select data-field="formation" class="visually-hidden"></select>
+                <div class="doctrine-card-grid" data-doctrine="formation" role="listbox"></div>
               </label>
-              <label class="simulator-field">
-                <span>Tactic</span>
-                <select data-field="tactic"></select>
+              <label class="simulator-field simulator-field--cards">
+                <span>Engagement Tactic</span>
+                <select data-field="tactic" class="visually-hidden"></select>
+                <div class="doctrine-card-grid" data-doctrine="tactic" role="listbox"></div>
               </label>
+            </div>
+
+            <div class="fleet-presets" data-presets>
+              <h4>Fleet Presets</h4>
+              <div class="fleet-presets__grid"></div>
             </div>
 
             <div class="fleet-flags">
-              <label class="simulator-checkbox">
-                <input type="checkbox" data-field="withdraw-r1" />
-                <span>Attempt withdraw after Round 1</span>
-              </label>
-              <label class="simulator-checkbox">
-                <input type="checkbox" data-field="withdraw-r2" />
-                <span>Attempt withdraw after Round 2</span>
-              </label>
-              <label class="simulator-checkbox simulator-checkbox--volley">
-                <input type="checkbox" data-field="volley" />
-                <span>Use Volley Coordination in Round 1</span>
-              </label>
+              <div class="chip-toggle" data-toggle="withdraw-r1">
+                <input type="checkbox" data-field="withdraw-r1" id="alpha-withdraw-r1" class="visually-hidden" />
+                <label for="alpha-withdraw-r1">Withdraw after R1</label>
+              </div>
+              <div class="chip-toggle" data-toggle="withdraw-r2">
+                <input type="checkbox" data-field="withdraw-r2" id="alpha-withdraw-r2" class="visually-hidden" />
+                <label for="alpha-withdraw-r2">Withdraw after R2</label>
+              </div>
+              <div class="chip-toggle chip-toggle--volley" data-toggle="volley">
+                <input type="checkbox" data-field="volley" id="alpha-volley" class="visually-hidden" />
+                <label for="alpha-volley">Volley Coordination R1</label>
+                <span class="chip-toggle__cooldown" aria-hidden="true">Cooldown: 1 round</span>
+              </div>
             </div>
 
             <section class="fleet-classlist" aria-labelledby="fleet-alpha-roster">
-              <h4 id="fleet-alpha-roster">Ship Counts</h4>
+              <h4 id="fleet-alpha-roster" class="status-slug" data-slug="alpha-roster">
+                Roster Integrity: <span data-slug-value>Nominal</span>
+              </h4>
               <div class="fleet-classlist__grid" data-counts></div>
             </section>
 
             <section class="fleet-orders" aria-labelledby="fleet-alpha-orders">
-              <h4 id="fleet-alpha-orders">Class Orders</h4>
+              <div class="fleet-orders__header">
+                <h4 id="fleet-alpha-orders" class="status-slug" data-slug="alpha-orders">
+                  Orders Matrix: <span data-slug-value>Standby</span>
+                </h4>
+                <button class="plan-orders-toggle" type="button" data-toggle-orders>
+                  Plan Orders ▸
+                </button>
+              </div>
               <p class="simulator-help-text">
-                Assign one order per class each round. Orders with cooldowns or follow-up effects are handled automatically.
+                Doctrine cards slot into each class per round. Hover synergy pips to read combined bonuses.
               </p>
               <div class="fleet-orders__container" data-orders></div>
             </section>
           </div>
-          <footer class="fleet-panel__footer" data-status></footer>
+          <footer class="fleet-panel__footer" data-status>
+            <div class="morale-meter" data-morale>
+              <span class="morale-meter__label">Morale</span>
+              <div class="morale-meter__track" aria-hidden="true">
+                <div class="morale-meter__value" data-morale-value></div>
+              </div>
+              <output class="morale-meter__score" role="status">50</output>
+            </div>
+          </footer>
         </section>
 
         <section class="fleet-panel" data-side="beta" aria-labelledby="fleet-beta-heading">
           <header class="fleet-panel__header">
-            <h3 id="fleet-beta-heading">Fleet Beta</h3>
-            <p class="fleet-panel__role">Defender / Right Column</p>
+            <div class="fleet-panel__heading">
+              <h3 id="fleet-beta-heading">Fleet Beta</h3>
+              <p class="fleet-panel__role">Defender / Right Column</p>
+            </div>
+            <div class="fleet-panel__commander-chip" data-commander-chip>
+              <div class="commander-chip__portrait" aria-hidden="true"></div>
+              <div class="commander-chip__info">
+                <p class="commander-chip__name">Unassigned</p>
+                <p class="commander-chip__traits">No command signature detected.</p>
+              </div>
+            </div>
           </header>
           <div class="fleet-panel__body">
             <div class="fleet-field-group">
@@ -139,45 +209,70 @@
                 <span>Commander</span>
                 <select data-field="commander"></select>
               </label>
-              <label class="simulator-field">
-                <span>Formation</span>
-                <select data-field="formation"></select>
+              <label class="simulator-field simulator-field--cards">
+                <span>Formation Doctrine</span>
+                <select data-field="formation" class="visually-hidden"></select>
+                <div class="doctrine-card-grid" data-doctrine="formation" role="listbox"></div>
               </label>
-              <label class="simulator-field">
-                <span>Tactic</span>
-                <select data-field="tactic"></select>
+              <label class="simulator-field simulator-field--cards">
+                <span>Engagement Tactic</span>
+                <select data-field="tactic" class="visually-hidden"></select>
+                <div class="doctrine-card-grid" data-doctrine="tactic" role="listbox"></div>
               </label>
+            </div>
+
+            <div class="fleet-presets" data-presets>
+              <h4>Fleet Presets</h4>
+              <div class="fleet-presets__grid"></div>
             </div>
 
             <div class="fleet-flags">
-              <label class="simulator-checkbox">
-                <input type="checkbox" data-field="withdraw-r1" />
-                <span>Attempt withdraw after Round 1</span>
-              </label>
-              <label class="simulator-checkbox">
-                <input type="checkbox" data-field="withdraw-r2" />
-                <span>Attempt withdraw after Round 2</span>
-              </label>
-              <label class="simulator-checkbox simulator-checkbox--volley">
-                <input type="checkbox" data-field="volley" />
-                <span>Use Volley Coordination in Round 1</span>
-              </label>
+              <div class="chip-toggle" data-toggle="withdraw-r1">
+                <input type="checkbox" data-field="withdraw-r1" id="beta-withdraw-r1" class="visually-hidden" />
+                <label for="beta-withdraw-r1">Withdraw after R1</label>
+              </div>
+              <div class="chip-toggle" data-toggle="withdraw-r2">
+                <input type="checkbox" data-field="withdraw-r2" id="beta-withdraw-r2" class="visually-hidden" />
+                <label for="beta-withdraw-r2">Withdraw after R2</label>
+              </div>
+              <div class="chip-toggle chip-toggle--volley" data-toggle="volley">
+                <input type="checkbox" data-field="volley" id="beta-volley" class="visually-hidden" />
+                <label for="beta-volley">Volley Coordination R1</label>
+                <span class="chip-toggle__cooldown" aria-hidden="true">Cooldown: 1 round</span>
+              </div>
             </div>
 
             <section class="fleet-classlist" aria-labelledby="fleet-beta-roster">
-              <h4 id="fleet-beta-roster">Ship Counts</h4>
+              <h4 id="fleet-beta-roster" class="status-slug" data-slug="beta-roster">
+                Roster Integrity: <span data-slug-value>Nominal</span>
+              </h4>
               <div class="fleet-classlist__grid" data-counts></div>
             </section>
 
             <section class="fleet-orders" aria-labelledby="fleet-beta-orders">
-              <h4 id="fleet-beta-orders">Class Orders</h4>
+              <div class="fleet-orders__header">
+                <h4 id="fleet-beta-orders" class="status-slug" data-slug="beta-orders">
+                  Orders Matrix: <span data-slug-value>Standby</span>
+                </h4>
+                <button class="plan-orders-toggle" type="button" data-toggle-orders>
+                  Plan Orders ▸
+                </button>
+              </div>
               <p class="simulator-help-text">
-                Assign one order per class each round. Orders with cooldowns or follow-up effects are handled automatically.
+                Doctrine cards slot into each class per round. Hover synergy pips to read combined bonuses.
               </p>
               <div class="fleet-orders__container" data-orders></div>
             </section>
           </div>
-          <footer class="fleet-panel__footer" data-status></footer>
+          <footer class="fleet-panel__footer" data-status>
+            <div class="morale-meter" data-morale>
+              <span class="morale-meter__label">Morale</span>
+              <div class="morale-meter__track" aria-hidden="true">
+                <div class="morale-meter__value" data-morale-value></div>
+              </div>
+              <output class="morale-meter__score" role="status">50</output>
+            </div>
+          </footer>
         </section>
       </div>
 
@@ -187,10 +282,16 @@
           <button id="simulate-button" class="gin-button">Run Three-Round Simulation</button>
           <button id="reset-button" class="gin-button gin-button--ghost">Reset Fleets</button>
         </div>
+        <div class="simulator-run__share">
+          <button id="share-seed" class="gin-button gin-button--ghost">Generate Share Code</button>
+          <output id="share-seed-output" aria-live="polite"></output>
+        </div>
       </section>
 
       <section class="simulator-results" aria-live="polite" aria-labelledby="simulator-results-heading">
-        <h3 id="simulator-results-heading">Battle Log</h3>
+        <h3 id="simulator-results-heading" class="status-slug" data-slug="results">
+          Engagement Log: <span data-slug-value>Awaiting Simulation</span>
+        </h3>
         <div class="simulator-results__content" id="simulator-results"></div>
       </section>
     </main>
