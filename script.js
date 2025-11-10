@@ -341,7 +341,7 @@ const C = {
   YAMATO: "#f9a8d4",
   NOVA: "#8b5cf6",
   CRIMSON: "#ef4444",
-  ORION: "#38bdf8",
+  ORION: "#7dd3fc",
   EAGLE: "#84cc16",
   FED: "#60a5fa",
   DOMINION: "#a855f7",
