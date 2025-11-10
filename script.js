@@ -772,6 +772,7 @@ function setTagline(uid, text) {
 }
 
 ['paxi_prime', 'ho_prime'].forEach(uid => setTagline(uid, 'Dominion Crucible Citadel (Megastructure)'));
+setTagline('veil_orion', 'The Veil System serves as the heart of Orion Industries, with Ida as its homeworld and Naruul as the second inhabited world, established under the leadership of Alpheus Cirie.');
 
 // ---------- HYPERLANES — REMADE WITH YOUR CORRECTIONS ----------
 // Solara-Ys (Aegir Outpost) → Aelyth Prime, Pone V, Veyra Null
