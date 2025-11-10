@@ -341,7 +341,7 @@ const C = {
   YAMATO: "#f9a8d4",
   NOVA: "#8b5cf6",
   CRIMSON: "#ef4444",
-  ORION: "#38bdf8",
+  ORION: "#7dd3fc",
   EAGLE: "#84cc16",
   FED: "#60a5fa",
   DOMINION: "#a855f7",
@@ -483,7 +483,7 @@ const nyren    = addSystemDotPct("Nyren", 63.44, 79.90, C.NEUTRAL, null, "nyren"
 const vexar    = addSystemDotPct("Vexar", 62.55, 83.57, C.NEUTRAL, null, "vexar");
 const cynar    = addSystemDotPct("Cynar", 46.67, 79.08, C.NEUTRAL, null, "cynar");
 const serohis  = addSystemDotPct("Serohis", 48.97, 79.43, C.NEUTRAL, null, "serothis_core");
-const korneth  = addSystemDotPct("Korneth", 50.83, 83.88, C.NEUTRAL, null, "korneth");
+const korneth  = addSystemDotPct("Korneth", 50.83, 83.88, C.ORION, null, "korneth", "Orion Industries");
 const seren    = addSystemDotPct("Seren", 43.27, 82.36, C.NEUTRAL, null, "seren");
 const vayth    = addSystemDotPct("Vayth", 53.46, 89.65, C.NEUTRAL, null, "vayth");
 const drelith  = addSystemDotPct("Drelith", 52.00, 92.71, C.NEUTRAL, null, "drelith", "Crimson Collective");
@@ -773,6 +773,7 @@ function setTagline(uid, text) {
 
 ['paxi_prime', 'ho_prime'].forEach(uid => setTagline(uid, 'Dominion Crucible Citadel (Megastructure)'));
 setTagline('veil_orion', 'The Veil System serves as the heart of Orion Industries, with Ida as its homeworld and Naruul as the second inhabited world, established under the leadership of Alpheus Cirie.');
+setTagline('korneth', 'Cbo is an inhabited world, established under the leadership of Ashford Cirie, for Orion Industries');
 
 // ---------- HYPERLANES — REMADE WITH YOUR CORRECTIONS ----------
 // Solara-Ys (Aegir Outpost) → Aelyth Prime, Pone V, Veyra Null
