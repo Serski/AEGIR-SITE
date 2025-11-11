@@ -341,7 +341,7 @@ const C = {
   YAMATO: "#f9a8d4",
   NOVA: "#8b5cf6",
   CRIMSON: "#ef4444",
-  ORION: "#38bdf8",
+  ORION: "#7dd3fc",
   EAGLE: "#84cc16",
   FED: "#60a5fa",
   DOMINION: "#a855f7",
@@ -481,9 +481,9 @@ const kho      = addSystemDotPct("Kho", 76.59, 90.10, C.NEUTRAL, null, "kho");
 const sgd      = addSystemDotPct("Sgd", 77.13, 93.06, C.NEUTRAL, null, "sgd");
 const nyren    = addSystemDotPct("Nyren", 63.44, 79.90, C.NEUTRAL, null, "nyren");
 const vexar    = addSystemDotPct("Vexar", 62.55, 83.57, C.NEUTRAL, null, "vexar");
-const cynar    = addSystemDotPct("Cynar", 46.67, 79.08, C.NEUTRAL, null, "cynar");
+const cynar    = addSystemDotPct("Cynar", 46.67, 79.08, C.ORION, null, "cynar", "Orion Industries");
 const serohis  = addSystemDotPct("Serohis", 48.97, 79.43, C.NEUTRAL, null, "serothis_core");
-const korneth  = addSystemDotPct("Korneth", 50.83, 83.88, C.NEUTRAL, null, "korneth");
+const korneth  = addSystemDotPct("Korneth", 50.83, 83.88, C.ORION, null, "korneth", "Orion Industries");
 const seren    = addSystemDotPct("Seren", 43.27, 82.36, C.NEUTRAL, null, "seren");
 const vayth    = addSystemDotPct("Vayth", 53.46, 89.65, C.NEUTRAL, null, "vayth");
 const drelith  = addSystemDotPct("Drelith", 52.00, 92.71, C.NEUTRAL, null, "drelith", "Crimson Collective");
@@ -603,7 +603,7 @@ const irri        = addSystemDotPct("Irri", 58.74, 85.02, C.NEUTRAL, null, "irri
 const polydrax    = addSystemDotPct("Polydrax", 59.80, 84.03, C.NEUTRAL, null, "polydrax");
 const xang        = addSystemDotPct("Xang", 52.77, 78.72, C.NEUTRAL, null, "xang");
 const defok       = addSystemDotPct("Defok", 51.01, 77.15, C.NEUTRAL, null, "defok");
-const polirsh     = addSystemDotPct("Polirsh", 48.12, 77.16, C.NEUTRAL, null, "polirsh");
+const polirsh     = addSystemDotPct("Polirsh", 48.12, 77.16, C.ORION, null, "polirsh", "Orion Industries");
 const moki        = addSystemDotPct("Moki", 45.97, 74.96, C.NEUTRAL, null, "moki");
 const lo          = addSystemDotPct("Lo", 43.18, 73.54, C.NEUTRAL, null, "lo");
 const wof         = addSystemDotPct("Wof", 40.50, 73.71, C.NEUTRAL, null, "wof");
@@ -773,6 +773,9 @@ function setTagline(uid, text) {
 
 ['paxi_prime', 'ho_prime'].forEach(uid => setTagline(uid, 'Dominion Crucible Citadel (Megastructure)'));
 setTagline('veil_orion', 'The Veil System serves as the heart of Orion Industries, with Ida as its homeworld and Naruul as the second inhabited world, established under the leadership of Alpheus Cirie.');
+setTagline('korneth', 'Cbo is an inhabited world, established under the leadership of Ashford Cirie, for Orion Industries');
+setTagline('cynar', 'Jampro is an inhabited world, established under the leadership of Leo O’neill, for Orion Industries');
+setTagline('polirsh', 'Togogh is an inhabited world, established under the leadership of Wulfhelm Mannering for Orion Industries');
 
 // ---------- HYPERLANES — REMADE WITH YOUR CORRECTIONS ----------
 // Solara-Ys (Aegir Outpost) → Aelyth Prime, Pone V, Veyra Null
