@@ -652,7 +652,7 @@ const pao7        = addSystemDotPct("Pao 7", 48.72, 71.90, C.NEUTRAL, null, "pao
 const okarin      = addSystemDotPct("Okarin", 50.98, 72.43, C.NEUTRAL, null, "okarin");
 const ioso        = addSystemDotPct("Ioso", 45.84, 71.37, C.NEUTRAL, null, "ioso");
 const toda        = addSystemDotPct("Toda", 43.88, 62.07, C.NEUTRAL, null, "toda");
-const fisu        = addSystemDotPct("Fisu", 70.31, 88.86, C.NEUTRAL, null, "fisu");
+const fisu        = addSystemDotPct("Fisu", 70.31, 88.86, C.NOVA, null, "fisu", "Nova Confederation");
 const penta3      = addSystemDotPct("Penta III", 87.91, 85.78, C.NEUTRAL, null, "penta3");
 const xdat        = addSystemDotPct("Xdat", 91.22, 63.80, C.NEUTRAL, null, "xdat");
 
@@ -1668,12 +1668,14 @@ addLaneByIds(omega, nica);
 });
 
 // AFM: Phosyr, Panag, Isvo, Defok, Oryx, Fisu, Hat, Panta II
+const AFM_TAGLINES = {
+  fisu: "Rino is a major AFM Miner world, established under the leadership of Emperor Broko for Nova Confederation"
+};
 ["phosyr","panag","isvo","defok","oryx","fisu","hat","penta_ii"].forEach(uid => {
   const s = SYS[uid];
   if (s && s.marker) {
-    const html = `<b>${s.name}</b><div style="margin-top:4px;color:#ffddaa">Major AFM deposits</div>`;
-    s.tagline = "Major AFM deposits";
-    updateSystemPopup(uid, html);
+    const text = AFM_TAGLINES[uid] || "Major AFM deposits";
+    setTagline(uid, text);
   } else {
     console.warn("AFM: system not found:", uid);
   }
