@@ -418,6 +418,7 @@ const SYSTEM_IMAGE_OVERRIDES = {
   vayth: "Star Systems/Vayth.png",
   haron: "Star Systems/Haron.jpg",
   vazour: "Star Systems/Vazour.png",
+  otik: "Star Systems/Orxas.jpg",
   pone_v: "Star Systems/Pone V.jpg",
   tavro_v: "Star Systems/Tavro V.jpg",
   olk_prime: "Star Systems/Olk Prime.jpg",
