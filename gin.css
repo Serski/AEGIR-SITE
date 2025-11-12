@@ -899,6 +899,17 @@
   letter-spacing: 0.02em;
 }
 
+.gin-lead-title a,
+.gin-story__headline a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.gin-lead-title a:hover,
+.gin-story__headline a:hover {
+  text-decoration: underline;
+}
+
 .gin-lead-summary {
   font-size: 1.05rem;
   line-height: 1.7;
