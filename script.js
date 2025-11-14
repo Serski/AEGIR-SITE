@@ -631,7 +631,7 @@ const moka2       = addSystemDotPct("Moka", 38.59, 87.87, C.NEUTRAL, null, "moka
 const vhalor      = addSystemDotPct("Vhalor", 37.41, 89.00, C.NEUTRAL, null, "vhalor");
 const ioq         = addSystemDotPct("Ioq", 40.86, 88.46, C.NEUTRAL, null, "ioq");
 const caoh        = addSystemDotPct("Caoh", 31.77, 89.78, C.NEUTRAL, null, "caoh");
-const phosyr      = addSystemDotPct("Phosyr", 29.74, 92.31, C.NEUTRAL, null, "phosyr");
+const phosyr      = addSystemDotPct("Phosyr", 29.74, 92.31, C.EAGLE, null, "phosyr", "Eagle Republic");
 const hxs         = addSystemDotPct("Hxs", 27.59, 95.71, C.NEUTRAL, null, "hxs");
 const papas       = addSystemDotPct("Papas", 27.27, 98.24, C.NEUTRAL, null, "papas");
 const kol         = addSystemDotPct("Kol", 29.32, 98.95, C.NEUTRAL, null, "kol");
@@ -799,6 +799,7 @@ setTagline('irri', 'Irriki is an inhabited world, established under the leadersh
 setTagline('vayth', 'Jorasi is a white gas planet, established under the leadership of Väinämöinen Bist for for Crimson Collective');
 setTagline('oryx', 'Harkar is a rich on AFM, barren planet, established under the leadership of Aleksei Panshin for for Crimson Collective');
 setTagline('aliti', 'Nast is a rich on GGP planet, established under the leadership of Aleksei Panshin for for Crimson Collective');
+setTagline('phosyr', 'Mitusk is a rich on AFM, barren planet, established under the leadership of President Ajax D Marius CLIX for for Crimson Collective');
 
 // ---------- HYPERLANES — REMADE WITH YOUR CORRECTIONS ----------
 // Solara-Ys (Aegir Outpost) → Aelyth Prime, Pone V, Veyra Null
