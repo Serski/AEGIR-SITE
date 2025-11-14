@@ -490,13 +490,13 @@ const cynar    = addSystemDotPct("Cynar", 46.67, 79.08, C.ORION, null, "cynar", 
 const serohis  = addSystemDotPct("Serohis", 48.97, 79.43, C.NEUTRAL, null, "serothis_core");
 const korneth  = addSystemDotPct("Korneth", 50.83, 83.88, C.ORION, null, "korneth", "Orion Industries");
 const seren    = addSystemDotPct("Seren", 43.27, 82.36, C.ORION, null, "seren", "Orion Industries");
-const vayth    = addSystemDotPct("Vayth", 53.46, 89.65, C.NEUTRAL, null, "vayth");
+const vayth    = addSystemDotPct("Vayth", 53.46, 89.65, C.CRIMSON, null, "vayth", "Crimson Collective");
 const drelith  = addSystemDotPct("Drelith", 52.00, 92.71, C.NEUTRAL, null, "drelith", "Crimson Collective");
 const zhaen    = addSystemDotPct("Zhaen", 53.80, 92.00, C.NEUTRAL, null, "zhaen");
 const olk      = addSystemDotPct("Olk Prime", 56.93, 94.04, C.NEUTRAL, null, "olk_prime");
 const col      = addSystemDotPct("Col", 55.73, 96.94, C.NEUTRAL, null, "col");
-const oryx     = addSystemDotPct("Oryx", 46.57, 90.95, C.NEUTRAL, null, "oryx");
-const aliti    = addSystemDotPct("Aliti", 46.50, 92.35, C.NEUTRAL, null, "aliti");
+const oryx     = addSystemDotPct("Oryx", 46.57, 90.95, C.CRIMSON, null, "oryx", "Crimson Collective");
+const aliti    = addSystemDotPct("Aliti", 46.50, 92.35, C.CRIMSON, null, "aliti", "Crimson Collective");
 const joris    = addSystemDotPct("Joris", 41.88, 84.04, C.NEUTRAL, null, "joris");
 const okoro    = addSystemDotPct("Okoro", 24.50, 84.45, C.NEUTRAL, null, "okoro");
 const taireb   = addSystemDotPct("Taireb", 25.98, 84.95, C.NEUTRAL, null, "taireb");
@@ -604,7 +604,7 @@ const otik        = addSystemDotPct("Otik", 65.03, 68.01, C.NEUTRAL, null, "otik
 
 const threnos     = addSystemDotPct("Threnos", 52.72, 85.25, C.NEUTRAL, null, "threnos");
 const shathros    = addSystemDotPct("Shathros", 53.70, 82.55, C.NEUTRAL, null, "shathros");
-const irri        = addSystemDotPct("Irri", 58.74, 85.02, C.NEUTRAL, null, "irri");
+const irri        = addSystemDotPct("Irri", 58.74, 85.02, C.CRIMSON, null, "irri", "Crimson Collective");
 const polydrax    = addSystemDotPct("Polydrax", 59.80, 84.03, C.NEUTRAL, null, "polydrax");
 const xang        = addSystemDotPct("Xang", 52.77, 78.72, C.NEUTRAL, null, "xang");
 const defok       = addSystemDotPct("Defok", 51.01, 77.15, C.NEUTRAL, null, "defok");
@@ -782,6 +782,10 @@ setTagline('korneth', 'Cbo is an inhabited world, established under the leadersh
 setTagline('cynar', "Jampro is an inhabited world, established under the leadership of Leo O’neill, for Orion Industries");
 setTagline('seren', 'Jerako is an inhabited world, established under the leadership of Kendric Harris, for Orion Industries');
 setTagline('polirsh', "Togogh is an inhabited world, established under the leadership of Wulfhelm Mannering for Orion Industries");
+setTagline('irri', 'Irriki is an inhabited world, established under the leadership of Mauka, for Crimson Collective');
+setTagline('vayth', 'Jorasi is a white gas planet, established under the leadership of Väinämöinen Bist for for Crimson Collective');
+setTagline('oryx', 'Harkar is a rich on AFM, barren planet, established under the leadership of Aleksei Panshin for for Crimson Collective');
+setTagline('aliti', 'Nast is a rich on GGP planet, established under the leadership of Aleksei Panshin for for Crimson Collective');
 
 // ---------- HYPERLANES — REMADE WITH YOUR CORRECTIONS ----------
 // Solara-Ys (Aegir Outpost) → Aelyth Prime, Pone V, Veyra Null
