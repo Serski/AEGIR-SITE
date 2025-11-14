@@ -636,6 +636,19 @@ const hxs         = addSystemDotPct("Hxs", 27.59, 95.71, C.NEUTRAL, null, "hxs")
 const papas       = addSystemDotPct("Papas", 27.27, 98.24, C.NEUTRAL, null, "papas");
 const kol         = addSystemDotPct("Kol", 29.32, 98.95, C.NEUTRAL, null, "kol");
 const tromp       = addSystemDotPct("Tromp", 28.19, 59.75, C.NEUTRAL, null, "tromp");
+
+// ---------- NEW SYSTEMS: KOK PRIME EXPANSION ----------
+const kok_prime   = addSystemDotPct("Kok Prime", 21.44, 54.58, C.NEUTRAL, null, "kok_prime");
+const patsa       = addSystemDotPct("Patsa", 25.46, 51.72, C.NEUTRAL, null, "patsa");
+const zidi        = addSystemDotPct("Zidi", 29.13, 55.95, C.NEUTRAL, null, "zidi");
+const triko       = addSystemDotPct("Triko", 31.05, 55.03, C.NEUTRAL, null, "triko");
+const hiko        = addSystemDotPct("Hiko", 21.63, 44.86, C.NEUTRAL, null, "hiko");
+const asteras     = addSystemDotPct("Asteras", 28.25, 49.35, C.NEUTRAL, null, "asteras");
+const epa         = addSystemDotPct("Epa", 30.13, 48.72, C.NEUTRAL, null, "epa");
+const hokla       = addSystemDotPct("Hokla", 30.43, 47.17, C.NEUTRAL, null, "hokla");
+const jga         = addSystemDotPct("Jga", 34.21, 49.25, C.NEUTRAL, null, "jga");
+const rizou       = addSystemDotPct("Rizou", 35.62, 48.54, C.NEUTRAL, null, "rizou");
+const papa        = addSystemDotPct("Papa", 34.15, 53.27, C.NEUTRAL, null, "papa");
 const gona        = addSystemDotPct("Gona", 33.66, 61.92, C.NEUTRAL, null, "gona");
 const kozan       = addSystemDotPct("Kozan", 33.56, 64.56, C.NEUTRAL, null, "kozan");
 const bet         = addSystemDotPct("Bet", 33.13, 66.27, C.NEUTRAL, null, "bet");
@@ -1574,6 +1587,58 @@ addLaneByIds(riki, tromp);
 addLaneByIds(riki, knatz);
 
 addLaneByIds(iraklo, knatz);
+
+// ---------- NEW HYPERLANES: KOK PRIME EXPANSION ----------
+addLaneByIds(kok_prime, dolca);
+addLaneByIds(kok_prime, patsa);
+addLaneByIds(kok_prime, zidi);
+
+addLaneByIds(dolca, kok_prime);
+addLaneByIds(dolca, hiko);
+addLaneByIds(dolca, rizou);
+
+addLaneByIds(patsa, kok_prime);
+addLaneByIds(patsa, hiko);
+addLaneByIds(patsa, hokla);
+addLaneByIds(patsa, epa);
+addLaneByIds(patsa, jga);
+
+addLaneByIds(zidi, kok_prime);
+addLaneByIds(zidi, triko);
+
+addLaneByIds(triko, zidi);
+addLaneByIds(triko, tromp);
+
+addLaneByIds(hiko, dolca);
+addLaneByIds(hiko, asteras);
+addLaneByIds(hiko, patsa);
+
+addLaneByIds(epa, patsa);
+addLaneByIds(epa, hokla);
+addLaneByIds(epa, jga);
+
+addLaneByIds(hokla, patsa);
+addLaneByIds(hokla, epa);
+addLaneByIds(hokla, asteras);
+
+addLaneByIds(asteras, hiko);
+addLaneByIds(asteras, hokla);
+addLaneByIds(asteras, rizou);
+
+addLaneByIds(jga, patsa);
+addLaneByIds(jga, epa);
+addLaneByIds(jga, papa);
+addLaneByIds(jga, rizou);
+
+addLaneByIds(rizou, dolca);
+addLaneByIds(rizou, asteras);
+addLaneByIds(rizou, patsa);
+addLaneByIds(rizou, jga);
+
+addLaneByIds(papa, jga);
+addLaneByIds(papa, eryndor);
+
+addLaneByIds(eryndor, papa);
 
 addLaneByIds(tromp, emiprime);
 addLaneByIds(tromp, gona);
