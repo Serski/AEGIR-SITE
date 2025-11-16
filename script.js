@@ -627,7 +627,7 @@ const okoi        = addSystemDotPct("Okoi", 34.99, 81.79, C.NEUTRAL, null, "okoi
 
 const azib        = addSystemDotPct("Azib", 36.36, 81.10, C.NEUTRAL, null, "azib");
 const skol        = addSystemDotPct("Skol", 35.67, 84.24, C.NEUTRAL, null, "skol");
-const corrn       = addSystemDotPct("Corrn", 33.94, 86.53, C.NEUTRAL, null, "corrn");
+const corrn       = addSystemDotPct("Corrn", 33.94, 86.53, C.EAGLE, null, "corrn", "Eagle Republic");
 const ypo         = addSystemDotPct("Ypo", 40.48, 87.39, C.NEUTRAL, null, "ypo");
 const moka2       = addSystemDotPct("Moka", 38.59, 87.87, C.NEUTRAL, null, "moka_2");
 const vhalor      = addSystemDotPct("Vhalor", 37.41, 89.00, C.NEUTRAL, null, "vhalor");
@@ -802,6 +802,7 @@ setTagline('vayth', 'Jorasi is a white gas planet, established under the leaders
 setTagline('oryx', 'Harkar is a rich on AFM, barren planet, established under the leadership of Aleksei Panshin for for Crimson Collective');
 setTagline('aliti', 'Nast is a rich on GGP planet, established under the leadership of Aleksei Panshin for for Crimson Collective');
 setTagline('phosyr', 'Mitusk is a rich on AFM, barren planet, established under the leadership of President Ajax D Marius CLIX for for Crimson Collective');
+setTagline('corrn', 'Imona is a gas planet, established under the leadership of President Ajax D Marius CLIX for the Eagle Republic');
 
 // ---------- HYPERLANES — REMADE WITH YOUR CORRECTIONS ----------
 // Solara-Ys (Aegir Outpost) → Aelyth Prime, Pone V, Veyra Null
