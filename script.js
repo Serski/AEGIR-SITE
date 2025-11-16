@@ -548,7 +548,7 @@ const iraklo      = addSystemDotPct("Iraklo", 19.63, 59.14, C.NEUTRAL, null, "ir
 const dolca       = addSystemDotPct("Dolca", 13.70, 52.63, C.NEUTRAL, null, "dolca");
 const knatz       = addSystemDotPct("Knatz", 16.93, 60.36, C.NEUTRAL, null, "knatz");
 
-const oraethos    = addSystemDotPct("Oraethos", 85.61, 88.79, C.NEUTRAL, null, "oraethos");
+const oraethos    = addSystemDotPct("Oraethos", 85.61, 88.79, C.NOVA, null, "oraethos", "Nova Confederation");
 const artemis     = addSystemDotPct("Artemis", 94.41, 91.97, C.NEUTRAL, null, "artemis");
 const ika         = addSystemDotPct("Ika", 96.83, 93.42, C.NEUTRAL, null, "ika");
 const paxi        = addSystemDotPct("Paxi", 95.63, 94.51, C.NEUTRAL, null, "paxi");
@@ -803,6 +803,7 @@ setTagline('oryx', 'Harkar is a rich on AFM, barren planet, established under th
 setTagline('aliti', 'Nast is a rich on GGP planet, established under the leadership of Aleksei Panshin for for Crimson Collective');
 setTagline('phosyr', 'Mitusk is a rich on AFM, barren planet, established under the leadership of President Ajax D Marius CLIX for for Crimson Collective');
 setTagline('corrn', 'Imona is a gas planet, established under the leadership of President Ajax D Marius CLIX for the Eagle Republic');
+setTagline('oraethos', 'Pentiko is an inhabited world, established under the leadership of Emperor Broko for Nova Confederation');
 
 // ---------- HYPERLANES — REMADE WITH YOUR CORRECTIONS ----------
 // Solara-Ys (Aegir Outpost) → Aelyth Prime, Pone V, Veyra Null
