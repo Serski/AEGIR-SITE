@@ -499,10 +499,10 @@ const olk      = addSystemDotPct("Olk Prime", 56.93, 94.04, C.NEUTRAL, null, "ol
 const col      = addSystemDotPct("Col", 55.73, 96.94, C.NEUTRAL, null, "col");
 const oryx     = addSystemDotPct("Oryx", 46.57, 90.95, C.CRIMSON, null, "oryx", "Crimson Collective");
 const aliti    = addSystemDotPct("Aliti", 46.50, 92.35, C.CRIMSON, null, "aliti", "Crimson Collective");
-const joris    = addSystemDotPct("Joris", 41.88, 84.04, C.NEUTRAL, null, "joris");
+const joris    = addSystemDotPct("Joris", 41.88, 84.04, C.ORION, null, "joris", "Orion Industries");
 const okoro    = addSystemDotPct("Okoro", 24.50, 84.45, C.NEUTRAL, null, "okoro");
 const taireb   = addSystemDotPct("Taireb", 25.98, 84.95, C.NEUTRAL, null, "taireb");
-const pyr      = addSystemDotPct("Pyr", 24.08, 82.16, C.NEUTRAL, null, "pyr");
+const pyr      = addSystemDotPct("Pyr", 24.08, 82.16, C.EAGLE, null, "pyr", "Eagle Republic");
 const ax       = addSystemDotPct("Ax", 24.42, 81.21, C.NEUTRAL, null, "ax");
 const ceythros = addSystemDotPct("Ceythros", 24.10, 88.76, C.NEUTRAL, null, "ceythros");
 const kentauros= addSystemDotPct("Kentauros", 20.07, 86.74, C.NEUTRAL, null, "kentauros");
@@ -675,7 +675,7 @@ const xdat        = addSystemDotPct("Xdat", 91.22, 63.80, C.NEUTRAL, null, "xdat
 const rova        = addSystemDotPct("Rova", 97.93, 82.00, C.NEUTRAL, null, "rova");
 
 // ---------- NEW DOTS ----------
-const fido  = addSystemDotPct("Fido", 44.48, 83.61, C.NEUTRAL, null, "fido");
+const fido  = addSystemDotPct("Fido", 44.48, 83.61, C.ORION, null, "fido", "Orion Industries");
 const okoi2 = addSystemDotPct("Okoi II", 37.85, 81.00, C.NEUTRAL, null, "okoi2");
 
 // ---------- NEW DOT ----------
@@ -797,12 +797,15 @@ setTagline('korneth', 'Cbo is an inhabited world, established under the leadersh
 setTagline('cynar', "Jampro is an inhabited world, established under the leadership of Leo O’neill, for Orion Industries");
 setTagline('seren', 'Jerako is an inhabited world, established under the leadership of Kendric Harris, for Orion Industries');
 setTagline('polirsh', "Togogh is an inhabited world, established under the leadership of Wulfhelm Mannering for Orion Industries");
+setTagline('joris', 'Erto is an inhabited world, established under the leadership of Wulfhelm Mannering for Orion Industries');
+setTagline('fido', 'Bvor is an inhabited world, established under the leadership of Alpheus Cirie for Orion Industries');
 setTagline('irri', 'Irriki is an inhabited world, established under the leadership of Mauka, for Crimson Collective');
 setTagline('vayth', 'Jorasi is a white gas planet, established under the leadership of Väinämöinen Bist for for Crimson Collective');
 setTagline('oryx', 'Harkar is a rich on AFM, barren planet, established under the leadership of Aleksei Panshin for for Crimson Collective');
 setTagline('aliti', 'Nast is a rich on GGP planet, established under the leadership of Aleksei Panshin for for Crimson Collective');
 setTagline('phosyr', 'Mitusk is a rich on AFM, barren planet, established under the leadership of President Ajax D Marius CLIX for for Crimson Collective');
 setTagline('corrn', 'Imona is a gas planet, established under the leadership of President Ajax D Marius CLIX for the Eagle Republic');
+setTagline('pyr', 'Doksona is an inhabited world, established under the leadership of the Son of Bebbanburg for Eagle Republic');
 setTagline('oraethos', 'Pentiko is an inhabited world, established under the leadership of Emperor Broko for Nova Confederation');
 
 // ---------- HYPERLANES — REMADE WITH YOUR CORRECTIONS ----------
