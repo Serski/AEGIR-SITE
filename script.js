@@ -429,6 +429,9 @@ const SYSTEM_IMAGE_OVERRIDES = {
   voruthen: "Star Systems/Voruthen.png",
   zhaen: "Star Systems/Zhaen.png",
   vexar: "Star Systems/Vexar.jpg",
+  koki_prime: "Star Systems/Koki Prime.png",
+  poly: "Star Systems/Poly.png",
+  jola: "Star Systems/Jola.png",
 };
 
 // ---------- EXISTING FACTION EMBLEMS ----------
