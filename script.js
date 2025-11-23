@@ -343,6 +343,7 @@ const C = {
   CRIMSON: "#ef4444",
   ORION: "#7dd3fc",
   EAGLE: "#84cc16",
+  UIWG: "#ff00ff",
   FED: "#60a5fa",
   DOMINION: "#a855f7",
   NEUTRAL: "#e5e7eb"
