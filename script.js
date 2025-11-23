@@ -516,13 +516,13 @@ const okoro    = addSystemDotPct("Okoro", 24.50, 84.45, C.NEUTRAL, null, "okoro"
 const taireb   = addSystemDotPct("Taireb", 25.98, 84.95, C.EAGLE, null, "taireb", "Eagle Republic");
 const pyr      = addSystemDotPct("Pyr", 24.08, 82.16, C.EAGLE, null, "pyr", "Eagle Republic");
 const ax       = addSystemDotPct("Ax", 24.42, 81.21, C.NEUTRAL, null, "ax");
-const ceythros = addSystemDotPct("Ceythros", 24.10, 88.76, C.NEUTRAL, null, "ceythros");
-const kentauros= addSystemDotPct("Kentauros", 20.07, 86.74, C.NEUTRAL, null, "kentauros");
+const ceythros = addSystemDotPct("Ceythros", 24.10, 88.76, C.EAGLE, null, "ceythros", "Eagle Republic");
+const kentauros= addSystemDotPct("Kentauros", 20.07, 86.74, C.EAGLE, null, "kentauros", "Eagle Republic");
 const arrakan  = addSystemDotPct("Arrakan", 17.57, 88.87, C.NEUTRAL, null, "arrakan");
 const trata    = addSystemDotPct("Trata", 15.03, 90.48, C.NEUTRAL, null, "trata");
 const jola     = addSystemDotPct("Jola", 14.91, 85.30, C.NEUTRAL, null, "jola");
 const panag    = addSystemDotPct("Panag", 14.32, 79.76, C.NEUTRAL, null, "panag");
-const koki     = addSystemDotPct("Koki Prime", 16.21, 78.35, C.NEUTRAL, null, "koki_prime");
+const koki     = addSystemDotPct("Koki Prime", 16.21, 78.35, C.EAGLE, null, "koki_prime", "Eagle Republic");
 const phaex    = addSystemDotPct("Phaex", 77.87, 75.25, C.NEUTRAL, null, "phaex");
 const ho_nass  = addSystemDotPct("Ho Nass", 76.66, 72.00, C.NEUTRAL, null, "ho_nass");
 const alctor   = addSystemDotPct("Alctor", 76.56, 70.42, C.NEUTRAL, null, "alctor");
@@ -820,6 +820,9 @@ setTagline('phosyr', 'Mitusk is a rich on AFM, barren planet, established under 
 setTagline('corrn', 'Imona is a gas planet, established under the leadership of President Ajax D Marius CLIX for the Eagle Republic');
 setTagline('pyr', 'Doksona is an inhabited world, established under the leadership of the Son of Bebbanburg for Eagle Republic');
 setTagline('taireb', 'Zoras is an inhabited world, established under the leadership of Rondo the Republican for Eagle Republic.');
+setTagline('koki_prime', 'Awovi is an inhabited world, established under the leadership of President Ajax D Marius CLIX for Eagle Republic.');
+setTagline('kentauros', 'Altetor is an inhabited world, established under the leadership of President Ajax D Marius CLIX for Eagle Republic.');
+setTagline('ceythros', 'Gorzik is a Gas giant harvest colony, established under the leadership of President Ajax D Marius CLIX for Eagle Republic.');
 setTagline('gona', 'Inomis is an inhabited world, established under the leadership of Logan Klay for U.I.W.G');
 setTagline('oraethos', 'Pentiko is an inhabited world, established under the leadership of Emperor Broko for Nova Confederation');
 
