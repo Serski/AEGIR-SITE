@@ -494,9 +494,9 @@ const pone_v   = addSystemDotPct("Pone V", 67.20, 77.66, C.NEUTRAL, null, "pone_
 const ozyrane  = addSystemDotPct("Ozyrane", 67.14, 80.64, C.NEUTRAL, null, "ozyrane");
 const aelyth   = addSystemDotPct("Aelyth Prime", 71.13, 74.33, C.NEUTRAL, null, "aelyth_prime");
 const nytheris = addSystemDotPct("Nytheris", 69.28, 83.59, C.NEUTRAL, null, "nytheris");
-const tavro_v  = addSystemDotPct("Tavro V", 80.82, 88.36, C.NEUTRAL, null, "tavro_v");
+const tavro_v  = addSystemDotPct("Tavro V", 80.82, 88.36, C.NOVA, null, "tavro_v", "Nova Confederation");
 const voruthen = addSystemDotPct("Voruthen", 84.78, 91.76, C.NEUTRAL, null, "voruthen");
-const kho      = addSystemDotPct("Kho", 76.59, 90.10, C.NEUTRAL, null, "kho");
+const kho      = addSystemDotPct("Kho", 76.59, 90.10, C.NOVA, null, "kho", "Nova Confederation");
 const sgd      = addSystemDotPct("Sgd", 77.13, 93.06, C.NEUTRAL, null, "sgd");
 const nyren    = addSystemDotPct("Nyren", 63.44, 79.90, C.NEUTRAL, null, "nyren");
 const vexar    = addSystemDotPct("Vexar", 62.55, 83.57, C.NEUTRAL, null, "vexar");
@@ -825,6 +825,8 @@ setTagline('kentauros', 'Altetor is an inhabited world, established under the le
 setTagline('ceythros', 'Gorzik is a Gas giant harvest colony, established under the leadership of President Ajax D Marius CLIX for Eagle Republic.');
 setTagline('gona', 'Inomis is an inhabited world, established under the leadership of Logan Klay for U.I.W.G');
 setTagline('oraethos', 'Pentiko is an inhabited world, established under the leadership of Emperor Broko for Nova Confederation');
+setTagline('kho', 'Asterko is an inhabited world, established under the leadership of Emperor Broko for Nova Confederation.');
+setTagline('tavro_v', 'Adreo is a Gas Planet colony, established under the leadership of Emperor Broko for Nova Confederation.');
 
 // ---------- HYPERLANES — REMADE WITH YOUR CORRECTIONS ----------
 // Solara-Ys (Aegir Outpost) → Aelyth Prime, Pone V, Veyra Null
