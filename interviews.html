@@ -122,6 +122,9 @@
 
             <p class="gin-section-header" id="other-nexi-news">OTHER NEXI NEWS</p>
             <div class="gin-news-carousel" role="region" aria-labelledby="other-nexi-news">
+              <button class="gin-carousel-arrow gin-carousel-arrow--prev" type="button" aria-label="Previous story">
+                &#10094;
+              </button>
               <div class="gin-news-carousel__track" tabindex="0" aria-roledescription="carousel">
                 <article class="gin-carousel-card">
                   <img src="images/1%20Ori.webp" alt="Alpheus Orion Cirie and Darius Cirie-Swan storm into the Orion War Room" loading="lazy" />
@@ -184,6 +187,9 @@
                   </p>
                 </article>
               </div>
+              <button class="gin-carousel-arrow gin-carousel-arrow--next" type="button" aria-label="Next story">
+                &#10095;
+              </button>
             </div>
           </section>
 
@@ -263,5 +269,32 @@
     </footer>
   </div>
   <script src="menu.js"></script>
+  <script>
+    const carouselTrack = document.querySelector('.gin-news-carousel__track');
+    const prevButton = document.querySelector('.gin-carousel-arrow--prev');
+    const nextButton = document.querySelector('.gin-carousel-arrow--next');
+
+    if (carouselTrack && prevButton && nextButton) {
+      const getScrollAmount = () => Math.max(220, Math.floor(carouselTrack.clientWidth * 0.8));
+
+      const updateArrows = () => {
+        const maxScrollLeft = carouselTrack.scrollWidth - carouselTrack.clientWidth;
+        prevButton.disabled = carouselTrack.scrollLeft <= 0;
+        nextButton.disabled = carouselTrack.scrollLeft >= maxScrollLeft - 2;
+      };
+
+      prevButton.addEventListener('click', () => {
+        carouselTrack.scrollBy({ left: -getScrollAmount(), behavior: 'smooth' });
+      });
+
+      nextButton.addEventListener('click', () => {
+        carouselTrack.scrollBy({ left: getScrollAmount(), behavior: 'smooth' });
+      });
+
+      carouselTrack.addEventListener('scroll', updateArrows);
+      window.addEventListener('resize', updateArrows);
+      updateArrows();
+    }
+  </script>
 </body>
 </html>
