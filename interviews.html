@@ -295,12 +295,11 @@
     const nextButton = document.querySelector('.gin-carousel-arrow--next');
 
     if (carouselTrack && prevButton && nextButton) {
-      // determine one-card width including the grid gap
       const getScrollAmount = () => {
         const card = carouselTrack.querySelector('.gin-carousel-card');
         const styles = window.getComputedStyle(carouselTrack);
         const gap = parseFloat(styles.columnGap || styles.gap || 0);
-        return (card?.offsetWidth || 0) + gap;
+        return card.offsetWidth + gap;
       };
 
       const updateArrows = () => {
