@@ -1146,7 +1146,7 @@
   .gin-news-carousel__track {
     padding: 0.25rem 2.75rem 0.85rem;
     scroll-snap-type: x mandatory;
-    grid-auto-columns: calc((100% - 2 * 1.25rem) / 3);
+    grid-auto-columns: calc((100% - 3 * 1.25rem) / 4);
   }
 
   .gin-carousel-arrow {
