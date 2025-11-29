@@ -318,6 +318,18 @@
 
       carouselTrack.addEventListener('scroll', updateArrows);
       window.addEventListener('resize', updateArrows);
+
+      // Offset initial scroll position so the first card isn't flush left
+      window.addEventListener('load', () => {
+        const card = carouselTrack.querySelector('.gin-carousel-card');
+        if (card) {
+          const styles = window.getComputedStyle(carouselTrack);
+          const gap = parseFloat(styles.columnGap || styles.gap || 0);
+          const offset = (card.offsetWidth + gap) / 2;
+          carouselTrack.scrollLeft = offset;
+          updateArrows(); // update disabled state of both arrows
+        }
+      });
       updateArrows();
     }
   </script>
