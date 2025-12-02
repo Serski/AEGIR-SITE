@@ -1007,6 +1007,25 @@
   text-decoration: none;
 }
 
+.gin-story__link {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+}
+
+.gin-story__link:visited,
+.gin-story__link:active {
+  color: inherit;
+}
+
+.gin-story__link:hover,
+.gin-story__link:focus-visible {
+  text-decoration: none;
+  outline: none;
+  box-shadow: 0 0 0 1px rgba(93, 220, 255, 0.35);
+  border-radius: 16px;
+}
+
 .gin-lead-title a:hover,
 .gin-story__headline a:hover {
   text-decoration: underline;
@@ -1095,6 +1114,35 @@
   line-height: 1.7;
   color: rgba(229, 244, 255, 0.92);
   max-width: 58ch;
+}
+
+.gin-inline-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+  align-items: start;
+  justify-items: center;
+}
+
+.gin-inline-gallery figure {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: center;
+  text-align: center;
+}
+
+.gin-inline-gallery img {
+  width: 100%;
+  max-width: 360px;
+  border-radius: 12px;
+  border: 1px solid rgba(93, 220, 255, 0.25);
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.45);
+}
+
+.gin-inline-gallery--wide {
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
 }
 
 .gin-multi-column {
