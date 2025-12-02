@@ -511,9 +511,9 @@ const serohis  = addSystemDotPct("Serohis", 48.97, 79.43, C.ORION, null, "seroth
 const korneth  = addSystemDotPct("Korneth", 50.83, 83.88, C.ORION, null, "korneth", "Orion Industries");
 const seren    = addSystemDotPct("Seren", 43.27, 82.36, C.ORION, null, "seren", "Orion Industries");
 const vayth    = addSystemDotPct("Vayth", 53.46, 89.65, C.CRIMSON, null, "vayth", "Crimson Collective");
-const drelith  = addSystemDotPct("Drelith", 52.00, 92.71, C.NEUTRAL, null, "drelith", "Crimson Collective");
+const drelith  = addSystemDotPct("Drelith", 52.00, 92.71, C.CRIMSON, null, "drelith", "Crimson Collective");
 const zhaen    = addSystemDotPct("Zhaen", 53.80, 92.00, C.NEUTRAL, null, "zhaen");
-const olk      = addSystemDotPct("Olk Prime", 56.93, 94.04, C.NEUTRAL, null, "olk_prime");
+const olk      = addSystemDotPct("Olk Prime", 56.93, 94.04, C.CRIMSON, null, "olk_prime", "Crimson Collective");
 const col      = addSystemDotPct("Col", 55.73, 96.94, C.NEUTRAL, null, "col");
 const oryx     = addSystemDotPct("Oryx", 46.57, 90.95, C.CRIMSON, null, "oryx", "Crimson Collective");
 const aliti    = addSystemDotPct("Aliti", 46.50, 92.35, C.CRIMSON, null, "aliti", "Crimson Collective");
@@ -524,7 +524,7 @@ const pyr      = addSystemDotPct("Pyr", 24.08, 82.16, C.EAGLE, null, "pyr", "Eag
 const ax       = addSystemDotPct("Ax", 24.42, 81.21, C.NEUTRAL, null, "ax");
 const ceythros = addSystemDotPct("Ceythros", 24.10, 88.76, C.EAGLE, null, "ceythros", "Eagle Republic");
 const kentauros= addSystemDotPct("Kentauros", 20.07, 86.74, C.EAGLE, null, "kentauros", "Eagle Republic");
-const arrakan  = addSystemDotPct("Arrakan", 17.57, 88.87, C.NEUTRAL, null, "arrakan");
+const arrakan  = addSystemDotPct("Arrakan", 17.57, 88.87, C.EAGLE, null, "arrakan", "Eagle Republic");
 const trata    = addSystemDotPct("Trata", 15.03, 90.48, C.NEUTRAL, null, "trata");
 const jola     = addSystemDotPct("Jola", 14.91, 85.30, C.NEUTRAL, null, "jola");
 const panag    = addSystemDotPct("Panag", 14.32, 79.76, C.NEUTRAL, null, "panag");
@@ -537,7 +537,7 @@ const egos_v   = addSystemDotPct("Egos V", 79.02, 70.16, C.NEUTRAL, null, "egos_
 const mikro    = addSystemDotPct("Mikro", 61.45, 75.76, C.NEUTRAL, null, "mikro");
 const toko     = addSystemDotPct("Toko", 60.37, 77.03, C.NEUTRAL, null, "toko");
 const dofo     = addSystemDotPct("Dofo", 58.96, 74.47, C.NEUTRAL, null, "dofo");
-const volur    = addSystemDotPct("Volur", 57.50, 77.86, C.NEUTRAL, null, "volur");
+const volur    = addSystemDotPct("Volur", 57.50, 77.86, C.ORION, null, "volur", "Orion Industries");
 
 // ---------- BRAND-NEW DOTS FROM YOUR LIST ----------
 const unnamed_5_39 = addSystemDotPct("Unnamed-5_39", 5.39, 99.56, C.NEUTRAL, null, "unnamed_5_39");
@@ -627,7 +627,7 @@ const shathros    = addSystemDotPct("Shathros", 53.70, 82.55, C.ORION, null, "sh
 const irri        = addSystemDotPct("Irri", 58.74, 85.02, C.CRIMSON, null, "irri", "Crimson Collective");
 const polydrax    = addSystemDotPct("Polydrax", 59.80, 84.03, C.NEUTRAL, null, "polydrax");
 const xang        = addSystemDotPct("Xang", 52.77, 78.72, C.NEUTRAL, null, "xang");
-const defok       = addSystemDotPct("Defok", 51.01, 77.15, C.NEUTRAL, null, "defok");
+const defok       = addSystemDotPct("Defok", 51.01, 77.15, C.ORION, null, "defok", "Orion Industries");
 const polirsh     = addSystemDotPct("Polirsh", 48.12, 77.16, C.ORION, null, "polirsh", "Orion Industries");
 const moki        = addSystemDotPct("Moki", 45.97, 74.96, C.NEUTRAL, null, "moki");
 const lo          = addSystemDotPct("Lo", 43.18, 73.54, C.NEUTRAL, null, "lo");
@@ -816,11 +816,15 @@ setTagline('cynar', "Jampro is an inhabited world, established under the leaders
 setTagline('seren', 'Jerako is an inhabited world, established under the leadership of Kendric Harris, for Orion Industries');
 setTagline('polirsh', "Togogh is an inhabited world, established under the leadership of Wulfhelm Mannering for Orion Industries");
 setTagline('joris', 'Erto is an inhabited world, established under the leadership of Wulfhelm Mannering for Orion Industries');
+setTagline('defok', 'Mehed is an inhabited world, established under the leadership of Kendric Harris for Orion Industries');
+setTagline('volur', 'Zonew is an inhabited world, established under the leadership of Alpheus Cirie for Orion Industries');
 setTagline('serothis_core', 'Rectoh is an inhabited world, established under the leadership of Darius Swan for Orion Industries.');
 setTagline('shathros', 'Vasil is an inhabited world, established under the leadership of Darren Sterling for Orion Industries.');
 setTagline('fido', 'Bvor is an inhabited world, established under the leadership of Alpheus Cirie for Orion Industries');
 setTagline('threnos', 'Alteroka is an inhabited world, established under the leadership of Ashford Cirie for Orion Industries.');
 setTagline('irri', 'Irriki is an inhabited world, established under the leadership of Mauka, for Crimson Collective');
+setTagline('drelith', 'Vasil is an inhabited world, established under the leadership of General Secretary Donovan Quixotovich for Crimson Collective');
+setTagline('olk_prime', 'Valeza is an inhabited world, established under the leadership of Väinämöinen Bist for Crimson Collective. 381 is an inhabited world, established under the leadership of Syundou for Crimson Collective');
 setTagline('vayth', 'Jorasi is a white gas planet, established under the leadership of Väinämöinen Bist for for Crimson Collective');
 setTagline('oryx', 'Harkar is a rich on AFM, barren planet, established under the leadership of Aleksei Panshin for for Crimson Collective');
 setTagline('aliti', 'Nast is a rich on GGP planet, established under the leadership of Aleksei Panshin for for Crimson Collective');
@@ -831,6 +835,7 @@ setTagline('taireb', 'Zoras is an inhabited world, established under the leaders
 setTagline('koki_prime', 'Awovi is an inhabited world, established under the leadership of President Ajax D Marius CLIX for Eagle Republic.');
 setTagline('kentauros', 'Altetor is an inhabited world, established under the leadership of President Ajax D Marius CLIX for Eagle Republic.');
 setTagline('ceythros', 'Gorzik is a Gas giant harvest colony, established under the leadership of President Ajax D Marius CLIX for Eagle Republic.');
+setTagline('arrakan', 'Korpako is an inhabited world, established under the leadership of Brigadier General Rorik Belyaev for Eagle Republic.');
 setTagline('okoro', 'Doos is an inhabited world, established under the leadership of Star Lord for Eagle Republic.');
 setTagline('gona', 'Inomis is an inhabited world, established under the leadership of Logan Klay for U.I.W.G');
 setTagline('oraethos', 'Pentiko is an inhabited world, established under the leadership of Emperor Broko for Nova Confederation');
