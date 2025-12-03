@@ -415,6 +415,8 @@ const SYSTEM_IMAGE_OVERRIDES = {
   korneth: "Star Systems/Korneth.jpg",
   mikro: "Star Systems/Mikro.png",
   moki: "Star Systems/Moki.png",
+  panag: "Star Systems/Panag.jpg",
+  panag_2: "Star Systems/Panag.jpg",
   osf: "Star Systems/Osf.png",
   nyren: "Star Systems/Nyren.jpg",
   nytheris: "Star Systems/Nytheris.png",
@@ -446,7 +448,10 @@ const SYSTEM_IMAGE_OVERRIDES = {
   vexar: "Star Systems/Vexar.jpg",
   koki_prime: "Star Systems/Koki Prime.png",
   poly: "Star Systems/Poly.png",
+  toko: "Star Systems/Toko.jpg",
+  dofo: "Star Systems/Dofo.jpg",
   jola: "Star Systems/Jola.png",
+  vrill: "Star Systems/Vrill.jpg",
 };
 
 // ---------- EXISTING FACTION EMBLEMS ----------
