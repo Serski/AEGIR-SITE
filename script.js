@@ -509,8 +509,8 @@ const tavro_v  = addSystemDotPct("Tavro V", 80.82, 88.36, C.NOVA, null, "tavro_v
 const voruthen = addSystemDotPct("Voruthen", 84.78, 91.76, C.NEUTRAL, null, "voruthen");
 const kho      = addSystemDotPct("Kho", 76.59, 90.10, C.NOVA, null, "kho", "Nova Confederation");
 const sgd      = addSystemDotPct("Sgd", 77.13, 93.06, C.NEUTRAL, null, "sgd");
-const nyren    = addSystemDotPct("Nyren", 63.44, 79.90, C.NEUTRAL, null, "nyren");
-const vexar    = addSystemDotPct("Vexar", 62.55, 83.57, C.NEUTRAL, null, "vexar");
+const nyren    = addSystemDotPct("Nyren", 63.44, 79.90, C.CRIMSON, null, "nyren", "Crimson Collective");
+const vexar    = addSystemDotPct("Vexar", 62.55, 83.57, C.CRIMSON, null, "vexar", "Crimson Collective");
 const cynar    = addSystemDotPct("Cynar", 46.67, 79.08, C.ORION, null, "cynar", "Orion Industries");
 const serohis  = addSystemDotPct("Serohis", 48.97, 79.43, C.ORION, null, "serothis_core", "Orion Industries");
 const korneth  = addSystemDotPct("Korneth", 50.83, 83.88, C.ORION, null, "korneth", "Orion Industries");
@@ -532,7 +532,7 @@ const kentauros= addSystemDotPct("Kentauros", 20.07, 86.74, C.EAGLE, null, "kent
 const arrakan  = addSystemDotPct("Arrakan", 17.57, 88.87, C.EAGLE, null, "arrakan", "Eagle Republic");
 const trata    = addSystemDotPct("Trata", 15.03, 90.48, C.NEUTRAL, null, "trata");
 const jola     = addSystemDotPct("Jola", 14.91, 85.30, C.NEUTRAL, null, "jola");
-const panag    = addSystemDotPct("Panag", 14.32, 79.76, C.NEUTRAL, null, "panag");
+const panag    = addSystemDotPct("Panag", 14.32, 79.76, C.EAGLE, null, "panag", "Eagle Republic");
 const koki     = addSystemDotPct("Koki Prime", 16.21, 78.35, C.EAGLE, null, "koki_prime", "Eagle Republic");
 const phaex    = addSystemDotPct("Phaex", 77.87, 75.25, C.NEUTRAL, null, "phaex");
 const ho_nass  = addSystemDotPct("Ho Nass", 76.66, 72.00, C.NEUTRAL, null, "ho_nass");
@@ -553,7 +553,7 @@ const simon       = addSystemDotPct("Simon", 7.47, 91.50, C.NEUTRAL, null, "simo
 const trata2      = addSystemDotPct("Trata", 15.02, 90.54, C.NEUTRAL, null, "trata_2");
 const isvo        = addSystemDotPct("Isvo", 3.55, 85.63, C.NEUTRAL, null, "isvo");
 const vrill       = addSystemDotPct("Vrill", 6.72, 84.56, C.NEUTRAL, null, "vrill");
-const panag2      = addSystemDotPct("Panag", 14.32, 79.77, C.NEUTRAL, null, "panag_2");
+const panag2      = addSystemDotPct("Panag", 14.32, 79.77, C.EAGLE, null, "panag_2", "Eagle Republic");
 const vieno       = addSystemDotPct("Vieno", 10.86, 76.52, C.NEUTRAL, null, "vieno");
 const xtc         = addSystemDotPct("Xtc", 10.99, 75.53, C.NEUTRAL, null, "xtc");
 const osf         = addSystemDotPct("Osf", 13.88, 74.61, C.NEUTRAL, null, "osf");
@@ -630,7 +630,7 @@ const otik        = addSystemDotPct("Otik", 65.03, 68.01, C.NEUTRAL, null, "otik
 const threnos     = addSystemDotPct("Threnos", 52.72, 85.25, C.ORION, null, "threnos", "Orion Industries");
 const shathros    = addSystemDotPct("Shathros", 53.70, 82.55, C.ORION, null, "shathros", "Orion Industries");
 const irri        = addSystemDotPct("Irri", 58.74, 85.02, C.CRIMSON, null, "irri", "Crimson Collective");
-const polydrax    = addSystemDotPct("Polydrax", 59.80, 84.03, C.NEUTRAL, null, "polydrax");
+const polydrax    = addSystemDotPct("Polydrax", 59.80, 84.03, C.CRIMSON, null, "polydrax", "Crimson Collective");
 const xang        = addSystemDotPct("Xang", 52.77, 78.72, C.NEUTRAL, null, "xang");
 const defok       = addSystemDotPct("Defok", 51.01, 77.15, C.ORION, null, "defok", "Orion Industries");
 const polirsh     = addSystemDotPct("Polirsh", 48.12, 77.16, C.ORION, null, "polirsh", "Orion Industries");
@@ -830,11 +830,16 @@ setTagline('threnos', 'Alteroka is an inhabited world, established under the lea
 setTagline('irri', 'Irriki is an inhabited world, established under the leadership of Mauka, for Crimson Collective');
 setTagline('drelith', 'Vasil is an inhabited world, established under the leadership of General Secretary Donovan Quixotovich for Crimson Collective');
 setTagline('olk_prime', 'Valeza is an inhabited world, established under the leadership of Väinämöinen Bist for Crimson Collective. 381 is an inhabited world, established under the leadership of Syundou for Crimson Collective');
+setTagline('polydrax', 'Kiklos is an inhabited world, established under the leadership of Sentrait for Crimson Collective');
+setTagline('vexar', 'Voltac II is an inhabited world, established under the leadership of Aleksei Panshin for Crimson Collective');
+setTagline('nyren', 'Elaf is an inhabited world, established under the leadership of Väinämöinen Bist for Crimson Collective');
 setTagline('vayth', 'Jorasi is a white gas planet, established under the leadership of Väinämöinen Bist for for Crimson Collective');
 setTagline('oryx', 'Harkar is a rich on AFM, barren planet, established under the leadership of Aleksei Panshin for for Crimson Collective');
 setTagline('aliti', 'Nast is a rich on GGP planet, established under the leadership of Aleksei Panshin for for Crimson Collective');
 setTagline('phosyr', 'Mitusk is a rich on AFM, barren planet, established under the leadership of President Ajax D Marius CLIX for for Crimson Collective');
 setTagline('corrn', 'Imona is a gas planet, established under the leadership of President Ajax D Marius CLIX for the Eagle Republic');
+setTagline('panag', 'Mengo is an inhabited world, established under the leadership of the son of Beddanburg for Eagle Republic.');
+setTagline('panag_2', 'Mengo is an inhabited world, established under the leadership of the son of Beddanburg for Eagle Republic.');
 setTagline('pyr', 'Doksona is an inhabited world, established under the leadership of the Son of Bebbanburg for Eagle Republic');
 setTagline('taireb', 'Zoras is an inhabited world, established under the leadership of Rondo the Republican for Eagle Republic.');
 setTagline('koki_prime', 'Awovi is an inhabited world, established under the leadership of President Ajax D Marius CLIX for Eagle Republic.');
