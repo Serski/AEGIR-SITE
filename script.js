@@ -502,9 +502,9 @@ const orpheas     = addSystemDotPct("Orpheas",     70.45, 77.09, C.NEUTRAL, null
 
 // NEW DOTS (previous batch)
 const pone_v   = addSystemDotPct("Pone V", 67.20, 77.66, C.NEUTRAL, null, "pone_v");
-const ozyrane  = addSystemDotPct("Ozyrane", 67.14, 80.64, C.NEUTRAL, null, "ozyrane");
+const ozyrane  = addSystemDotPct("Ozyrane", 67.14, 80.64, C.YAMATO, null, "ozyrane", "Yamato Syndicate");
 const aelyth   = addSystemDotPct("Aelyth Prime", 71.13, 74.33, C.NEUTRAL, null, "aelyth_prime");
-const nytheris = addSystemDotPct("Nytheris", 69.28, 83.59, C.NEUTRAL, null, "nytheris");
+const nytheris = addSystemDotPct("Nytheris", 69.28, 83.59, C.YAMATO, null, "nytheris", "Yamato Syndicate");
 const tavro_v  = addSystemDotPct("Tavro V", 80.82, 88.36, C.NOVA, null, "tavro_v", "Nova Confederation");
 const voruthen = addSystemDotPct("Voruthen", 84.78, 91.76, C.NEUTRAL, null, "voruthen");
 const kho      = addSystemDotPct("Kho", 76.59, 90.10, C.NOVA, null, "kho", "Nova Confederation");
@@ -526,7 +526,7 @@ const joris    = addSystemDotPct("Joris", 41.88, 84.04, C.ORION, null, "joris", 
 const okoro    = addSystemDotPct("Okoro", 24.50, 84.45, C.EAGLE, null, "okoro", "Eagle Republic");
 const taireb   = addSystemDotPct("Taireb", 25.98, 84.95, C.EAGLE, null, "taireb", "Eagle Republic");
 const pyr      = addSystemDotPct("Pyr", 24.08, 82.16, C.EAGLE, null, "pyr", "Eagle Republic");
-const ax       = addSystemDotPct("Ax", 24.42, 81.21, C.NEUTRAL, null, "ax");
+const ax       = addSystemDotPct("Ax", 24.42, 81.21, C.EAGLE, null, "ax", "Eagle Republic");
 const ceythros = addSystemDotPct("Ceythros", 24.10, 88.76, C.EAGLE, null, "ceythros", "Eagle Republic");
 const kentauros= addSystemDotPct("Kentauros", 20.07, 86.74, C.EAGLE, null, "kentauros", "Eagle Republic");
 const arrakan  = addSystemDotPct("Arrakan", 17.57, 88.87, C.EAGLE, null, "arrakan", "Eagle Republic");
@@ -655,9 +655,9 @@ const ypo         = addSystemDotPct("Ypo", 40.48, 87.39, C.NEUTRAL, null, "ypo")
 const moka2       = addSystemDotPct("Moka", 38.59, 87.87, C.NEUTRAL, null, "moka_2");
 const vhalor      = addSystemDotPct("Vhalor", 37.41, 89.00, C.NEUTRAL, null, "vhalor");
 const ioq         = addSystemDotPct("Ioq", 40.86, 88.46, C.NEUTRAL, null, "ioq");
-const caoh        = addSystemDotPct("Caoh", 31.77, 89.78, C.NEUTRAL, null, "caoh");
+const caoh        = addSystemDotPct("Caoh", 31.77, 89.78, C.EAGLE, null, "caoh", "Eagle Republic");
 const phosyr      = addSystemDotPct("Phosyr", 29.74, 92.31, C.EAGLE, null, "phosyr", "Eagle Republic");
-const hxs         = addSystemDotPct("Hxs", 27.59, 95.71, C.NEUTRAL, null, "hxs");
+const hxs         = addSystemDotPct("Hxs", 27.59, 95.71, C.EAGLE, null, "hxs", "Eagle Republic");
 const papas       = addSystemDotPct("Papas", 27.27, 98.24, C.NEUTRAL, null, "papas");
 const kol         = addSystemDotPct("Kol", 29.32, 98.95, C.NEUTRAL, null, "kol");
 const tromp       = addSystemDotPct("Tromp", 28.19, 59.75, C.NEUTRAL, null, "tromp");
@@ -847,10 +847,15 @@ setTagline('kentauros', 'Altetor is an inhabited world, established under the le
 setTagline('ceythros', 'Gorzik is a Gas giant harvest colony, established under the leadership of President Ajax D Marius CLIX for Eagle Republic.');
 setTagline('arrakan', 'Korpako is an inhabited world, established under the leadership of Brigadier General Rorik Belyaev for Eagle Republic.');
 setTagline('okoro', 'Doos is an inhabited world, established under the leadership of Star Lord for Eagle Republic.');
+setTagline('caoh', 'Natrasor is an inhabited world, established under the leadership of President Ajax D Marius CLIX for Eagle Republic.');
+setTagline('ax', 'Gosiko is an inhabited world, established under the leadership of Star Lord for Eagle Republic.');
+setTagline('hxs', 'Zoklak is an inhabited world, established under the leadership of the Son of Bebbanburg for Eagle Republic.');
 setTagline('gona', 'Inomis is an inhabited world, established under the leadership of Logan Klay for U.I.W.G');
 setTagline('oraethos', 'Pentiko is an inhabited world, established under the leadership of Emperor Broko for Nova Confederation');
 setTagline('kho', 'Asterko is an inhabited world, established under the leadership of Emperor Broko for Nova Confederation.');
 setTagline('tavro_v', 'Adreo is a Gas Planet colony, established under the leadership of Emperor Broko for Nova Confederation.');
+setTagline('nytheris', "Talkon is an inhabited world, established under the leadership of Antonov, the people’s Arbiter for Yamato Syndicate.");
+setTagline('ozyrane', "Topery is an inhabited world, established under the leadership of Antonov, the people’s Arbiter for Yamato Syndicate.");
 
 // ---------- HYPERLANES — REMADE WITH YOUR CORRECTIONS ----------
 // Solara-Ys (Aegir Outpost) → Aelyth Prime, Pone V, Veyra Null
