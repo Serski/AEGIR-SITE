@@ -44,6 +44,8 @@ const labelLayer = L.layerGroup().addTo(map); // permanent labels
 const DOT_RADIUS_PX = 5.5;       // increase click/tap target for system dots
 const DOT_STROKE_WEIGHT = 1.1;
 window.SYS = SYS;
+// Custom renderers are opt-in per system so the rest of the map stays unchanged.
+const SYSTEM_CUSTOM_VIEWS = {};
 
 // ---------- system detail modal wiring ----------
 const modalEl = document.getElementById('system-modal');
@@ -56,8 +58,41 @@ const modalMediaEl = modalEl ? modalEl.querySelector('.system-modal-media') : nu
 const modalImageEl = document.getElementById('system-modal-image');
 const modalImageFallbackEl = document.getElementById('system-modal-image-fallback');
 const modalBodyEl = document.getElementById('system-modal-body');
+const modal3dContainer = document.getElementById('system-modal-3d');
 
 let activeModalSystem = null;
+let activeCustomViewCleanup = null;
+let threePromise = null;
+
+// Lazy-load Three.js only when a custom system view needs it
+function loadThree() {
+  if (window.THREE) return Promise.resolve(window.THREE);
+  if (!threePromise) {
+    threePromise = new Promise((resolve, reject) => {
+      const script = document.createElement('script');
+      script.src = 'https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.min.js';
+      script.async = true;
+      script.onload = () => resolve(window.THREE);
+      script.onerror = () => reject(new Error('Failed to load Three.js'));
+      document.head.appendChild(script);
+    });
+  }
+  return threePromise;
+}
+
+function teardownCustomView() {
+  if (typeof activeCustomViewCleanup === 'function') {
+    try { activeCustomViewCleanup(); } catch (err) { console.error(err); }
+  }
+  activeCustomViewCleanup = null;
+  if (modal3dContainer) {
+    modal3dContainer.innerHTML = '';
+    modal3dContainer.setAttribute('aria-hidden', 'true');
+  }
+  if (modalMediaEl) {
+    modalMediaEl.classList.remove('has-3d');
+  }
+}
 
 function closeSystemModal() {
   if (!modalEl) return;
@@ -65,6 +100,7 @@ function closeSystemModal() {
   modalEl.setAttribute('aria-hidden', 'true');
   document.body.classList.remove('modal-open');
   activeModalSystem = null;
+  teardownCustomView();
 }
 
 function openSystemModal(uid) {
@@ -72,6 +108,7 @@ function openSystemModal(uid) {
   const s = SYS[uid];
   if (!s) return;
 
+  teardownCustomView();
   activeModalSystem = uid;
   modalTitleEl.textContent = s.name;
 
@@ -116,11 +153,41 @@ function openSystemModal(uid) {
     modalBodyEl.innerHTML = bodyFragments.join('');
   }
 
+  renderCustomView(uid);
   modalEl.classList.add('active');
   modalEl.setAttribute('aria-hidden', 'false');
   document.body.classList.add('modal-open');
   if (modalCloseBtn) {
     setTimeout(() => modalCloseBtn.focus(), 0);
+  }
+}
+
+async function renderCustomView(uid) {
+  if (!modal3dContainer) return;
+
+  const rendererFn = SYSTEM_CUSTOM_VIEWS[uid];
+  if (!rendererFn) {
+    modal3dContainer.hidden = true;
+    modal3dContainer.setAttribute('aria-hidden', 'true');
+    if (modalMediaEl) modalMediaEl.classList.remove('has-3d');
+    return;
+  }
+
+  modal3dContainer.hidden = false;
+  modal3dContainer.setAttribute('aria-hidden', 'false');
+  if (modalMediaEl) modalMediaEl.classList.add('has-3d');
+
+  try {
+    const cleanup = await rendererFn(modal3dContainer);
+    if (typeof cleanup === 'function') {
+      activeCustomViewCleanup = cleanup;
+    }
+  } catch (err) {
+    console.error('Failed to render custom system view', err);
+    modal3dContainer.innerHTML = '';
+    modal3dContainer.hidden = true;
+    modal3dContainer.setAttribute('aria-hidden', 'true');
+    if (modalMediaEl) modalMediaEl.classList.remove('has-3d');
   }
 }
 
@@ -183,6 +250,168 @@ function updateSystemPopup(uid, html) {
   s.popupHtml = html;
   s.marker.bindPopup(html);
 }
+
+async function renderPenta3View(container) {
+  const THREE = await loadThree();
+  container.innerHTML = '';
+
+  const width = container.clientWidth || 640;
+  const height = container.clientHeight || 360;
+
+  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+  renderer.setPixelRatio(window.devicePixelRatio || 1);
+  renderer.setSize(width, height);
+  container.appendChild(renderer.domElement);
+
+  const scene = new THREE.Scene();
+  const texLoader = new THREE.TextureLoader();
+  texLoader.load('Star Systems/Penta III.jpg', texture => {
+    if (texture) texture.colorSpace = THREE.SRGBColorSpace;
+    scene.background = texture;
+  });
+
+  const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 100);
+  camera.position.set(0, 7, 13);
+  camera.lookAt(0, 0, 0);
+
+  const ambient = new THREE.AmbientLight(0x7aa0ff, 0.6);
+  scene.add(ambient);
+  const starLight = new THREE.PointLight(0xffd479, 1.4, 100);
+  scene.add(starLight);
+
+  const starMaterial = new THREE.MeshStandardMaterial({
+    color: 0xffe066,
+    emissive: 0xffd54f,
+    emissiveIntensity: 1.8,
+    roughness: 0.25,
+    metalness: 0.05
+  });
+  const star = new THREE.Mesh(new THREE.SphereGeometry(1.8, 64, 64), starMaterial);
+  scene.add(star);
+
+  const orbitPlane = new THREE.Group();
+  orbitPlane.rotation.x = -0.02 * Math.PI;
+  scene.add(orbitPlane);
+
+  const orbiters = [];
+
+  function createLabel(text, color) {
+    const canvas = document.createElement('canvas');
+    canvas.width = 256;
+    canvas.height = 128;
+    const ctx = canvas.getContext('2d');
+    ctx.fillStyle = 'rgba(7, 11, 26, 0.85)';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 6;
+    ctx.strokeRect(6, 6, canvas.width - 12, canvas.height - 12);
+    ctx.font = 'bold 48px "Orbitron VF", "Eurostile Ext", sans-serif';
+    ctx.fillStyle = '#e5e7eb';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(text, canvas.width / 2, canvas.height / 2);
+    const texture = new THREE.CanvasTexture(canvas);
+    texture.colorSpace = THREE.SRGBColorSpace;
+    const material = new THREE.SpriteMaterial({ map: texture, transparent: true, depthWrite: false });
+    const sprite = new THREE.Sprite(material);
+    sprite.scale.set(3, 1.5, 1);
+    return sprite;
+  }
+
+  function addOrbit(radius) {
+    const orbitGeo = new THREE.RingGeometry(radius - 0.02, radius + 0.02, 128);
+    const orbitMat = new THREE.MeshBasicMaterial({ color: 0x6b7280, side: THREE.DoubleSide, transparent: true, opacity: 0.55 });
+    const ring = new THREE.Mesh(orbitGeo, orbitMat);
+    ring.rotation.x = Math.PI / 2;
+    orbitPlane.add(ring);
+  }
+
+  function addPlanet(opts) {
+    addOrbit(opts.radius);
+    const planetGroup = new THREE.Group();
+    const planetMaterial = new THREE.MeshStandardMaterial({
+      color: opts.color,
+      roughness: 0.4,
+      metalness: 0.2
+    });
+    const planet = new THREE.Mesh(new THREE.SphereGeometry(opts.size, 48, 48), planetMaterial);
+    planet.position.set(opts.radius, 0, 0);
+    planetGroup.add(planet);
+    orbitPlane.add(planetGroup);
+
+    const label = createLabel(opts.label, opts.labelColor);
+    label.position.set(opts.radius * 1.02, opts.size + 0.6, 0);
+    orbitPlane.add(label);
+
+    orbiters.push({ group: planetGroup, label, radius: opts.radius, speed: opts.speed, offset: opts.offset });
+  }
+
+  addPlanet({ radius: 4.2, size: 0.55, color: 0xd97706, label: 'Valkes', labelColor: '#fbbf24', speed: 0.35, offset: 0.3 });
+  addPlanet({ radius: 6.9, size: 0.78, color: 0x38bdf8, label: 'Anao', labelColor: '#67e8f9', speed: 0.24, offset: 1.1 });
+
+  let autoSpin = 0;
+  let userSpin = 0;
+  let isDragging = false;
+  let lastX = 0;
+  const onPointerDown = evt => {
+    isDragging = true;
+    lastX = evt.clientX;
+  };
+  const onPointerMove = evt => {
+    if (!isDragging) return;
+    const delta = evt.clientX - lastX;
+    lastX = evt.clientX;
+    userSpin += delta * 0.004;
+  };
+  const endDrag = () => { isDragging = false; };
+
+  container.addEventListener('pointerdown', onPointerDown);
+  container.addEventListener('pointermove', onPointerMove);
+  container.addEventListener('pointerup', endDrag);
+  container.addEventListener('pointerleave', endDrag);
+
+  const orbitSpeed = 0.5;
+  let frameId = null;
+
+  function animate(now) {
+    frameId = requestAnimationFrame(animate);
+    const t = now * 0.001;
+    autoSpin = t * 0.05;
+    orbitPlane.rotation.y = autoSpin + userSpin;
+    orbiters.forEach(o => {
+      const angle = t * orbitSpeed * o.speed + o.offset;
+      const x = Math.cos(angle) * o.radius;
+      const z = Math.sin(angle) * o.radius;
+      o.group.position.set(x, 0, z);
+      o.label.position.set(x * 1.02, 0.8, z * 1.02);
+    });
+    renderer.render(scene, camera);
+  }
+  animate(0);
+
+  function onResize() {
+    const w = container.clientWidth || width;
+    const h = container.clientHeight || height;
+    camera.aspect = w / h;
+    camera.updateProjectionMatrix();
+    renderer.setSize(w, h);
+  }
+  window.addEventListener('resize', onResize);
+
+  return function cleanup() {
+    if (frameId) cancelAnimationFrame(frameId);
+    window.removeEventListener('resize', onResize);
+    container.removeEventListener('pointerdown', onPointerDown);
+    container.removeEventListener('pointermove', onPointerMove);
+    container.removeEventListener('pointerup', endDrag);
+    container.removeEventListener('pointerleave', endDrag);
+    renderer.dispose();
+    if (renderer.domElement && renderer.domElement.parentElement === container) {
+      container.removeChild(renderer.domElement);
+    }
+  };
+}
+SYSTEM_CUSTOM_VIEWS.penta3 = renderPenta3View;
 
 // DOT marker (for planets) with optional image in popup
 function addSystemDotPct(name, xPct, yPct, color = "#e5e7eb", imageUrl = null, id = null, faction = null) {
@@ -854,6 +1083,7 @@ setTagline('gona', 'Inomis is an inhabited world, established under the leadersh
 setTagline('oraethos', 'Pentiko is an inhabited world, established under the leadership of Emperor Broko for Nova Confederation');
 setTagline('kho', 'Asterko is an inhabited world, established under the leadership of Emperor Broko for Nova Confederation.');
 setTagline('tavro_v', 'Adreo is a Gas Planet colony, established under the leadership of Emperor Broko for Nova Confederation.');
+setTagline('penta3', 'Interactive orbital reconstruction of Valkes and Anao.');
 setTagline('nytheris', "Talkon is an inhabited world, established under the leadership of Antonov, the people’s Arbiter for Yamato Syndicate.");
 setTagline('ozyrane', "Topery is an inhabited world, established under the leadership of Antonov, the people’s Arbiter for Yamato Syndicate.");
 
