@@ -44,6 +44,8 @@ const labelLayer = L.layerGroup().addTo(map); // permanent labels
 const DOT_RADIUS_PX = 5.5;       // increase click/tap target for system dots
 const DOT_STROKE_WEIGHT = 1.1;
 window.SYS = SYS;
+// Custom renderers are opt-in per system so the rest of the map stays unchanged.
+const SYSTEM_CUSTOM_VIEWS = {};
 
 // ---------- system detail modal wiring ----------
 const modalEl = document.getElementById('system-modal');
@@ -56,8 +58,41 @@ const modalMediaEl = modalEl ? modalEl.querySelector('.system-modal-media') : nu
 const modalImageEl = document.getElementById('system-modal-image');
 const modalImageFallbackEl = document.getElementById('system-modal-image-fallback');
 const modalBodyEl = document.getElementById('system-modal-body');
+const modal3dContainer = document.getElementById('system-modal-3d');
 
 let activeModalSystem = null;
+let activeCustomViewCleanup = null;
+let threePromise = null;
+
+// Lazy-load Three.js only when a custom system view needs it
+function loadThree() {
+  if (window.THREE) return Promise.resolve(window.THREE);
+  if (!threePromise) {
+    threePromise = new Promise((resolve, reject) => {
+      const script = document.createElement('script');
+      script.src = 'https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.min.js';
+      script.async = true;
+      script.onload = () => resolve(window.THREE);
+      script.onerror = () => reject(new Error('Failed to load Three.js'));
+      document.head.appendChild(script);
+    });
+  }
+  return threePromise;
+}
+
+function teardownCustomView() {
+  if (typeof activeCustomViewCleanup === 'function') {
+    try { activeCustomViewCleanup(); } catch (err) { console.error(err); }
+  }
+  activeCustomViewCleanup = null;
+  if (modal3dContainer) {
+    modal3dContainer.innerHTML = '';
+    modal3dContainer.setAttribute('aria-hidden', 'true');
+  }
+  if (modalMediaEl) {
+    modalMediaEl.classList.remove('has-3d');
+  }
+}
 
 function closeSystemModal() {
   if (!modalEl) return;
@@ -65,6 +100,7 @@ function closeSystemModal() {
   modalEl.setAttribute('aria-hidden', 'true');
   document.body.classList.remove('modal-open');
   activeModalSystem = null;
+  teardownCustomView();
 }
 
 function openSystemModal(uid) {
@@ -72,6 +108,7 @@ function openSystemModal(uid) {
   const s = SYS[uid];
   if (!s) return;
 
+  teardownCustomView();
   activeModalSystem = uid;
   modalTitleEl.textContent = s.name;
 
@@ -116,11 +153,41 @@ function openSystemModal(uid) {
     modalBodyEl.innerHTML = bodyFragments.join('');
   }
 
+  renderCustomView(uid);
   modalEl.classList.add('active');
   modalEl.setAttribute('aria-hidden', 'false');
   document.body.classList.add('modal-open');
   if (modalCloseBtn) {
     setTimeout(() => modalCloseBtn.focus(), 0);
+  }
+}
+
+async function renderCustomView(uid) {
+  if (!modal3dContainer) return;
+
+  const rendererFn = SYSTEM_CUSTOM_VIEWS[uid];
+  if (!rendererFn) {
+    modal3dContainer.hidden = true;
+    modal3dContainer.setAttribute('aria-hidden', 'true');
+    if (modalMediaEl) modalMediaEl.classList.remove('has-3d');
+    return;
+  }
+
+  modal3dContainer.hidden = false;
+  modal3dContainer.setAttribute('aria-hidden', 'false');
+  if (modalMediaEl) modalMediaEl.classList.add('has-3d');
+
+  try {
+    const cleanup = await rendererFn(modal3dContainer);
+    if (typeof cleanup === 'function') {
+      activeCustomViewCleanup = cleanup;
+    }
+  } catch (err) {
+    console.error('Failed to render custom system view', err);
+    modal3dContainer.innerHTML = '';
+    modal3dContainer.hidden = true;
+    modal3dContainer.setAttribute('aria-hidden', 'true');
+    if (modalMediaEl) modalMediaEl.classList.remove('has-3d');
   }
 }
 
@@ -183,6 +250,162 @@ function updateSystemPopup(uid, html) {
   s.popupHtml = html;
   s.marker.bindPopup(html);
 }
+
+async function renderPenta3View(container) {
+  container.innerHTML = '';
+
+  let width = container.clientWidth || 640;
+  let height = container.clientHeight || 360;
+
+  const canvas = document.createElement('canvas');
+  canvas.width = width;
+  canvas.height = height;
+  canvas.className = 'penta3-canvas';
+  container.appendChild(canvas);
+
+  const ctx = canvas.getContext('2d');
+  const bg = new Image();
+  bg.src = 'Star Systems/Penta III.jpg';
+
+  let centerX = width / 2;
+  let centerY = height / 2;
+  let baseScale = Math.min(width, height) / 16;
+  const tilt = 0.42; // radians
+
+  const orbiters = [
+    { radius: 4.2, size: 0.55, color: '#fbbf24', label: 'Valkes', speed: 0.35, offset: 0.3 },
+    { radius: 6.9, size: 0.78, color: '#67e8f9', label: 'Anao',   speed: 0.24, offset: 1.1 },
+  ];
+
+  let autoSpin = 0;
+  let userSpin = 0;
+  let isDragging = false;
+  let lastX = 0;
+
+  const onPointerDown = evt => {
+    isDragging = true;
+    lastX = evt.clientX;
+  };
+  const onPointerMove = evt => {
+    if (!isDragging) return;
+    const delta = evt.clientX - lastX;
+    lastX = evt.clientX;
+    userSpin += delta * 0.0035;
+  };
+  const endDrag = () => { isDragging = false; };
+
+  canvas.addEventListener('pointerdown', onPointerDown);
+  canvas.addEventListener('pointermove', onPointerMove);
+  canvas.addEventListener('pointerup', endDrag);
+  canvas.addEventListener('pointerleave', endDrag);
+
+  function project(x, y, z) {
+    const rotY = x * Math.cos(userSpin + autoSpin) + z * Math.sin(userSpin + autoSpin);
+    const rotZ = -x * Math.sin(userSpin + autoSpin) + z * Math.cos(userSpin + autoSpin);
+    const screenX = centerX + rotY * baseScale;
+    const screenY = centerY + (y + rotZ * Math.sin(tilt)) * baseScale;
+    return { x: screenX, y: screenY, depth: rotZ };
+  }
+
+  function drawOrbits() {
+    ctx.save();
+    ctx.strokeStyle = 'rgba(148, 163, 184, 0.55)';
+    ctx.lineWidth = 1.5;
+    orbiters.forEach(o => {
+      ctx.beginPath();
+      for (let i = 0; i <= 360; i += 2) {
+        const angle = (i * Math.PI) / 180;
+        const x = Math.cos(angle) * o.radius;
+        const z = Math.sin(angle) * o.radius;
+        const p = project(x, 0, z);
+        if (i === 0) ctx.moveTo(p.x, p.y); else ctx.lineTo(p.x, p.y);
+      }
+      ctx.closePath();
+      ctx.stroke();
+    });
+    ctx.restore();
+  }
+
+  function drawStar() {
+    const p = project(0, 0, 0);
+    const r = 1.6 * baseScale;
+    const grad = ctx.createRadialGradient(p.x, p.y, r * 0.15, p.x, p.y, r);
+    grad.addColorStop(0, '#ffd479');
+    grad.addColorStop(0.5, '#f6ad55');
+    grad.addColorStop(1, 'rgba(244, 114, 182, 0.15)');
+    ctx.fillStyle = grad;
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, r, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  function drawPlanet(o, t) {
+    const angle = t * 0.5 * o.speed + o.offset;
+    const x = Math.cos(angle) * o.radius;
+    const z = Math.sin(angle) * o.radius;
+    const pos = project(x, 0, z);
+    const r = o.size * baseScale;
+
+    ctx.save();
+    ctx.shadowColor = 'rgba(0,0,0,0.35)';
+    ctx.shadowBlur = 12;
+    ctx.fillStyle = o.color;
+    ctx.beginPath();
+    ctx.arc(pos.x, pos.y, r, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+
+    ctx.fillStyle = '#0f172a';
+    ctx.font = `600 ${Math.max(12, r * 1.4)}px "Orbitron VF", "Eurostile Ext", sans-serif`;
+    ctx.textAlign = 'center';
+    ctx.fillText(o.label, pos.x, pos.y - r - 8);
+  }
+
+  let frameId = null;
+  function animate(ts) {
+    frameId = requestAnimationFrame(animate);
+    autoSpin = ts * 0.00005;
+
+    ctx.clearRect(0, 0, width, height);
+    if (bg.complete) {
+      ctx.globalAlpha = 0.15;
+      ctx.drawImage(bg, 0, 0, width, height);
+      ctx.globalAlpha = 1;
+    }
+
+    drawStar();
+    drawOrbits();
+    orbiters
+      .slice()
+      .sort((a, b) => project(0, 0, b.radius).depth - project(0, 0, a.radius).depth)
+      .forEach(o => drawPlanet(o, ts * 0.001));
+  }
+  animate(0);
+
+  function onResize() {
+    width = container.clientWidth || width;
+    height = container.clientHeight || height;
+    canvas.width = width;
+    canvas.height = height;
+    centerX = width / 2;
+    centerY = height / 2;
+    baseScale = Math.min(width, height) / 16;
+  }
+  window.addEventListener('resize', onResize);
+
+  return function cleanup() {
+    if (frameId) cancelAnimationFrame(frameId);
+    window.removeEventListener('resize', onResize);
+    canvas.removeEventListener('pointerdown', onPointerDown);
+    canvas.removeEventListener('pointermove', onPointerMove);
+    canvas.removeEventListener('pointerup', endDrag);
+    canvas.removeEventListener('pointerleave', endDrag);
+    if (canvas.parentElement === container) {
+      container.removeChild(canvas);
+    }
+  };
+}
+SYSTEM_CUSTOM_VIEWS.penta3 = renderPenta3View;
 
 // DOT marker (for planets) with optional image in popup
 function addSystemDotPct(name, xPct, yPct, color = "#e5e7eb", imageUrl = null, id = null, faction = null) {
@@ -854,6 +1077,7 @@ setTagline('gona', 'Inomis is an inhabited world, established under the leadersh
 setTagline('oraethos', 'Pentiko is an inhabited world, established under the leadership of Emperor Broko for Nova Confederation');
 setTagline('kho', 'Asterko is an inhabited world, established under the leadership of Emperor Broko for Nova Confederation.');
 setTagline('tavro_v', 'Adreo is a Gas Planet colony, established under the leadership of Emperor Broko for Nova Confederation.');
+setTagline('penta3', 'Interactive orbital reconstruction of Valkes and Anao.');
 setTagline('nytheris', "Talkon is an inhabited world, established under the leadership of Antonov, the people’s Arbiter for Yamato Syndicate.");
 setTagline('ozyrane', "Topery is an inhabited world, established under the leadership of Antonov, the people’s Arbiter for Yamato Syndicate.");
 
