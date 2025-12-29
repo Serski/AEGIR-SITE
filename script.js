@@ -604,6 +604,7 @@ const SYSTEM_IMAGE_OVERRIDES = {
   aelyth_prime: "Star Systems/Aelyth Prime.jpg",
   anvyr: "Star Systems/Anvyr.png",
   ax: "Star Systems/Ax.png",
+  bet: "Star Systems/Bet.jpg",
   caoh: "Star Systems/Caoh.png",
   ceythros: "Star Systems/Ceythros.png",
   cynar: "Star Systems/Cynar.png",
@@ -644,6 +645,7 @@ const SYSTEM_IMAGE_OVERRIDES = {
   korneth: "Star Systems/Korneth.jpg",
   mikro: "Star Systems/Mikro.png",
   moki: "Star Systems/Moki.png",
+  moka_2: "Star Systems/Moka.jpg",
   panag: "Star Systems/Panag.jpg",
   panag_2: "Star Systems/Panag.jpg",
   osf: "Star Systems/Osf.png",
@@ -660,6 +662,7 @@ const SYSTEM_IMAGE_OVERRIDES = {
   kol: "Star Systems/Kol.jpg",
   papas: "Star Systems/Papas.jpg",
   trysin: "Star Systems/Thrysin.png",
+  tromp: "Star Systems/Tromp.jpg",
   serothis_core: "Star Systems/Serohis.png",
   seren: "Star Systems/Seren.jpg",
   drelith: "Star Systems/Drelith.jpg",
@@ -681,6 +684,7 @@ const SYSTEM_IMAGE_OVERRIDES = {
   dofo: "Star Systems/Dofo.jpg",
   jola: "Star Systems/Jola.png",
   vrill: "Star Systems/Vrill.jpg",
+  ypo: "Star Systems/Ypo.jpg",
 };
 
 // ---------- EXISTING FACTION EMBLEMS ----------
